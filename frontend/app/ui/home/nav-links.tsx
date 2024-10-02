@@ -4,6 +4,11 @@ import {
   HomeIcon,
   CloudIcon,
   ClipboardDocumentListIcon,
+  QuestionMarkCircleIcon,
+  InformationCircleIcon,
+  LockClosedIcon,
+  FingerPrintIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,6 +24,21 @@ const links = [
     icon: ClipboardDocumentListIcon,
   },
   { name: "Storage", href: "/home/storage", icon: CloudIcon },
+  {
+    name: "Frequently Asked Questions",
+    href: "/home/faq",
+    icon: QuestionMarkCircleIcon,
+  },
+  {
+    name: "Privacy Policy",
+    href: "/home/policy",
+    icon: InformationCircleIcon /* | LockClosedIcon | FingerPrintIcon */,
+  },
+  {
+    name: "Settings",
+    href: "/home/settings",
+    icon: Cog6ToothIcon /* | Cog8ToothIcon */,
+  },
 ];
 
 export default function NavLinks() {

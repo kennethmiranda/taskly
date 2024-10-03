@@ -47,6 +47,17 @@ app.get('/', (req, res) => {
     });
   });
 
+  app.get('/files', (req, res) => {
+    const query = 'SELECT * FROM files';
+    connection.query(query, (err, results) => {
+      if (err) {
+        console.error('Error retrieving files:', err);
+        return res.status(500).send('Error retrieving files');
+      }
+      res.json(results);  // Return all files as JSON
+    });
+  });
+
   
   // Start the server on port 3000
   app.listen(3000, () => {

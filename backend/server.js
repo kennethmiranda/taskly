@@ -1,8 +1,6 @@
 // Import necessary modules
-const express = require('express');
-const connection = require('./mysql'); // Import your MySQL connection
-
-
+const express = require("express");
+const connection = require("./mysql"); // Import your MySQL connection
 
 // Create an Express application
 const app = express();
@@ -11,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 // Define a route to add a task (POST /tasks)
-app.post('/tasks', (req, res) => {
+app.post("/tasks", (req, res) => {
   const { name, status, priority, due_date, notifiable_by_email } = req.body;
 
   const query = `
@@ -19,48 +17,51 @@ app.post('/tasks', (req, res) => {
     VALUES (?, ?, ?, ?, ?)
   `;
 
-  connection.query(query, [name, status, priority, due_date, notifiable_by_email], (err, results) => {
-    if (err) {
-      console.error('Error inserting task:', err);
-      return res.status(500).send('Error inserting task');
+  connection.query(
+    query,
+    [name, status, priority, due_date, notifiable_by_email],
+    (err, results) => {
+      if (err) {
+        console.error("Error inserting task:", err);
+        return res.status(500).send("Error inserting task");
+      }
+      res.status(201).send("Task inserted successfully");
     }
-    res.status(201).send('Task inserted successfully');
-  });
+  );
 });
 
 // Route for the root URL '/'
-app.get('/', (req, res) => {
-    res.send('Welcome to the Task Manager API!');
-  });
-  
-  // Route for '/tasks' to retrieve all tasks
-  console.log(app.get('/tasks'));
-  app.get('/tasks', (req, res) => {
-    const query = 'SELECT * FROM tasks';
-    connection.query(query, (err, results) => {
-      if (err) {
-        console.error('Error retrieving tasks:', err);
-        return res.status(500).send('Error retrieving tasks');
-      }
-      res.json(results);  // Return all tasks as JSON
-      console.log(results);
-    });
-  });
+app.get("/", (req, res) => {
+  res.send("Welcome to the Task Manager API!");
+});
 
-  app.get('/files', (req, res) => {
-    const query = 'SELECT * FROM files';
-    connection.query(query, (err, results) => {
-      if (err) {
-        console.error('Error retrieving files:', err);
-        return res.status(500).send('Error retrieving files');
-      }
-      res.json(results);  // Return all files as JSON
-    });
+// Route for '/tasks' to retrieve all tasks
+console.log(app.get("/tasks"));
+app.get("/tasks", (req, res) => {
+  const query = "SELECT * FROM tasks";
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error("Error retrieving tasks:", err);
+      return res.status(500).send("Error retrieving tasks");
+    }
+    res.json(results); // Return all tasks as JSON
+    console.log(results);
   });
+});
 
-  
-  // Start the server on port 3000
-  app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+
+app.get("/files", (req, res) => {
+  const query = "SELECT * FROM files";
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error("Error retrieving files:", err);
+      return res.status(500).send("Error retrieving files");
+    }
+    res.json(results); // Return all files as JSON
   });
-  
+});
+
+// Start the server on port 3000
+app.listen(3000, () => {
+  console.log("Server is running on http://localhost:3000");
+});

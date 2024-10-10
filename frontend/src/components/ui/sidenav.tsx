@@ -1,6 +1,6 @@
 import Link from "next/link";
 import NavLinks from "@/src/components/ui/nav-links";
-import Logo from "@/src/app/ui/logo";
+import Logo from "@/src/components/logo";
 import { PowerIcon } from "@heroicons/react/24/outline";
 import { signOut } from "@/auth";
 import { ThemeToggle } from "@/src/components/ui/theme-toggle";
@@ -21,12 +21,15 @@ export default function SideNav() {
         <Link className="flex p-4 md:h-40" href="/home">
           <Logo />
         </Link>
-        <Separator className="-mx-3" />
+        <Separator className="-mt-3 mb-4 mx-3 w-10/12" />
 
         {/* User profile */}
         <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
           {users.map((user) => (
-            <div key={user.id} className="flex items-center gap-2 mb-4 mt-6">
+            <div
+              key={user.id}
+              className="flex items-center mx-1 text-sm gap-2 mb-6 mt-6"
+            >
               <Avatar>
                 <AvatarImage
                   src={`https://cdn.discordapp.com/avatars/${
@@ -67,8 +70,8 @@ export default function SideNav() {
           </Card>
         </div>
       </nav>
-      {/* keep or remove */}
-      <Separator className="h-full" orientation="vertical" />
+      {/* keep or remove? */}
+      <Separator className="h-10/12 mt-15" orientation="vertical" />
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import "@/src/components/ui/global.css";
-import { inter } from "@/src/components/ui/fonts";
+import "@/src/components/global.css";
+import { inter } from "@/src/components/fonts";
 import { ThemeProvider } from "@/src/components/ui/theme-provider";
 
 export default function RootLayout({

@@ -1,6 +1,6 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
-const users = [
+export const users = [
   {
     id: "143071933355917312",
     name: "Kenny",
@@ -10,6 +10,22 @@ const users = [
   },
 ];
 
-const tasks = [{}];
+export const tasks = [{}];
 
-export { users, tasks };
+export const files = [
+  {
+    name: "file1.docx",
+    size: "2.5 MB",
+    date: "10/2/2024",
+  },
+  {
+    name: "file2.docx",
+    size: "1 MB",
+    date: "8/30/2024",
+  },
+  {
+    name: "file3.docx",
+    size: "3.5 MB",
+    date: "9/28/2024",
+  },
+];

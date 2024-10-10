@@ -1,7 +1,11 @@
-import { lusitana } from "@/src/components/ui/fonts";
-import { Card } from "@/src/app/ui/home/cards";
+import { lusitana } from "@/src/components/fonts";
 import { fetchTest } from "@/src/lib/data";
 import { CalendarIcon } from "@heroicons/react/20/solid";
+
+export const metadata = {
+  title: "Frequently Asked Questions | Task Manager and Cloud Storage System",
+  description: "Frequently Asked Questions page",
+};
 
 export default async function FaqPage() {
   // remove in production

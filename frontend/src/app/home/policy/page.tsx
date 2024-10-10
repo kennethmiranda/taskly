@@ -1,6 +1,11 @@
-import { lusitana } from "@/src/components/ui/fonts";
+import { lusitana } from "@/src/components/fonts";
 import { fetchTest } from "@/src/lib/data";
 import { CalendarIcon } from "@heroicons/react/20/solid";
+
+export const metadata = {
+  title: "Privacy Policy | Task Manager and Cloud Storage System",
+  description: "Privacy Policy page",
+};
 
 export default async function PolicyPage() {
   // remove in production

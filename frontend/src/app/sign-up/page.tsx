@@ -1,5 +1,4 @@
 import Logo from "@/src/components/logo";
-import SignInForm from "@/src/components/sign-in/sign-in-form";
 import { redirect } from "next/navigation";
 import { signIn, auth, providerMap } from "@/auth";
 import { AuthError } from "next-auth";
@@ -17,14 +16,15 @@ import { Label } from "@/src/components/ui/label";
 import { Input } from "@/src/components/ui/input";
 import { Icons } from "@/src/components/icons";
 import { Separator } from "@/src/components/ui/separator";
+import SignUpForm from "@/src/components/sign-up/sign-up-form";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Sign In | Task Manager and Cloud Storage System",
-  description: "Sign in to your account",
+  title: "Sign Up | Task Manager and Cloud Storage System",
+  description: "Create a new account",
 };
 
-export default async function SignInPage(props: {
+export default async function SignUpPage(props: {
   searchParams: { callbackUrl: string | undefined };
 }) {
   return (
@@ -35,12 +35,12 @@ export default async function SignInPage(props: {
         </div>
         <Separator className="mt-4 mb-5 -mx-2" />
         <div className="flex flex-col gap-5">
-          <SignInForm />
+          <SignUpForm />
         </div>
-        <CardFooter className="text-muted-foreground items-center justify-center mt-4 mb-4 text-xs">
-          No account?
-          <Link href="/sign-up" className="px-1.5 underline text-blue-400">
-            Sign Up
+        <CardFooter className="text-muted-foreground items-center justify-center text-xs">
+          Already have an account?
+          <Link href="/sign-in" className="px-1.5 underline text-blue-400">
+            Sign In
           </Link>
         </CardFooter>
 

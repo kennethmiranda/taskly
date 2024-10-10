@@ -1,6 +1,6 @@
 import { Button } from "@/src/components/ui/button";
 import { Card } from "@/src/components/ui/card";
-import { lusitana } from "@/src/components/ui/fonts";
+import { lusitana } from "@/src/components/fonts";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {
@@ -14,8 +14,14 @@ import {
 } from "@/src/components/ui/table";
 import { Separator } from "@/src/components/ui/separator";
 import { DownloadIcon } from "@radix-ui/react-icons";
+import FileTable from "@/src/components/storage/table";
 
-async function downloadFile(fileName: string) {
+export const metadata = {
+  title: "Storage | Task Manager and Cloud Storage System",
+  description: "Store your files securely in the cloud.",
+};
+
+/* async function downloadFile(fileName: string) {
   try {
     const response = await fetch(`/api/files/download?name=${fileName}`);
     if (!response.ok) {
@@ -33,25 +39,7 @@ async function downloadFile(fileName: string) {
   } catch (error) {
     console.error("There was a problem with the download operation:", error);
   }
-}
-
-const files = [
-  {
-    name: "file1.docx",
-    size: "2.5 MB",
-    date: "10/2/2024",
-  },
-  {
-    name: "file2.docx",
-    size: "1 MB",
-    date: "8/30/2024",
-  },
-  {
-    name: "file3.docx",
-    size: "3.5 MB",
-    date: "9/28/2024",
-  },
-];
+} */
 
 export default async function StoragePage() {
   return (
@@ -68,36 +56,7 @@ export default async function StoragePage() {
           </Button>
         </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead> </TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Size</TableHead>
-              <TableHead>Date</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {files.map((file) => (
-              <TableRow key={file.name}>
-                <TableCell>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="flex p-2 rounded-md"
-                    type="submit"
-                    /* onClick={() => downloadFile(file.name)} */
-                  >
-                    <DownloadIcon />
-                  </Button>
-                </TableCell>
-                <TableCell>{file.name}</TableCell>
-                <TableCell>{file.size}</TableCell>
-                <TableCell>{file.date}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <FileTable />
       </div>
     </main>
   );

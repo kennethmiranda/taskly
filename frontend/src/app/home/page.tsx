@@ -1,7 +1,6 @@
 import { lusitana } from "@/src/components/fonts";
-import { Card } from "@/src/components/ui/card";
+import Calendar from "@/src/components/home/calendar";
 import { fetchTest } from "@/src/lib/data";
-import { CalendarIcon } from "@heroicons/react/20/solid";
 
 export const metadata = {
   title: "Home | Task Manager and Cloud Storage System",
@@ -17,7 +16,7 @@ export default async function HomePage() {
       <h2 className={`${lusitana.className} text-3xl font-bold mb-6`}>
         Calendar
       </h2>
-      <CalendarIcon />
+      <Calendar />
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></div>
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8"></div>
     </main>

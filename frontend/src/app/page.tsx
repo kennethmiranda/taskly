@@ -6,6 +6,7 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Separator } from "@/src/components/ui/separator";
 import Link from "next/link";
 import { CardFooter } from "@/src/components/ui/card";
+import { CarouselComponent } from "@/src/components/carousel";
 
 export const metadata = {
   title: "Task Manager and Cloud Storage System",
@@ -45,8 +46,8 @@ export default function Page() {
             </Link>
           </CardFooter>
         </div>
-        <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-          <img src="/hero-desktop.png" alt="Task Management" />
+        <div className="flex items-center justify-center md:w-3/5 md:px-28 md:py-12">
+          <CarouselComponent />
         </div>
       </div>
     </main>

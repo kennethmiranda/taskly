@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { lusitana } from "@/src/components/ui/fonts";
+import { lusitana } from "@/src/components/fonts";
 import {
   PlusIcon,
   HomeIcon,
@@ -11,6 +11,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { DatePickerForm } from "@/src/components/ui/date-picker-form";
 import { Button } from "@/src/components/ui/button";
+import { tasks } from "@/src/lib/placeholder-data";
+/* export const metadata = {
+  title: "Tasks | Task Manager and Cloud Storage System",
+  description: "Manage your tasks.",
+}; */
 
 interface Task {
   id: number;
@@ -118,7 +123,7 @@ export default function TaskPage() {
   };
 
   return (
-    <div className="absolute h-screen bg-gray-100 ">
+    <div className="absolute h-screen">
       <main className="flex-1 p-8 overflow-auto">
         <div className="max-w-6xl mx-auto">
           <h2 className={`${lusitana.className} text-3xl font-bold mb-6`}>
@@ -134,34 +139,34 @@ export default function TaskPage() {
             </button>
           </div>
 
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className=" rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full table-fixed">
-                <thead className="bg-gray-50">
+                <thead className="">
                   <tr>
-                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Title
                     </th>
-                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Description
                     </th>
-                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Created
                     </th>
-                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Due Date
                     </th>
-                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="w-1/6 px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className=" divide-y divide-gray-200">
                   {tasks.map((task) => (
-                    <tr key={task.id} className="hover:bg-gray-50">
+                    <tr key={task.id} className="">
                       <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
                         {task.title}
                       </td>
@@ -193,7 +198,7 @@ export default function TaskPage() {
                             <ChevronDownIcon className="h-4 w-4 ml-1" />
                           </button>
                           {statusDropdownOpen === task.id && (
-                            <div className="fixed z-10 mt-1 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div className="fixed z-10 mt-1 w-40 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
                               <div
                                 className="py-1"
                                 role="menu"
@@ -253,7 +258,7 @@ export default function TaskPage() {
       {/* Create/Edit Task Modal */}
       {isCreateFormOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
-          <div className="bg-white p-5 rounded-lg shadow-xl w-96">
+          <div className=" p-5 rounded-lg shadow-xl w-96">
             <h3 className="text-lg font-bold mb-4">
               {selectedTask ? "Edit Task" : "Create New Task"}
             </h3>

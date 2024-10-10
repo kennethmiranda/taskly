@@ -15,7 +15,6 @@ import {
 import { Label } from "@/src/components/ui/label";
 import { Input } from "@/src/components/ui/input";
 import { Icons } from "@/src/components/icons";
-import { DemoCreateAccount } from "@/src/components/create-account";
 import { Separator } from "@/src/components/ui/separator";
 import SignUpForm from "@/src/components/sign-up/sign-up-form";
 import Link from "next/link";

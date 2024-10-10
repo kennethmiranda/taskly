@@ -1,7 +1,12 @@
-import { lusitana } from "@/src/components/ui/fonts";
+import { lusitana } from "@/src/components/fonts";
 import { Card } from "@/src/components/ui/card";
 import { fetchTest } from "@/src/lib/data";
 import { CalendarIcon } from "@heroicons/react/20/solid";
+
+export const metadata = {
+  title: "Home | Task Manager and Cloud Storage System",
+  description: "Home page",
+};
 
 export default async function HomePage() {
   // remove in production

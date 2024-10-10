@@ -23,6 +23,9 @@ input[type="number"]::-webkit-outer-spin-button {
 } */
 
 .calendar-container {
+  font-family: Poppins, sans-serif;
+  font-weight: normal;
+  font-display: swap;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;

@@ -1,19 +1,4 @@
 import { Button } from "@/src/components/ui/button";
-import { Card } from "@/src/components/ui/card";
-import { lusitana } from "@/src/components/fonts";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/src/components/ui/table";
-import { Separator } from "@/src/components/ui/separator";
-import { DownloadIcon } from "@radix-ui/react-icons";
 import FileTable from "@/src/components/storage/table";
 
 export const metadata = {
@@ -45,9 +30,7 @@ export default async function StoragePage() {
   return (
     <main className="flex-1 p-8 overflow-auto">
       <div className="max-w-4xl mx-auto">
-        <h2 className={`${lusitana.className} text-3xl font-bold mb-6`}>
-          File Storage
-        </h2>
+        <h2 className="text-2xl font-bold tracking-tight">File Storage</h2>
 
         {/* add file */}
         <div className="flex-grow mb-4 mt-4">

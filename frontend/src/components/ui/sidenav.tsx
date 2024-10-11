@@ -36,7 +36,12 @@ export default function SideNav() {
                     user.id || "143071933355917312"
                   }/${user.avatar || "8434111b06ba1df3eed123f4fc12d9ca"}.png`}
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>
+                  <img
+                    src="/profile-placeholder.png"
+                    alt="Profile Placeholder"
+                  />
+                </AvatarFallback>
               </Avatar>
               {user.name}
               <div className="flex-grow"></div>

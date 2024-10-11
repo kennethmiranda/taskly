@@ -3,6 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { tasks } from "@/src/lib/placeholder-data";
+import "@/src/components/home/calendar.css";
 
 export default function Calendar() {
   // map tasks to events
@@ -29,6 +30,7 @@ export default function Calendar() {
     <div className="calendar-container">
       <FullCalendar
         height={"85vh"}
+        themeSystem="standard"
         views={{
           dayGridMonth: {
             titleFormat: { year: "numeric", month: "long" },
@@ -43,7 +45,7 @@ export default function Calendar() {
         }}
         buttonText={{
           today: "Current Date",
-          month: "Month View",
+          month: "Month",
         }}
         initialView="dayGridMonth"
         nowIndicator={true}
@@ -52,7 +54,13 @@ export default function Calendar() {
         selectMirror={true}
         events={{ events }}
         initialEvents={[
-          { title: "Test Task", start: new Date(), resourceId: "a" },
+          {
+            title: "Today",
+            allDay: true,
+            start: new Date(),
+            editable: false,
+            textColor: "var(--foreground)",
+          },
         ]}
       />
     </div>

@@ -1,7 +1,8 @@
 import Calendar from "@/src/components/home/calendar";
 import { fetchTest } from "@/src/lib/data";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Home | Task Manager and Cloud Storage System",
   description: "Home page",
 };

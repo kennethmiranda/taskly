@@ -2,24 +2,14 @@ import Logo from "@/src/components/logo";
 import { redirect } from "next/navigation";
 import { signIn, auth, providerMap } from "@/auth";
 import { AuthError } from "next-auth";
-import { Button } from "@/src/components/ui/button";
 import { ThemeToggle } from "@/src/components/ui/theme-toggle";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
-import { Label } from "@/src/components/ui/label";
-import { Input } from "@/src/components/ui/input";
-import { Icons } from "@/src/components/icons";
+import { CardFooter } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
 import SignUpForm from "@/src/components/sign-up/sign-up-form";
 import Link from "next/link";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Sign Up | Task Manager and Cloud Storage System",
   description: "Create a new account",
 };

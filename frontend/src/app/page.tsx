@@ -7,8 +7,9 @@ import { Separator } from "@/src/components/ui/separator";
 import Link from "next/link";
 import { CardFooter } from "@/src/components/ui/card";
 import { CarouselComponent } from "@/src/components/carousel";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Task Manager and Cloud Storage System",
   description: "Manage your tasks and store your files securely in the cloud.",
 };

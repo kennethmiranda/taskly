@@ -1,6 +1,7 @@
 import { fetchTest } from "@/src/lib/data";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Privacy Policy | Task Manager and Cloud Storage System",
   description: "Privacy Policy page",
 };

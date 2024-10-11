@@ -1,7 +1,8 @@
 import { Button } from "@/src/components/ui/button";
 import FileTable from "@/src/components/storage/table";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Storage | Task Manager and Cloud Storage System",
   description: "Store your files securely in the cloud.",
 };

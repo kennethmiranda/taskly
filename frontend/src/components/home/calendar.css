@@ -2,10 +2,10 @@
 
 /* calendar container */
 .fc {
-  --fc-border-color: hsl(var(--border));
+  --fc-border-color: hsl(var(--calendar-border));
   --fc-button-text-color: hsl(var(--foreground));
   --fc-button-bg-color: hsl(var(--background));
-  --fc-button-border-color: hsl(var(--border));
+  --fc-button-border-color: hsl(var(--calendar-border));
   --fc-button-hover-bg-color: hsl(var(--accent));
   --fc-button-hover-border-color: hsl(var(--accent));
   --fc-button-active-bg-color: hsl(var(--accent));
@@ -33,7 +33,7 @@
   line-height: 1.25rem;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  border: 1px solid hsl(var(--border));
+  border: 1px solid hsl(var(--calendar-border));
   transition: all 0.15s ease;
 }
 
@@ -71,21 +71,10 @@
 }
 
 /* today highlight */
-/* light mode */
-@media (prefers-color-scheme: light) {
-  .fc .fc-day-today {
-    background-color: hsl(var(--accent) / 0.15) !important;
-    /* border: 1px solid hsl(var(--accent)); */
-    box-shadow: 0 0 5px hsl(var(--accent) / 0.4);
-  }
-}
-/* dark mode */
-@media (prefers-color-scheme: dark) {
-  .fc .fc-day-today {
-    background-color: hsl(var(--accent) / 0.4) !important;
-    /* border: 1px solid hsl(var(--accent-foreground)); */
-    box-shadow: 0 0 5px hsl(var(--accent-foreground) / 0.2);
-  }
+.fc .fc-day-today {
+  background-color: hsl(var(--accent) / 0.5) !important;
+  /* border: 1px solid hsl(var(--accent-foreground)); */
+  box-shadow: 0 0 5px hsl(var(--accent-foreground) / 0.5);
 }
 
 /* more event indicator */
@@ -95,7 +84,7 @@
 
 /* hover effect on day cells */
 .fc .fc-day:hover {
-  background-color: hsl(var(--accent) / 0.05);
+  background-color: hsl(var(--accent) / 0.1);
 }
 
 /* day number */

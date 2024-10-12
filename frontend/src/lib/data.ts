@@ -1,5 +1,3 @@
-import { tasks } from "@/src/lib/placeholder-data";
-import { Task } from "@/src/lib/definitions";
 import {
   ArrowDownIcon,
   ArrowRightIcon,
@@ -61,4 +59,11 @@ export async function fetchTest() {
   console.log("Fetching test data...");
   await new Promise((resolve) => setTimeout(resolve, 3000));
   console.log("Data fetch completed after 3 seconds.");
+}
+
+export async function fetchTaskById(id: string) {
+  console.log(`Fetching task by ID: ${id}`);
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  console.log(`Task fetch completed after 3 seconds for ID: ${id}`);
+  return;
 }

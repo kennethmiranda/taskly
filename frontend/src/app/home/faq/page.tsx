@@ -11,7 +11,7 @@ export default async function FaqPage() {
   // await fetchTest();
 
   return (
-    <main className="flex-1 p-8 overflow-auto max-w-8xl mx-auto">
+    <main className="flex-1 p-8 max-w-8xl mx-auto">
       <h2 className="text-2xl font-bold tracking-tight">
         Frequently Asked Questions
       </h2>

@@ -11,12 +11,14 @@ export default async function HomePage() {
   // remove in production
   // await fetchTest();
 
+  const streak = 0;
+
   return (
-    <main className="flex-1 p-8 overflow-auto max-w-8xl mx-auto">
+    <main className="flex-1 p-8 max-w-8xl mx-auto">
       <h2 className="text-2xl font-bold tracking-tight">Calendar</h2>
+      <p className="text-muted-foreground">Current Streak: {streak}</p>
+      <div className="flex items-center space-x-2"></div>
       <Calendar />
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8"></div>
     </main>
   );
 }

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default async function StoragePage() {
   return (
-    <main className="flex-1 p-8 overflow-auto">
+    <main className="flex-1 p-8">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-2xl font-bold tracking-tight">File Storage</h2>
 

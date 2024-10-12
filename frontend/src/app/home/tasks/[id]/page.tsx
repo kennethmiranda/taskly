@@ -36,7 +36,7 @@ export default async function TaskPage({ params }: Props) {
   // await fetchTest();
 
   return (
-    <main className="flex-1 p-8 overflow-auto max-w-8xl mx-auto">
+    <main className="flex-1 p-8 max-w-8xl mx-auto">
       <h2 className="text-2xl font-bold tracking-tight">
         Task {task.id}: {task.title}
       </h2>
@@ -47,7 +47,7 @@ export default async function TaskPage({ params }: Props) {
         </div>
         <div>
           <h3 className="text-xl font-semibold mb-2">Due Date</h3>
-          <p>{new Date(task.dueDate).toLocaleDateString()}</p>
+          <p>{task.dueDate?.toLocaleDateString()}</p>
         </div>
       </div>
       Files: {files.map((file) => file.name).join(", ")}

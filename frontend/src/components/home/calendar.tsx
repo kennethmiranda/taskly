@@ -18,7 +18,7 @@ export default function Calendar() {
     },
     {
       title: `${task.title} (Due)`,
-      start: task.dueDate,
+      start: task.dueDate || null || undefined,
       allDay: true,
       backgroundColor: "#F44336", // red for due date
       borderColor: "#F44336",
@@ -29,7 +29,7 @@ export default function Calendar() {
   return (
     <div className="calendar-container">
       <FullCalendar
-        height={"85vh"}
+        height="auto"
         themeSystem="standard"
         views={{
           dayGridMonth: {

@@ -11,6 +11,7 @@ import { DataTableColumnHeader } from "@/src/components/tasks/data-table-column-
 import { DataTableRowActions } from "@/src/components/tasks/data-table-row-actions";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/src/components/ui/button";
+import { getStatusOrder, getPriorityOrder } from "@/src/lib/utils";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -108,8 +109,10 @@ export const columns: ColumnDef<Task>[] = [
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+    sortingFn: (rowA, rowB, columnId) => {
+      const statusA = rowA.getValue(columnId) as string;
+      const statusB = rowB.getValue(columnId) as string;
+      return getStatusOrder(statusA) - getStatusOrder(statusB);
     },
   },
   {
@@ -135,8 +138,10 @@ export const columns: ColumnDef<Task>[] = [
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+    sortingFn: (rowA, rowB, columnId) => {
+      const priorityA = rowA.getValue(columnId) as string;
+      const priorityB = rowB.getValue(columnId) as string;
+      return getPriorityOrder(priorityA) - getPriorityOrder(priorityB);
     },
   },
   {

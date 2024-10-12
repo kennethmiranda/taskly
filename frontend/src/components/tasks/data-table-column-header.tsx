@@ -3,8 +3,9 @@ import {
   ArrowUpIcon,
   CaretSortIcon,
   EyeNoneIcon,
+  ReloadIcon,
 } from "@radix-ui/react-icons";
-import { Column } from "@tanstack/react-table";
+import { Column, Table } from "@tanstack/react-table";
 
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
@@ -20,6 +21,7 @@ interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title: string;
+  table: Table<TData>;
 }
 
 export function DataTableColumnHeader<TData, TValue>({

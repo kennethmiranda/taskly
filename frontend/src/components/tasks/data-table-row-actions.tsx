@@ -42,12 +42,9 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
+        <DropdownMenuItem>Share</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          Delete ⌫{/* <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut> */}
-        </DropdownMenuItem>
+        <DropdownMenuItem>Delete ⌫</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

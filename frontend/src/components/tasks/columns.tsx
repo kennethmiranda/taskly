@@ -9,6 +9,8 @@ import { priorities, statuses } from "@/src/lib/data";
 import { Task } from "@/src/lib/definitions";
 import { DataTableColumnHeader } from "@/src/components/tasks/data-table-column-header";
 import { DataTableRowActions } from "@/src/components/tasks/data-table-row-actions";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { Button } from "@/src/components/ui/button";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -37,8 +39,8 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
+    header: ({ column, table }) => (
+      <DataTableColumnHeader column={column} title="Task" table={table} />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
     enableSorting: false,
@@ -46,8 +48,8 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "title",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+    header: ({ column, table }) => (
+      <DataTableColumnHeader column={column} title="Title" table={table} />
     ),
     cell: ({ row }) => {
       return (
@@ -60,9 +62,33 @@ export const columns: ColumnDef<Task>[] = [
     },
   },
   {
+    accessorKey: "dueDate",
+    header: ({ column, table }) => (
+      <DataTableColumnHeader column={column} title="Due Date" table={table} />
+    ),
+    cell: ({ row }) => {
+      const dueDate = row.getValue("dueDate");
+
+      // If the dueDate is undefined or invalid, return an empty state
+      if (!dueDate || !(dueDate instanceof Date)) {
+        return <div className="flex items-center"></div>;
+      }
+
+      return (
+        <div className="flex items-center">
+          {new Date(dueDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+    header: ({ column, table }) => (
+      <DataTableColumnHeader column={column} title="Status" table={table} />
     ),
     cell: ({ row }) => {
       const status = statuses.find(
@@ -88,8 +114,8 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "priority",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Priority" />
+    header: ({ column, table }) => (
+      <DataTableColumnHeader column={column} title="Priority" table={table} />
     ),
     cell: ({ row }) => {
       const priority = priorities.find(
@@ -115,6 +141,21 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     id: "actions",
+    header: ({ table }) => (
+      <Button
+        onClick={() => {
+          table.resetSorting(),
+            table.toggleAllColumnsVisible(true),
+            table.resetRowSelection();
+          table.setPageSize(10);
+        }}
+        variant="ghost"
+        aria-label="Select all"
+        className="-mx-1 flex items-center"
+      >
+        <ReloadIcon className="-mx-1 flex items-center" />
+      </Button>
+    ),
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];

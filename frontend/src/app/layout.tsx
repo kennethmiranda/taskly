@@ -1,6 +1,7 @@
 import "@/src/components/global.css";
 import { inter } from "@/src/components/fonts";
 import { ThemeProvider } from "@/src/components/ui/theme-provider";
+import { Toaster } from "@/src/components/ui/toaster";
 
 export default function RootLayout({
   children,
@@ -18,6 +19,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

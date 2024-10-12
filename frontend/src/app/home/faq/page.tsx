@@ -1,19 +1,18 @@
-import { lusitana } from "@/src/components/fonts";
 import { fetchTest } from "@/src/lib/data";
-import { CalendarIcon } from "@heroicons/react/20/solid";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Frequently Asked Questions | Task Manager and Cloud Storage System",
   description: "Frequently Asked Questions page",
 };
 
 export default async function FaqPage() {
   // remove in production
-  const test = await fetchTest();
+  // await fetchTest();
 
   return (
-    <main className="flex-1 p-8 overflow-auto max-w-8xl mx-auto">
-      <h2 className={`${lusitana.className} text-3xl font-bold mb-6`}>
+    <main className="flex-1 p-8 max-w-8xl mx-auto">
+      <h2 className="text-2xl font-bold tracking-tight">
         Frequently Asked Questions
       </h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></div>

@@ -1,0 +1,97 @@
+/* FullCalendar custom styles */
+
+/* calendar container */
+.fc {
+  border-radius: 0.375rem;
+  overflow: hidden;
+  --fc-border-color: hsl(var(--calendar-border));
+  --fc-button-text-color: hsl(var(--foreground));
+  --fc-button-bg-color: hsl(var(--background));
+  --fc-button-border-color: hsl(var(--calendar-border));
+  --fc-button-hover-bg-color: hsl(var(--accent));
+  --fc-button-hover-border-color: hsl(var(--accent));
+  --fc-button-active-bg-color: hsl(var(--accent));
+  --fc-button-active-border-color: hsl(var(--accent));
+  --fc-page-bg-color: hsl(var(--background));
+  --fc-neutral-bg-color: hsl(var(--background));
+  --fc-neutral-text-color: hsl(var(--foreground));
+  --fc-cell-shaded-color: hsl(var(--accent) / 0.1);
+}
+
+/* calendar header */
+.fc .fc-toolbar-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+/* buttons */
+.fc .fc-button {
+  font-weight: 500;
+  border-radius: 0.375rem;
+  height: 2.5rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--calendar-border));
+  transition: all 0.15s ease;
+}
+
+.fc .fc-button:hover {
+  background-color: hsl(var(--accent));
+  border-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  background-color: hsl(var(--accent));
+  border-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+/* day headers */
+.fc th {
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-transform: uppercase;
+  box-sizing: border-box;
+}
+
+/* event styles */
+.fc-event {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  padding: 2px 4px;
+}
+
+/* today highlight */
+.fc .fc-day-today {
+  background-color: hsl(var(--accent) / 0.5) !important;
+  /* border: 1px solid hsl(var(--accent-foreground)); */
+  box-shadow: 0 0 5px hsl(var(--accent-foreground) / 0.5);
+}
+
+/* more event indicator */
+.fc .fc-more-link {
+  color: hsl(var(--muted-foreground));
+}
+
+/* hover effect on day cells */
+.fc .fc-day:hover {
+  background-color: hsl(var(--accent) / 0.1);
+}
+
+/* day number */
+.fc .fc-daygrid-day-number {
+  color: hsl(var(--foreground));
+  opacity: 0.7;
+  padding: 0.5rem;
+}

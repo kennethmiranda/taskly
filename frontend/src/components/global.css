@@ -17,17 +17,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-/* html {
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-  font-size: 14px;
-} */
-
-.calendar-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -47,6 +36,7 @@ input[type="number"]::-webkit-outer-spin-button {
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
+    --calendar-border: 214.3 31.8% 90%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
     --chart-1: 12 76% 61%;
@@ -74,6 +64,7 @@ input[type="number"]::-webkit-outer-spin-button {
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
+    --calendar-border: 217.2 0% 40%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     --chart-1: 220 70% 50%;
@@ -82,6 +73,12 @@ input[type="number"]::-webkit-outer-spin-button {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
 }
 
 @layer base {

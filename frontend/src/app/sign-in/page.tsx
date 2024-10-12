@@ -3,23 +3,13 @@ import SignInForm from "@/src/components/sign-in/sign-in-form";
 import { redirect } from "next/navigation";
 import { signIn, auth, providerMap } from "@/auth";
 import { AuthError } from "next-auth";
-import { Button } from "@/src/components/ui/button";
 import { ThemeToggle } from "@/src/components/ui/theme-toggle";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
-import { Label } from "@/src/components/ui/label";
-import { Input } from "@/src/components/ui/input";
-import { Icons } from "@/src/components/icons";
+import { CardFooter } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
 import Link from "next/link";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Sign In | Task Manager and Cloud Storage System",
   description: "Sign in to your account",
 };

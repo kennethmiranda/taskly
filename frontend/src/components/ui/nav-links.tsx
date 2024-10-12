@@ -18,24 +18,34 @@ import { Card } from "@/src/components/ui/card";
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: "Home", href: "/home", icon: HomeIcon },
+  { id: "home", name: "Home", href: "/home", icon: HomeIcon },
   {
+    id: "tasks",
     name: "Tasks",
     href: "/home/tasks",
     icon: ClipboardDocumentListIcon,
   },
-  { name: "Storage", href: "/home/storage", icon: CloudIcon },
+  { id: "storage", name: "Storage", href: "/home/storage", icon: CloudIcon },
   {
+    id: "faq",
     name: "Frequently Asked Questions",
     href: "/home/faq",
     icon: QuestionMarkCircleIcon,
   },
   {
-    name: "Privacy Policy",
-    href: "/home/policy",
+    id: "terms",
+    name: "Terms of Service",
+    href: "/home/terms",
     icon: InformationCircleIcon /* | LockClosedIcon | FingerPrintIcon */,
   },
   {
+    id: "privacy",
+    name: "Privacy Policy",
+    href: "/home/privacy",
+    icon: InformationCircleIcon /* | LockClosedIcon | FingerPrintIcon */,
+  },
+  {
+    id: "settings",
     name: "Settings",
     href: "/home/settings",
     icon: Cog6ToothIcon /* | Cog8ToothIcon */,
@@ -52,7 +62,7 @@ export default function NavLinks() {
         return (
           <Card>
             <Link
-              key={link.name}
+              key={link.id}
               href={link.href}
               className={clsx(
                 "flex h-[48px] grow items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",

@@ -30,13 +30,20 @@ export function DataTableSelectOptions<TData>({
 
   return (
     table.getSelectedRowModel().flatRows.length > 0 && (
-      <div className="flex items-center -mb-1 gap-2">
-        <Button onClick={handleDeleteSelected} variant="destructive">
+      <div className="flex items-center gap-2">
+        <Button
+          onClick={handleDeleteSelected}
+          variant="destructive"
+          size="sm"
+          className="h-8 rounded-md"
+        >
           Delete Selected
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">Change Status</Button>
+            <Button variant="outline" size="sm" className="h-8 rounded-md">
+              Change Status
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {statuses.map((status) => (
@@ -54,7 +61,9 @@ export function DataTableSelectOptions<TData>({
         </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">Change Priority</Button>
+            <Button variant="outline" size="sm" className="h-8 rounded-md">
+              Change Priority
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {priorities.map((priority) => (

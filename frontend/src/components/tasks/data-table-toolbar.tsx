@@ -9,6 +9,7 @@ import { Input } from "@/src/components/ui/input";
 import { priorities, statuses } from "@/src/lib/data";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { DataTableSelectOptions } from "@/src/components/tasks/data-table-select-options";
+import { DataTableCreateTask } from "@/src/components/tasks/data-table-create-task";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -22,6 +23,7 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
+        <DataTableCreateTask table={table} />
         <Input
           placeholder="Filter tasks..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}

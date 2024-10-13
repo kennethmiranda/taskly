@@ -155,7 +155,7 @@ export const columns: ColumnDef<Task>[] = [
           table.setPageSize(10);
         }}
         variant="ghost"
-        aria-label="Select all"
+        aria-label="Reset table"
         className="-mx-1 flex items-center"
       >
         <ReloadIcon className="-mx-1 flex items-center" />

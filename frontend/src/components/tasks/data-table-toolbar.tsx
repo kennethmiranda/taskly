@@ -8,6 +8,7 @@ import { Input } from "@/src/components/ui/input";
 
 import { priorities, statuses } from "@/src/lib/data";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { DataTableSelectOptions } from "@/src/components/tasks/data-table-select-options";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -54,6 +55,7 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
+      <DataTableSelectOptions table={table} />
     </div>
   );
 }

@@ -1,22 +1,15 @@
-import { lusitana } from "@/src/components/fonts";
-import {
-  AtSymbolIcon,
-  KeyIcon,
-  ExclamationCircleIcon,
-} from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { Button } from "@/src/components/ui/button";
 import { Label } from "@/src/components/ui/label";
 import { Input } from "@/src/components/ui/input";
-import { Title } from "@radix-ui/react-toast";
 import { Icons } from "@/src/components/icons";
 
 export default function SignUpForm() {
   return (
     <div className="flex-1 rounded-lg px-6 pb-2 pt-8">
-      <Title className={`${lusitana.className} -my-2 mb-8 text-2xl`}>
+      <h2 className="font-bold -my-2 mb-8 text-2xl tracking-tight">
         Create a new account
-      </Title>
+      </h2>
       <div className="w-full">
         <div className="mt-4 grid gap-2">
           <Label htmlFor="email">Email</Label>
@@ -24,7 +17,7 @@ export default function SignUpForm() {
         </div>
         <div className="mt-4 grid gap-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" />
+          <Input id="password" type="password" placeholder="******" />
         </div>
       </div>
       <Button className="mt-4 mb-3 w-full">

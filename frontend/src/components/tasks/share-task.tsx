@@ -13,30 +13,34 @@ import {
 } from "@/src/components/ui/dialog";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
-import { Task } from "@/src/lib/definitions";
+import { Task, TaskSchema } from "@/src/lib/definitions";
 import { useEffect, useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
+import { Table } from "@tanstack/react-table";
 
-interface ShareTaskProps {
+interface ShareTaskProps<TData> {
+  table: Table<TData>;
   taskId: string;
   onOpenChange: (open: boolean) => void;
 }
 
-export function ShareTask({ taskId, onOpenChange }: ShareTaskProps) {
+export function ShareTask<TData>({
+  table,
+  taskId,
+  onOpenChange,
+}: ShareTaskProps<TData>) {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(true);
-  const [task, setTask] = useState<Task | null>(null);
+  const [task, setTask] = useState<TaskSchema | null>(null);
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        // Simulating a fetch call with placeholder data
-        const placeholderData: Task = {
+        const placeholderData: TaskSchema = {
           id: taskId,
-          title: "Sample Task",
-          status: "open",
+          title: "task",
+          status: "backlog",
           priority: "low",
           createdAt: new Date(),
-          dueDate: new Date(),
         };
         setTask(placeholderData);
       } catch (error) {

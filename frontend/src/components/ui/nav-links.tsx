@@ -5,10 +5,8 @@ import {
   CloudIcon,
   ClipboardDocumentListIcon,
   QuestionMarkCircleIcon,
-  InformationCircleIcon,
-  LockClosedIcon,
-  FingerPrintIcon,
   Cog6ToothIcon,
+  Cog8ToothIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -31,18 +29,6 @@ const links = [
     name: "Frequently Asked Questions",
     href: "/home/faq",
     icon: QuestionMarkCircleIcon,
-  },
-  {
-    id: "terms",
-    name: "Terms of Service",
-    href: "/home/terms",
-    icon: InformationCircleIcon /* | LockClosedIcon | FingerPrintIcon */,
-  },
-  {
-    id: "privacy",
-    name: "Privacy Policy",
-    href: "/home/privacy",
-    icon: InformationCircleIcon /* | LockClosedIcon | FingerPrintIcon */,
   },
   {
     id: "settings",

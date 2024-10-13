@@ -8,6 +8,7 @@ import { Separator } from "@/src/components/ui/separator";
 import SignUpForm from "@/src/components/sign-up/sign-up-form";
 import Link from "next/link";
 import { Metadata } from "next";
+import PolicyFooter from "@/src/components/policy-footer";
 
 export const metadata: Metadata = {
   title: "Sign Up | Task Manager and Cloud Storage System",
@@ -24,15 +25,17 @@ export default async function SignUpPage(props: {
           <Logo />
         </div>
         <Separator className="mt-4 mb-5 -mx-2" />
-        <div className="flex flex-col gap-5">
-          <SignUpForm />
-        </div>
+
+        <SignUpForm />
+
         <CardFooter className="text-muted-foreground items-center justify-center text-xs">
           Already have an account?
           <Link href="/sign-in" className="px-1.5 underline text-blue-400">
             Sign In
           </Link>
         </CardFooter>
+
+        <PolicyFooter />
 
         {/* Theme Toggle for testing, remove in production */}
         <ThemeToggle />

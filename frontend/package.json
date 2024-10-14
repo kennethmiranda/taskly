@@ -35,12 +35,13 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
-    "date-fns": "^4.1.0",
+    "date-fns": "^3.6.0",
     "embla-carousel-autoplay": "^8.3.0",
     "embla-carousel-react": "^8.3.0",
     "lucide-react": "^0.447.0",
     "next": "14.2.15",
     "next-auth": "5.0.0-beta.19",
+    "next-themes": "^0.3.0",
     "postcss": "8.4.38",
     "react": "18.3.1",
     "react-day-picker": "8.10.1",
@@ -56,8 +57,8 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/node": "20.14.8",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0"
+    "@types/react": "18.3.1",
+    "@types/react-dom": "18.3.1"
   },
   "engines": {
     "node": ">=20.12.0"

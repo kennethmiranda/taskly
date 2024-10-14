@@ -66,9 +66,12 @@ export function CreateTaskForm({
   };
 
   const formSchema = z.object({
-    title: z.string({
-      required_error: "A title is required.",
-    }),
+    title: z
+      .string({
+        required_error: "A title is required.",
+      })
+      .min(1, "A title is required.")
+      .max(30, "Title must be less than 30 characters."),
     description: z.string().optional(),
     dueDate: z.date().optional(),
     status: z.enum(["backlog", "todo", "in progress", "done"], {
@@ -153,7 +156,10 @@ export function CreateTaskForm({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Task description" {...field} />
+                    <Textarea
+                      placeholder="Task description (optional)"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

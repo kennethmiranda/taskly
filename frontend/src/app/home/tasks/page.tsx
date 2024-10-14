@@ -1,10 +1,4 @@
-import { promises as fs } from "fs";
-import path from "path";
-import { z } from "zod";
-import { DatePickerForm } from "@/src/components/ui/date-picker-form";
-import { Button } from "@/src/components/ui/button";
 import { tasks } from "@/src/lib/placeholder-data";
-import { taskSchema } from "@/src/lib/definitions";
 import { Metadata } from "next";
 import { DataTable } from "@/src/components/tasks/data-table";
 import { columns } from "@/src/components/tasks/columns";
@@ -15,13 +9,7 @@ export const metadata: Metadata = {
 };
 
 async function getTasks() {
-  const data = await fs.readFile(
-    path.join(process.cwd(), "src/lib/placeholder-data.ts")
-  );
-
-  /* const tasks = JSON.parse(data.toString()); */
-
-  return z.array(taskSchema).parse(tasks);
+  return tasks;
 }
 
 export default async function TasksPage() {

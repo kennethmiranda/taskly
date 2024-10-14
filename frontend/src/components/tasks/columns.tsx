@@ -1,12 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-
-import { Badge } from "@/src/components/ui/badge";
 import { Checkbox } from "@/src/components/ui/checkbox";
-
 import { priorities, statuses } from "@/src/lib/data";
-import { Task, taskSchema } from "@/src/lib/definitions";
+import { Task } from "@/src/lib/definitions";
 import { DataTableColumnHeader } from "@/src/components/tasks/data-table-column-header";
 import { DataTableRowActions } from "@/src/components/tasks/data-table-row-actions";
 import { ReloadIcon } from "@radix-ui/react-icons";
@@ -162,13 +159,15 @@ export const columns: ColumnDef<Task>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      const task = taskSchema.parse(row.original);
+      const task = row.original;
 
       const onDelete = async (id: string) => {
         console.log(`Deleting task with id: ${id}`);
       };
 
-      return <DataTableRowActions row={row} onDelete={onDelete} />;
+      return (
+        <DataTableRowActions row={row} onDelete={() => onDelete(task.id)} />
+      );
     },
   },
 ];

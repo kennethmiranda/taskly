@@ -9,40 +9,28 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/src/components/ui/dialog";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
-import { Task, TaskSchema } from "@/src/lib/definitions";
+import { Task } from "@/src/lib/definitions";
 import { useEffect, useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
-import { Table } from "@tanstack/react-table";
+import { tasks } from "@/src/lib/placeholder-data";
 
-interface ShareTaskProps<TData> {
-  table: Table<TData>;
+interface ShareTaskProps {
   taskId: string;
   onOpenChange: (open: boolean) => void;
 }
 
-export function ShareTask<TData>({
-  table,
-  taskId,
-  onOpenChange,
-}: ShareTaskProps<TData>) {
+export function ShareTask({ taskId, onOpenChange }: ShareTaskProps) {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(true);
-  const [task, setTask] = useState<TaskSchema | null>(null);
+  const [task, setTask] = useState<Task | null>(null);
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const placeholderData: TaskSchema = {
-          id: taskId,
-          title: "task",
-          status: "backlog",
-          priority: "low",
-          createdAt: new Date(),
-        };
-        setTask(placeholderData);
+        const fetchedTask = tasks.find((task) => task.id === taskId) || null;
+        setTask(fetchedTask);
       } catch (error) {
         console.error("Failed to fetch task:", error);
       }

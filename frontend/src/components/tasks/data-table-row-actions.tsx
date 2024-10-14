@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 
-import { taskSchema } from "@/src/lib/definitions";
+import { Task } from "@/src/lib/definitions";
 import { ShareTask } from "@/src/components/tasks/share-task";
 import { useState } from "react";
 import {
@@ -43,7 +43,7 @@ export function DataTableRowActions<TData>({
   row,
   onDelete,
 }: DataTableRowActionsProps<TData>) {
-  const task = taskSchema.parse(row.original);
+  const task = row.original as Task;
   const router = useRouter();
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);

@@ -123,6 +123,70 @@ app.delete("/api/tasks/:id", (req, res) => {
   });
 });
 
+//Route to update attributes of task.
+app.patch("/api/tasks/:id", (req, res) => {
+  const { id } = req.params;
+  const { userId, title, description, createdAt, status, priority } = req.body;
+
+  // Build dynamic query based on which attributes are being updated
+  let updateFields = [];
+  let updateValues = [];
+
+  if (userId !== undefined) {
+    updateFields.push("userId = ?");
+    updateValues.push(userId);
+  }
+  if (title !== undefined) {
+    updateFields.push("title = ?");
+    updateValues.push(title);
+  }
+  if (description !== undefined) {
+    updateFields.push("description = ?");
+    updateValues.push(description);
+  }
+  if (createdAt !== undefined) {
+    updateFields.push("createdAt = ?");
+    updateValues.push(createdAt);
+  }
+  if (status !== undefined) {
+    updateFields.push("status = ?");
+    updateValues.push(status);
+  }
+  if (priority !== undefined) {
+    updateFields.push("priority = ?");
+    updateValues.push(priority);
+  }
+
+  // If there are no fields to update, return an error
+  if (updateFields.length === 0) {
+    return res.status(400).json({ message: "No valid fields provided for update" });
+  }
+
+  // Final SQL query to update the task
+  const updateQuery = `
+    UPDATE tasks
+    SET ${updateFields.join(", ")}
+    WHERE id = ?
+  `;
+
+  // Add the task id to the values array for the WHERE clause
+  updateValues.push(id);
+
+  pool.query(updateQuery, updateValues, (err, result) => {
+    if (err) {
+      console.error("Error updating task:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    // Returns message if task is not found
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    // Task updated successfully
+    res.status(200).json({ message: "Task updated successfully" });
+  });
+});
+
+
 
 
 

@@ -53,6 +53,8 @@ app.get("/", (req, res) => {
 app.post("/api/tasks", async (req, res) => {
   const { id, userId, title, description, createdAt, status, priority } = req.body;
   
+  const formattedCreatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
   // Create query to insert task into database
   const insertQuery = `
     INSERT INTO tasks (id, userId, title, description, createdAt, status, priority)
@@ -62,7 +64,7 @@ app.post("/api/tasks", async (req, res) => {
   try {
     pool.query(
       insertQuery,
-      [id, userId, title, description, createdAt, status, priority],
+      [id, userId, title, description, formattedCreatedAt, status, priority],
       (err, results) => {
         if (err) {
           console.error("Error creating task:", err);
@@ -80,7 +82,7 @@ app.post("/api/tasks", async (req, res) => {
 });
 
 // Route for '/tasks' to retrieve all tasks
-app.get("/tasks", (req, res) => {
+app.get("/api/tasks", (req, res) => {
   const query = "SELECT * FROM tasks";
   pool.query(query, (err, results) => {
     if (err) {
@@ -122,6 +124,7 @@ app.delete("/api/tasks/:id", (req, res) => {
     res.status(200).json({ message: "Task deleted successfully" });
   });
 });
+
 
 //Route to update attributes of task.
 app.patch("/api/tasks/:id", (req, res) => {
@@ -185,10 +188,6 @@ app.patch("/api/tasks/:id", (req, res) => {
     res.status(200).json({ message: "Task updated successfully" });
   });
 });
-
-
-
-
 
 
 // Start the server on port 3002

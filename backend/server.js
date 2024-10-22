@@ -43,20 +43,21 @@ app.get("/", (req, res) => {
 
 //Route to create task
 app.post("/api/tasks", async (req, res) => {
-  const { id, userId, title, description, createdAt, status, priority } = req.body;
+  const { id, userId, title, description, createdAt, dueDate, status, priority } = req.body;
   
   const formattedCreatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const formattedDueDate = dueDate ? new Date(dueDate).toISOString().slice(0, 19).replace('T', ' ') : null;
 
   // Create query to insert task into database
   const insertQuery = `
-    INSERT INTO tasks (id, userId, title, description, createdAt, status, priority)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO tasks (id, userId, title, description, createdAt, dueDate, status, priority)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   try {
     pool.query(
       insertQuery,
-      [id, userId, title, description, formattedCreatedAt, status, priority],
+      [id, userId, title, description, formattedCreatedAt, formattedDueDate, status, priority],
       (err, results) => {
         if (err) {
           console.error("Error creating task:", err);
@@ -64,7 +65,7 @@ app.post("/api/tasks", async (req, res) => {
         }
 
         // Respond with the inserted task details
-        res.status(201).json({ message: "Task created successfully", task: { id, userId, title, description, createdAt, status, priority } });
+        res.status(201).json({ message: "Task created successfully", task: { id, userId, title, description,formattedCreatedAt, formattedDueDate, status, priority } });
       }
     );
   } catch (error) {

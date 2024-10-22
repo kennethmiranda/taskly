@@ -109,6 +109,7 @@ export function CreateTaskForm({
                 createdAt: new Date().toISOString(), // Current timestamp in ISO format
                 status: 'pending', // Default status, can be adjusted as needed
                 priority: data.priority, // Priority from the form
+                dueDate: data.dueDate // Priority from the form
             }),
         });
 

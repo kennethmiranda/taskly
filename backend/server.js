@@ -1,17 +1,9 @@
 // Import necessary modules
 const mysql = require("mysql2");
+const pool = require("backend/mysql.js");
 const express = require("express");
-const pool = mysql.createPool({
-  host: 'localhost', // Change to your MySQL host if needed
-  user: 'root', // Your MySQL username
-  password: '6351812aa!', // Your MySQL password
-  database: 'sys', // The database you want to connect to
-  waitForConnections: true, // Wait for a connection to become available
-  connectionLimit: 10, // Max number of connections in pool
-  queueLimit: 0 // Max number of connection requests
-});
 
-// Create an Express application
+
 const cors = require('cors');
 const app = express();
 

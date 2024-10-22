@@ -95,27 +95,54 @@ export function CreateTaskForm({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
-    onCreateTask({
-      ...data,
-      id: Date.now().toString(),
-      userId: `temp-user-${Math.random().toString(36).substr(2, 9)}`, // temporary userId
-      createdAt: new Date(),
-      status: data.status,
-      priority: data.priority,
-    });
+    try {
+        const response = await fetch('http://localhost:3002/api/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify({
+                id: Date.now().toString(), // Temporary ID generation
+                userId: `temp-user-${Math.random().toString(36).substr(2, 9)}`, // Temporary userId
+                title: data.title, // Title from the form
+                description: data.description, // Description from the form
+                createdAt: new Date().toISOString(), // Current timestamp in ISO format
+                status: 'pending', // Default status, can be adjusted as needed
+                priority: data.priority, // Priority from the form
+            }),
+        });
 
-    toast({
-      title: "Task created",
-      description: "You successfully created a new task!",
-      duration: 3000,
-    });
+        //Checking if response is ok.
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-    console.log("Submitted data:", data);
-    setIsOpen(false);
-    form.reset();
+        const createdTask = await response.json();
 
-    setLoading(false);
-  }
+        // Call the onCreateTask function with the created task
+        onCreateTask(createdTask.task); 
+
+        toast({
+            title: "Task created",
+            description: "You successfully created a new task!",
+            duration: 3000,
+        });
+
+        console.log("Submitted data:", data);
+    } catch (error) {
+        console.error("Error creating task:", error);
+        toast({
+            title: "Error",
+            description: "Failed to create task. Please try again.",
+            variant: "destructive",
+            duration: 3000,
+        });
+    } finally {
+        setIsOpen(false);
+        form.reset();
+        setLoading(false);
+    }
+}
 
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>

@@ -96,7 +96,7 @@ export function CreateTaskForm({
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-        const response = await fetch('http://localhost:3002/api/tasks', {
+        const response = await fetch('/api/tasks', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', 

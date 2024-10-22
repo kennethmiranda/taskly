@@ -1,8 +1,7 @@
 const mysql = require("mysql2");
 const dotenv = require('dotenv');
-dotenv.config({ path: 'backend/.env' });
+dotenv.config({ path: 'SE2-Project/backend/.env' });
 
-console.log(process.env.DB_HOST);
 
 // Create a connection to the MySQL database
 const pool = mysql.createPool({

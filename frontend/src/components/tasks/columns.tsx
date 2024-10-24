@@ -66,15 +66,16 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const dueDate = row.getValue("dueDate");
-
+      const parsedDueDate = typeof dueDate === "string" ? new Date(dueDate) : dueDate;
       // If the dueDate is undefined or invalid, return an empty state
-      if (!dueDate || !(dueDate instanceof Date)) {
-        return <div className="flex items-center"></div>;
+      if (!(parsedDueDate instanceof Date) || isNaN(parsedDueDate.getTime())) {
+        return <div className="flex items-center">Invalid due date</div>;
       }
+      
 
       return (
         <div className="flex items-center">
-          {new Date(dueDate).toLocaleDateString("en-US", {
+          {parsedDueDate.toLocaleDateString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",

@@ -8,9 +8,12 @@ export const metadata: Metadata = {
   description: "Manage your tasks.",
 };
 
+
 async function getTasks() {
   try {
-    const response = await fetch("http://localhost:3002/api/tasks"); // Replace with your API endpoint
+    const response = await fetch("http://localhost:3002/api/tasks", {
+      cache: 'no-store', // Disable caching to always fetch fresh data
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch tasks");
     }

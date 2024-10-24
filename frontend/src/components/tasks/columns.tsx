@@ -162,24 +162,7 @@ export const columns: ColumnDef<Task>[] = [
       const task = row.original;
 
       const onDelete = async (id: string) => {
-        try {
-          const response = await fetch(`/api/tasks/${id}`, {
-            method: 'DELETE', // Specify the HTTP method
-            headers: {
-              'Content-Type': 'application/json', // Specify content type
-            },
-          });
-      
-          if (!response.ok) {
-            throw new Error('Failed to delete the task'); // Handle errors
-          }
-      
-          // Optionally, refresh the data or update local state here
-          console.log(`Task with id: ${id} deleted successfully`);
-        } catch (error) {
-          console.error("Error deleting task:", error);
-          // Optionally show an error message to the user
-        }
+        console.log(`Deleting task with id: ${id}`);
       };
 
       return (

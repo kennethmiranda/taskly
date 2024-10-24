@@ -96,7 +96,7 @@ export function CreateTaskForm({
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-        const response = await fetch('/api/tasks', {
+        const response = await fetch('http://localhost:3002/api/tasks', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', 
@@ -129,7 +129,6 @@ export function CreateTaskForm({
             duration: 3000,
         });
 
-        console.log("Submitted data:", data);
     } catch (error) {
         console.error("Error creating task:", error);
         toast({

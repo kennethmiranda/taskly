@@ -55,8 +55,14 @@ export function DataTableRowActions<TData>({
     setIsShareOpen(true);
   };
   const handleDelete = async () => {
-    await onDelete(task.id);
-    setIsDeleteAlertOpen(false);
+    try {
+      await onDelete(task.id);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      // Optionally show an error message to the user
+    } finally {
+      setIsDeleteAlertOpen(false); // Close the alert dialog
+    }
   };
 
   return (

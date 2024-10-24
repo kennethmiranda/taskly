@@ -161,9 +161,21 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const task = row.original;
-
       const onDelete = async (id: string) => {
-        console.log(`Deleting task with id: ${id}`);
+        try {
+          const response = await fetch(`http://localhost:3002/api/tasks/${id}`, {
+            method: 'DELETE',
+          });
+      
+          if (!response.ok) {
+            throw new Error('Failed to delete task');
+          }
+      
+          console.log(`Task with id: ${id} deleted successfully`);
+        
+        } catch (error) {
+          console.error('Error deleting task:', error);
+        }
       };
 
       return (

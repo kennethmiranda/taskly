@@ -1,8 +1,5 @@
 import Logo from "@/src/components/logo";
 import SignInForm from "@/src/components/sign-in/sign-in-form";
-import { redirect } from "next/navigation";
-import { signIn, auth, providerMap } from "@/auth";
-import { AuthError } from "next-auth";
 import { ThemeToggle } from "@/src/components/ui/theme-toggle";
 import { CardFooter } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
@@ -15,9 +12,7 @@ export const metadata: Metadata = {
   description: "Sign in to your account",
 };
 
-export default async function SignInPage(props: {
-  searchParams: { callbackUrl: string | undefined };
-}) {
+export default async function SignInPage() {
   return (
     <main className="flex items-center justify-center md:h-screen">
       <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">

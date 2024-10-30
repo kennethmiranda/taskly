@@ -18,7 +18,7 @@ export default function Calendar() {
     },
     {
       title: `${task.title} (Due)`,
-      start: task.dueDate || null || undefined,
+      start: task.dueDate || undefined,
       allDay: true,
       backgroundColor: "#F44336", // red for due date
       borderColor: "#F44336",

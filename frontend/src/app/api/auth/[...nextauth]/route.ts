@@ -1,4 +1,4 @@
-import { hash, compare } from "bcryptjs";
+import { compare } from "bcryptjs";
 import NextAuth from "next-auth";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";

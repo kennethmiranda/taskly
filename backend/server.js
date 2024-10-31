@@ -140,11 +140,11 @@ app.delete("/api/tasks/:id", async (req, res) => {
 // update task
 app.patch("/api/tasks/:id", async (req, res) => {
   const { id } = req.params;
-  const userEmail = req.query.userEmail;
+  const userId = req.headers.userid; 
+
   const { title, description, dueDate, status, priority } = req.body;
 
   try {
-    const userId = await getUserIdFromEmail(userEmail);
 
     // First verify the task belongs to the user
     const [task] = await pool.query(

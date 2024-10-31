@@ -29,9 +29,14 @@ import { DataTableToolbar } from "@/src/components/tasks/data-table-toolbar";
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
   data: TData[];
+  onTasksChange?: () => void;
 }
 
-export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
+export function DataTable<TData>({
+  columns,
+  data,
+  onTasksChange,
+}: DataTableProps<TData>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -64,7 +69,7 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar table={table} onTasksChange={onTasksChange} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

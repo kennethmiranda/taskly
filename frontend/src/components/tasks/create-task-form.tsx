@@ -46,15 +46,13 @@ import { format } from "date-fns";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/src/hooks/use-toast";
+import { getSession } from "next-auth/react";
 
 interface CreateTaskFormProps {
   onCreateTask: (task: Task) => void;
-  /* userId: string; */
 }
 
-export function CreateTaskForm({
-  onCreateTask /* userId */,
-}: CreateTaskFormProps) {
+export function CreateTaskForm({ onCreateTask }: CreateTaskFormProps) {
   const { toast } = useToast();
   const [loading, setLoading] = React.useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -94,55 +92,64 @@ export function CreateTaskForm({
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const session = await getSession();
+    if (!session?.user?.email) {
+      toast({
+        title: "Error",
+        description: "User session not found. Please log in again.",
+        variant: "destructive",
+        duration: 3000,
+      });
+      return;
+    }
+
     setLoading(true);
     try {
-        const response = await fetch('http://localhost:3002/api/tasks', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json', 
-            },
-            body: JSON.stringify({
-                id: Date.now().toString(), // Temporary ID generation
-                userId: `temp-user-${Math.random().toString(36).substr(2, 9)}`, // Temporary userId
-                title: data.title, // Title from the form
-                description: data.description, // Description from the form
-                createdAt: new Date().toISOString(), // Current timestamp in ISO format
-                status: data.status, // Default status, can be adjusted as needed
-                priority: data.priority, // Priority from the form
-                dueDate: data.dueDate // Priority from the form
-            }),
-        });
+      const response = await fetch("http://localhost:3002/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userEmail: session?.user?.email, // UserId
+          title: data.title, // Title from the form
+          description: data.description, // Description from the form
+          createdAt: new Date().toISOString(), // Current timestamp in ISO format
+          dueDate: data.dueDate, // Date the task is due
+          status: data.status, // Default status, can be adjusted as needed
+          priority: data.priority, // Priority from the form
+        }),
+      });
 
-        //Checking if response is ok.
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+      //Checking if response is ok.
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-        const createdTask = await response.json();
+      const createdTask = await response.json();
+      // Call the onCreateTask function with the created task
+      onCreateTask(createdTask.task);
 
-        // Call the onCreateTask function with the created task
-        onCreateTask(createdTask.task); 
+      toast({
+        title: "Success",
+        description: "Task created successfully!",
+        duration: 3000,
+      });
 
-        toast({
-            title: "Task created",
-            description: "You successfully created a new task!",
-            duration: 3000,
-        });
-
+      setIsOpen(false);
+      form.reset();
     } catch (error) {
-        console.error("Error creating task:", error);
-        toast({
-            title: "Error",
-            description: "Failed to create task. Please try again.",
-            variant: "destructive",
-            duration: 3000,
-        });
+      console.error("Error creating task:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create task. Please try again.",
+        variant: "destructive",
+        duration: 3000,
+      });
     } finally {
-        setIsOpen(false);
-        form.reset();
-        setLoading(false);
+      setLoading(false);
     }
-}
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>

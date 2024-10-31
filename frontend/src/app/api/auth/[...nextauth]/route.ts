@@ -27,8 +27,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid credentials");
         }
 
-        console.log("Attempting to sign in user:", credentials.email);
-
         const [rows]: any = await pool.query(
           "SELECT * FROM users WHERE email = ?",
           [credentials.email]
@@ -68,6 +66,20 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_ID!,
       clientSecret: process.env.GOOGLE_SECRET!,
+      authorization: {
+        params: {
+          scope:
+            "openid email profile https://www.googleapis.com/auth/userinfo.profile",
+        },
+      },
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
     }),
     DiscordProvider({
       clientId: process.env.DISCORD_ID!,
@@ -98,8 +110,6 @@ export const authOptions: NextAuthOptions = {
             "SELECT * FROM users WHERE email = ?",
             [user.email]
           );
-
-          console.log("New user created with id:", existingUser[0].id);
         }
 
         // link user to provider in `user_providers` table
@@ -109,34 +119,34 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (existingProvider.length === 0) {
-          console.log("Inserting user provider with userId:", user.id);
           await pool.query(
             "INSERT INTO user_providers (userId, provider, providerId) VALUES (?, ?, ?)",
             [existingUser[0].id, provider, providerId]
           );
         }
-
-        console.log("Existing Provider: ", existingProvider); // Check existing provider data
       }
     },
   },
   callbacks: {
     async session({ session, token }: { session: any; token: any }) {
-      console.log("Session Token: ", token);
       if (token) {
         session.user.id = token.id;
         session.user.name = token.name;
         session.user.email = token.email;
-        session.user.image = token.picture;
+        session.user.image = token.picture || token.image;
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, profile }: any) {
       if (user) {
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
-        token.picture = user.image;
+        if (account?.provider === "google" && profile?.picture) {
+          token.picture = profile.picture;
+        } else {
+          token.picture = user.image;
+        }
       }
       return token;
     },

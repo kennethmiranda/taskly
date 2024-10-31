@@ -2,6 +2,8 @@
 
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
+import { Task } from "@/src/lib/definitions";
+
 
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
@@ -11,12 +13,12 @@ import { DataTableFacetedFilter } from "@/src/components/tasks/data-table-facete
 import { DataTableSelectOptions } from "@/src/components/tasks/data-table-select-options";
 import { DataTableCreateTask } from "@/src/components/tasks/data-table-create-task";
 
-interface DataTableToolbarProps<TData> {
+interface DataTableToolbarProps<TData extends Task> {
   table: Table<TData>;
   onTasksChange?: () => void;
 }
 
-export function DataTableToolbar<TData>({
+export function DataTableToolbar<TData extends Task>({
   table,
   onTasksChange,
 }: DataTableToolbarProps<TData>) {

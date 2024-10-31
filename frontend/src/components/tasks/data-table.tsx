@@ -25,6 +25,8 @@ import {
 } from "@/src/components/ui/table";
 import { DataTablePagination } from "@/src/components/tasks/data-table-pagination";
 import { DataTableToolbar } from "@/src/components/tasks/data-table-toolbar";
+import { Task } from "@/src/lib/definitions";
+
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -32,7 +34,7 @@ interface DataTableProps<TData> {
   onTasksChange?: () => void;
 }
 
-export function DataTable<TData>({
+export function DataTable<TData extends Task>({
   columns,
   data,
   onTasksChange,

@@ -161,10 +161,16 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const task = row.original;
+      const userIdNum = row.original.userId;
       const onDelete = async (id: string) => {
         try {
           const response = await fetch(`http://localhost:3002/api/tasks/${id}`, {
             method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'userId': String(userIdNum),
+            
+            },
           });
       
           if (!response.ok) {

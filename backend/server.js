@@ -108,10 +108,9 @@ app.post("/api/tasks", async (req, res) => {
 // delete task
 app.delete("/api/tasks/:id", async (req, res) => {
   const { id } = req.params;
-  const userEmail = req.query.userEmail;
+  const userId = req.headers.userid; 
 
   try {
-    const userId = await getUserIdFromEmail(userEmail);
 
     // First verify the task belongs to the user
     const [task] = await pool.query(

@@ -7,23 +7,25 @@ import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 
 import { priorities, statuses } from "@/src/lib/data";
-import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { DataTableFacetedFilter } from "@/src/components/tasks/data-table-faceted-filter";
 import { DataTableSelectOptions } from "@/src/components/tasks/data-table-select-options";
 import { DataTableCreateTask } from "@/src/components/tasks/data-table-create-task";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  onTasksChange?: () => void;
 }
 
 export function DataTableToolbar<TData>({
   table,
+  onTasksChange,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        <DataTableCreateTask table={table} />
+        <DataTableCreateTask table={table} onTasksChange={onTasksChange} />
         <Input
           placeholder="Filter tasks..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}

@@ -23,15 +23,13 @@ export default function Page() {
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg mx-20 px-6 py-10 md:w-2/5 md:px-20">
           <Logo />
-          <Separator className="mt-5 mb-5" />
-          <p
-            className={`${lusitana.className} text-xl md:text-3xl md:leading-normal`}
-          >
+          <Separator className="mt-3 mb-2" />
+          <p className="text-xl md:text-3xl md:leading-normal mb-2">
             <strong>
-              Welcome to the Task Manager and Cloud Storage System.
+              Welcome to the Task Manager and Cloud Storage System
             </strong>
           </p>
-          <Button>
+          <Button asChild>
             <Link
               href="/sign-in"
               className="flex items-center gap-5 rounded-lg px-6 py-3 text-sm font-medium transition-colors md:text-base"

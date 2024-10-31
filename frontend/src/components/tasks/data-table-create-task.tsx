@@ -2,39 +2,26 @@ import { Table } from "@tanstack/react-table";
 import { CreateTaskForm } from "@/src/components/tasks/create-task-form";
 import { Task } from "@/src/lib/definitions";
 
-
 interface DataTableCreateTaskProps<TData> {
   table: Table<TData>;
+  onTasksChange?: () => void;
 }
 
 export function DataTableCreateTask<TData>({
   table,
+  onTasksChange,
 }: DataTableCreateTaskProps<TData>) {
-  const handleCreateTask = async(newTask: Task) => {
-    try{
-     const response = await fetch("api/tasks",{
-       method: "POST",
-       headers:{
-         "Content-Type": "applications/json"
-       },
-       body: JSON.stringify(newTask)
-    });
+  const handleCreateTask = (task: Task) => {
+    console.log("Task created successfully:", task);
 
-    if(!response.ok){
-      throw new Error("Failed to create task");
-    };
-    const data = await response.json();
-    console.log("task created successfully:", data);
-    }catch(error){
-      console.error("Error creating task:", error);
+    if (onTasksChange) {
+      onTasksChange();
     }
   };
 
   return (
     <div className="flex items-center gap-2">
-      <CreateTaskForm
-        /* userId={currentUserId} */ onCreateTask={handleCreateTask}
-      />
+      <CreateTaskForm onCreateTask={handleCreateTask} />
     </div>
   );
 }

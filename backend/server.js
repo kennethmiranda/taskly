@@ -1,92 +1,223 @@
-// Import necessary modules
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 const pool = require("backend/mysql.js");
 const express = require("express");
 
-
-const cors = require('cors');
+const cors = require("cors");
 const app = express();
-
 
 // Middleware to parse JSON request bodies
 app.use(cors());
 app.use(express.json());
 
-/*
-// Define a route to add a task (POST /tasks)
-app.post("/tasks", (req, res) => {
-  const { name, status, priority, due_date, notifiable_by_email } = req.body;
-
-  const query = `
-    INSERT INTO tasks (name, status, priority, due_date, notifiable_by_email)
-    VALUES (?, ?, ?, ?, ?)
-  `;
-
-  connection.query(
-    query,
-    [name, status, priority, due_date, notifiable_by_email],
-    (err, results) => {
-      if (err) {
-        console.error("Error inserting task:", err);
-        return res.status(500).send("Error inserting task");
-      }
-      res.status(201).send("Task inserted successfully");
-    }
-  );
-});
-*/
+// helper function to get userId from email
+async function getUserIdFromEmail(email) {
+  const [rows] = await pool.query("SELECT id FROM users WHERE email = ?", [
+    email,
+  ]);
+  if (!rows || rows.length === 0) {
+    throw new Error(`User not found for email: ${email}`);
+  }
+  return rows[0].id;
+}
 
 // Route for the root URL '/'
 app.get("/", (req, res) => {
   res.send("Welcome to the Task Manager API!");
 });
 
-//Route to create task
-app.post("/api/tasks", async (req, res) => {
-  const { id, userId, title, description, createdAt, dueDate, status, priority } = req.body;
-  
-  const formattedCreatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  const formattedDueDate = dueDate ? new Date(dueDate).toISOString().slice(0, 19).replace('T', ' ') : null;
+// get tasks for specific user
+app.get("/api/tasks", async (req, res) => {
+  const userEmail = req.query.userEmail;
 
-  // Create query to insert task into database
-  const insertQuery = `
-    INSERT INTO tasks (id, userId, title, description, createdAt, dueDate, status, priority)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `;
+  if (!userEmail) {
+    return res.status(400).json({ error: "userId is required" });
+  }
 
   try {
-    pool.query(
-      insertQuery,
-      [id, userId, title, description, formattedCreatedAt, formattedDueDate, status, priority],
-      (err, results) => {
-        if (err) {
-          console.error("Error creating task:", err);
-          return res.status(500).json({ error: "Failed to create task" });
-        }
-
-        // Respond with the inserted task details
-        res.status(201).json({ message: "Task created successfully", task: { id, userId, title, description,formattedCreatedAt, formattedDueDate, status, priority } });
-      }
+    const userId = await getUserIdFromEmail(userEmail);
+    const [results] = await pool.query(
+      "SELECT * FROM tasks WHERE userId = ? ORDER BY createdAt DESC",
+      [userId]
     );
-  } catch (error) {
-    console.error("Error creating task:", error);
-    res.status(500).json({ error: "Failed to create task" });
+    res.json(results);
+  } catch (err) {
+    console.error("Error retrieving tasks:", err);
+    res.status(500).json({ error: "Error retrieving tasks" });
   }
 });
 
-// Route for '/tasks' to retrieve all tasks
-app.get("/api/tasks", (req, res) => {
-  const query = "SELECT * FROM tasks";
-  pool.query(query, (err, results) => {
-    if (err) {
-      console.error("Error retrieving tasks:", err);
-      return res.status(500).send("Error retrieving tasks");
+// create task
+app.post("/api/tasks", async (req, res) => {
+  const { userEmail, title, description, dueDate, status, priority } = req.body;
+
+  if (!userEmail) {
+    return res.status(400).json({ error: "userEmail is required" });
+  }
+
+  try {
+    const userId = await getUserIdFromEmail(userEmail);
+
+    const formattedCreatedAt = new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+    const formattedDueDate = dueDate
+      ? new Date(dueDate).toISOString().slice(0, 19).replace("T", " ")
+      : null;
+
+    // Create query to insert task into database
+    const insertQuery = `
+    INSERT INTO tasks (userId, title, description, createdAt, dueDate, status, priority)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+    const [result] = await pool.query(insertQuery, [
+      userId,
+      title,
+      description,
+      formattedCreatedAt,
+      formattedDueDate,
+      status,
+      priority,
+    ]);
+
+    // Respond with the inserted task details
+    res.status(201).json({
+      message: "Task created successfully",
+      task: {
+        id: result.insertId,
+        userId,
+        title,
+        description,
+        createdAt: formattedCreatedAt,
+        dueDate: formattedDueDate,
+        status,
+        priority,
+      },
+    });
+  } catch (error) {
+    console.error("Error creating task:", error);
+    if (error.message.includes("User not found")) {
+      res.status(404).json({ error: "User not found" });
+    } else {
+      res.status(500).json({ error: "Failed to create task" });
     }
-    res.json(results); // Return all tasks as JSON
-    console.log(results);
-  });
+  }
 });
 
+// delete task
+app.delete("/api/tasks/:id", async (req, res) => {
+  const { id } = req.params;
+  const userEmail = req.query.userEmail;
+
+  try {
+    const userId = await getUserIdFromEmail(userEmail);
+
+    // First verify the task belongs to the user
+    const [task] = await pool.query(
+      "SELECT * FROM tasks WHERE id = ? AND userId = ?",
+      [id, userId]
+    );
+
+    if (task.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Task not found or unauthorized" });
+    }
+
+    // If verification passes, delete the task
+    const [result] = await pool.query(
+      "DELETE FROM tasks WHERE id = ? AND userId = ?",
+      [id, userId]
+    );
+
+    res.status(200).json({ message: "Task deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// update task
+app.patch("/api/tasks/:id", async (req, res) => {
+  const { id } = req.params;
+  const userEmail = req.query.userEmail;
+  const { title, description, dueDate, status, priority } = req.body;
+
+  try {
+    const userId = await getUserIdFromEmail(userEmail);
+
+    // First verify the task belongs to the user
+    const [task] = await pool.query(
+      "SELECT * FROM tasks WHERE id = ? AND userId = ?",
+      [id, userId]
+    );
+
+    if (task.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Task not found or unauthorized" });
+    }
+
+    // Build dynamic query based on which attributes are being updated
+    let updateFields = [];
+    let updateValues = [];
+
+    if (title !== undefined) {
+      updateFields.push("title = ?");
+      updateValues.push(title);
+    }
+    if (description !== undefined) {
+      updateFields.push("description = ?");
+      updateValues.push(description);
+    }
+    if (dueDate !== undefined) {
+      const formattedDueDate = dueDate
+        ? new Date(dueDate).toISOString().slice(0, 19).replace("T", " ")
+        : null;
+      updateFields.push("dueDate = ?");
+      updateValues.push(formattedDueDate);
+    }
+    if (status !== undefined) {
+      updateFields.push("status = ?");
+      updateValues.push(status);
+    }
+    if (priority !== undefined) {
+      updateFields.push("priority = ?");
+      updateValues.push(priority);
+    }
+
+    // If there are no fields to update, return an error
+    if (updateFields.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No valid fields provided for update" });
+    }
+
+    // Final SQL query to update the task
+    const updateQuery = `
+      UPDATE tasks
+      SET ${updateFields.join(", ")}
+      WHERE id = ? AND userId = ?
+    `;
+
+    // Add the task id to the values array for the WHERE clause
+    updateValues.push(id, userId);
+
+    const [result] = await pool.query(updateQuery, updateValues);
+
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .json({ message: "Task not found or unauthorized" });
+    }
+
+    res.status(200).json({ message: "Task updated successfully" });
+  } catch (error) {
+    console.error("Error updating task:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 app.get("/files", (req, res) => {
   const query = "SELECT * FROM files";
@@ -98,90 +229,6 @@ app.get("/files", (req, res) => {
     res.json(results); // Return all files as JSON
   });
 });
-
-//Route to delete task
-app.delete("/api/tasks/:id", (req, res) => {
-  const { id } = req.params;
-  const deleteQuery = "DELETE FROM tasks WHERE id = ?";
-
-  pool.query(deleteQuery, [id], (err, result) => {
-    if (err) {
-      console.error("Error deleting task:", err);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-    //Returns message if task is not found.
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Task not found" });
-    }
-    //Task deleted.
-    res.status(200).json({ message: "Task deleted successfully" });
-  });
-});
-
-
-//Route to update attributes of task.
-app.patch("/api/tasks/:id", (req, res) => {
-  const { id } = req.params;
-  const { userId, title, description, createdAt, status, priority } = req.body;
-
-  // Build dynamic query based on which attributes are being updated
-  let updateFields = [];
-  let updateValues = [];
-
-  if (userId !== undefined) {
-    updateFields.push("userId = ?");
-    updateValues.push(userId);
-  }
-  if (title !== undefined) {
-    updateFields.push("title = ?");
-    updateValues.push(title);
-  }
-  if (description !== undefined) {
-    updateFields.push("description = ?");
-    updateValues.push(description);
-  }
-  if (createdAt !== undefined) {
-    updateFields.push("createdAt = ?");
-    updateValues.push(createdAt);
-  }
-  if (status !== undefined) {
-    updateFields.push("status = ?");
-    updateValues.push(status);
-  }
-  if (priority !== undefined) {
-    updateFields.push("priority = ?");
-    updateValues.push(priority);
-  }
-
-  // If there are no fields to update, return an error
-  if (updateFields.length === 0) {
-    return res.status(400).json({ message: "No valid fields provided for update" });
-  }
-
-  // Final SQL query to update the task
-  const updateQuery = `
-    UPDATE tasks
-    SET ${updateFields.join(", ")}
-    WHERE id = ?
-  `;
-
-  // Add the task id to the values array for the WHERE clause
-  updateValues.push(id);
-
-  pool.query(updateQuery, updateValues, (err, result) => {
-    if (err) {
-      console.error("Error updating task:", err);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-    // Returns message if task is not found
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Task not found" });
-    }
-    // Task updated successfully
-    res.status(200).json({ message: "Task updated successfully" });
-  });
-});
-
 
 // Start the server on port 3002
 app.listen(3002, () => {

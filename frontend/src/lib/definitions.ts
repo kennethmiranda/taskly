@@ -1,9 +1,9 @@
 export type User = {
   id: string;
-  name: string;
+  name?: string;
   email: string;
-  password: string;
-  avatar: string;
+  password?: string;
+  image?: string;
 };
 
 export type Task = {

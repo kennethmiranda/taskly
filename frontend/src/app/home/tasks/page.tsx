@@ -1,44 +1,43 @@
-import { tasks } from "@/src/lib/placeholder-data";
 import { Metadata } from "next";
-import { DataTable } from "@/src/components/tasks/data-table";
-import { columns } from "@/src/components/tasks/columns";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+import { TaskDashboard } from "@/src/components/tasks/tasks-dashboard";
 
 export const metadata: Metadata = {
   title: "Tasks | Task Manager and Cloud Storage System",
   description: "Manage your tasks.",
 };
 
-
-async function getTasks() {
+async function getTasks(userEmail: string) {
   try {
-    const response = await fetch("http://localhost:3002/api/tasks", {
-      cache: 'no-store', // Disable caching to always fetch fresh data
-    });
+    const response = await fetch(
+      `http://localhost:3002/api/tasks?userEmail=${userEmail}`,
+      {
+        cache: "no-store",
+      }
+    );
+
     if (!response.ok) {
       throw new Error("Failed to fetch tasks");
     }
-    const tasks = await response.json();
-    return tasks;
+
+    return await response.json();
   } catch (error) {
     console.error("Error fetching tasks:", error);
-    return []; // Return an empty array or handle the error as needed
+    throw error;
   }
 }
+
 export default async function TasksPage() {
-  const tasks = await getTasks();
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    return <div>Please sign in to view tasks</div>;
+  }
+
+  const initialTasks = await getTasks(session.user.email);
 
   return (
-    <div className="space-y-6 h-full mx-auto">
-      <div className="flex-1 items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Tasks</h2>
-          <p className="text-muted-foreground">
-            Here&apos;s a list of your tasks
-          </p>
-        </div>
-        <div className="flex items-center space-x-2"></div>
-      </div>
-      <DataTable data={tasks} columns={columns} />
-    </div>
+    <TaskDashboard initialTasks={initialTasks} userEmail={session.user.email} />
   );
 }

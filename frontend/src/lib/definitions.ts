@@ -17,3 +17,13 @@ export type Task = {
   status: string;
   priority: string;
 };
+
+export type EventType = {
+  title: string;
+  start: string | Date;
+  allDay: boolean;
+  backgroundColor?: string;
+  borderColor?: string;
+  url?: string;
+  id: string; 
+};

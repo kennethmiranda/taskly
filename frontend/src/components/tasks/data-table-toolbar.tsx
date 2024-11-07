@@ -4,7 +4,6 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 import { Task } from "@/src/lib/definitions";
 
-
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 
@@ -61,7 +60,7 @@ export function DataTableToolbar<TData extends Task>({
           </Button>
         )}
       </div>
-      <DataTableSelectOptions table={table} />
+      <DataTableSelectOptions table={table} onTasksChange={onTasksChange} />
     </div>
   );
 }

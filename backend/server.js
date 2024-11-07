@@ -218,6 +218,33 @@ app.patch("/api/tasks/:id", async (req, res) => {
   }
 });
 
+// get specific task for user
+app.get("/api/tasks/:id", async (req, res) => {
+  const { id } = req.params;
+  const userEmail = req.query.userEmail;
+
+  if (!userEmail) {
+    return res.status(400).json({ error: "userId is required" });
+  }
+
+  try {
+    const userId = await getUserIdFromEmail(userEmail);
+    const [results] = await pool.query(
+      "SELECT * FROM tasks WHERE id = ? AND userId = ?",
+      [id, userId]
+    );
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    res.json(results[0]);
+  } catch (err) {
+    console.error("Error retrieving tasks:", err);
+    res.status(500).json({ error: "Error retrieving tasks" });
+  }
+});
+
 app.get("/files", (req, res) => {
   const query = "SELECT * FROM files";
   connection.query(query, (err, results) => {

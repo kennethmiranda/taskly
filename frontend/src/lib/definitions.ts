@@ -16,6 +16,17 @@ export type Task = {
   updatedAt?: Date;
   status: string;
   priority: string;
+  files?: File[];
+};
+
+export type File = {
+  id: string;
+  taskId: Task["id"];
+  name?: string;
+  url?: string;
+  size?: number;
+  type?: string;
+  createdAt: Date;
 };
 
 export type EventType = {
@@ -25,5 +36,5 @@ export type EventType = {
   backgroundColor?: string;
   borderColor?: string;
   url?: string;
-  id: string; 
+  id: string;
 };

@@ -57,12 +57,14 @@ app.post("/api/tasks", async (req, res) => {
   try {
     const userId = await getUserIdFromEmail(userEmail);
 
-    const formattedCreatedAt = new Date()
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
+    function getLocaleDate() {
+      const date = new Date();
+      date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+      return date.toISOString().slice(0, 19).replace("T", " ");
+    }
+    const formattedCreatedAt = getLocaleDate();
     const formattedDueDate = dueDate
-      ? new Date(dueDate).toISOString().slice(0, 19).replace("T", " ")
+      ? new Date(dueDate).toISOString("en-US").slice(0, 19).replace("T", " ")
       : null;
 
     // Create query to insert task into database
@@ -108,10 +110,9 @@ app.post("/api/tasks", async (req, res) => {
 // delete task
 app.delete("/api/tasks/:id", async (req, res) => {
   const { id } = req.params;
-  const userId = req.headers.userid; 
+  const userId = req.headers.userid;
 
   try {
-
     // First verify the task belongs to the user
     const [task] = await pool.query(
       "SELECT * FROM tasks WHERE id = ? AND userId = ?",
@@ -140,12 +141,11 @@ app.delete("/api/tasks/:id", async (req, res) => {
 // update task
 app.patch("/api/tasks/:id", async (req, res) => {
   const { id } = req.params;
-  const userId = req.headers.userid; 
+  const userId = req.headers.userid;
 
   const { title, description, dueDate, status, priority } = req.body;
 
   try {
-
     // First verify the task belongs to the user
     const [task] = await pool.query(
       "SELECT * FROM tasks WHERE id = ? AND userId = ?",

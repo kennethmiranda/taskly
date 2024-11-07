@@ -66,12 +66,12 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const dueDate = row.getValue("dueDate");
-      const parsedDueDate = typeof dueDate === "string" ? new Date(dueDate) : dueDate;
+      const parsedDueDate =
+        typeof dueDate === "string" ? new Date(dueDate) : dueDate;
       // If the dueDate is undefined or invalid, return an empty state
       if (!(parsedDueDate instanceof Date) || isNaN(parsedDueDate.getTime())) {
-        return <div className="flex items-center">Invalid due date</div>;
+        return <div className="flex items-center">No due date</div>;
       }
-      
 
       return (
         <div className="flex items-center">
@@ -164,23 +164,24 @@ export const columns: ColumnDef<Task>[] = [
       const userIdNum = row.original.userId;
       const onDelete = async (id: string) => {
         try {
-          const response = await fetch(`http://localhost:3002/api/tasks/${id}`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-              'userId': String(userIdNum),
-            
-            },
-          });
-      
+          const response = await fetch(
+            `http://localhost:3002/api/tasks/${id}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                userId: String(userIdNum),
+              },
+            }
+          );
+
           if (!response.ok) {
-            throw new Error('Failed to delete task');
+            throw new Error("Failed to delete task");
           }
-      
+
           console.log(`Task with id: ${id} deleted successfully`);
-        
         } catch (error) {
-          console.error('Error deleting task:', error);
+          console.error("Error deleting task:", error);
         }
       };
 

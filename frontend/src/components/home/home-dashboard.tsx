@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
 import Calendar from "@/src/components/home/calendar";
 import { SessionProvider } from "next-auth/react";
 
-export default function HomeContent() {
+export default function HomeDashboard() {
   const streak = 0;
 
   return (

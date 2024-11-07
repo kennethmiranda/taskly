@@ -1,6 +1,6 @@
 // /src/app/home/page.tsx
 import { Metadata } from "next";
-import HomeContent from "@/src/app/home/HomeContent";
+import HomeDashboard from "@/src/components/home/home-dashboard";
 
 export const metadata: Metadata = {
   title: "Home | Task Manager and Cloud Storage System",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <HomeContent />;
+  return <HomeDashboard />;
 }

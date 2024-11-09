@@ -9,9 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 import { priorities, statuses } from "@/src/lib/data";
-import React, { useEffect, useState } from "react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+import React, { useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import {

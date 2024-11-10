@@ -11,7 +11,7 @@ export default function Calendar() {
   const { data: userSession } = useSession();
   const [events, setEvents] = useState<EventType[]>([]);
   const userEmail = userSession?.user?.email;
-
+  
   useEffect(() => {
     const fetchTasks = async () => {
       if (!userEmail) {
@@ -33,6 +33,7 @@ export default function Calendar() {
         const mappedEvents = tasks.flatMap(
           (task: { title: any; createdAt: any; id: any; dueDate: any }) => [
             {
+              id: task.id,
               title: task.title,
               start: task.createdAt,
               allDay: true,
@@ -41,6 +42,7 @@ export default function Calendar() {
               url: `http://localhost:3000/home/tasks/${task.id}`,
             },
             {
+              id: task.id,
               title: `${task.title} (Due)`,
               start: task.dueDate || undefined,
               allDay: true,
@@ -67,6 +69,33 @@ export default function Calendar() {
 
     fetchTasks();
   }, [userEmail]);
+
+  const handleEventDrop = async (info: { revert?: any; event?: any; }) => {
+    const { event } = info; 
+    try {
+      
+      const response = await fetch(
+        `http://localhost:3002/api/tasks/test/${event.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            dueDate: event.start, // Update with new start date
+          }),
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to update task date");
+      }
+      
+    } catch (error) {
+      console.error("Error updating task date:", error);
+      info.revert(); // Revert the event's position if the update fails
+    }
+  };
 
   return (
     <div className="calendar-container">
@@ -95,6 +124,7 @@ export default function Calendar() {
         selectable={true}
         selectMirror={true}
         events={events}
+        eventDrop={handleEventDrop}
       />
     </div>
   );

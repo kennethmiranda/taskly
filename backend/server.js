@@ -256,6 +256,31 @@ app.get("/files", (req, res) => {
   });
 });
 
+//second patch for changing dates for calendar.
+app.patch('/api/tasks/test/:id', async (req, res) => {
+  const taskId = req.params.id;
+  const { dueDate } = req.body;  
+  
+  const formattedDate = new Date(dueDate).toISOString().slice(0, 19).replace('T', ' ');
+
+  try {
+
+    const [result] = await pool.query(
+      "UPDATE tasks SET dueDate = ? WHERE id = ?",
+      [formattedDate, taskId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send('Task not found');
+    }
+
+    res.status(200).send('Task updated successfully');
+  } catch (error) {
+    console.error('Error updating task:', error);
+    res.status(500).send('Error updating task');
+  }
+});
+
 // Start the server on port 3002
 app.listen(3002, () => {
   console.log("Server is running on http://localhost:3002");

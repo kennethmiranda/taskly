@@ -1,57 +1,96 @@
-import { fetchTaskById, fetchTest } from "@/src/lib/data";
-import { files, tasks } from "@/src/lib/placeholder-data";
-import { DownloadIcon } from "@radix-ui/react-icons";
+import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
+import { Task } from "@/src/lib/definitions";
+import TaskForm from "@/src/components/tasks/edit-task";
+import { Button } from "@/src/components/ui/button";
+import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 
-type Params = {
-  id: string;
-};
+async function getTaskById(
+  taskId: string,
+  userEmail: string
+): Promise<Task | null> {
+  try {
+    const response = await fetch(
+      `http://localhost:3002/api/tasks/${taskId}?userEmail=${userEmail}`,
+      { cache: "no-store" }
+    );
 
-type Props = {
-  params: Params;
-};
+    if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error("Failed to fetch task");
+    }
+
+    const task = await response.json();
+    return {
+      ...task,
+      createdAt: new Date(task.createdAt),
+      dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
+      files: task.files?.map((file: File) => ({
+        ...file,
+        createdAt: new Date(),
+      })),
+    };
+  } catch (error) {
+    console.error("Error fetching task:", error);
+    throw error;
+  }
+}
+
+interface Props {
+  params: {
+    id: string;
+  };
+}
 
 export async function generateMetadata({ params }: Props) {
-  const task = await fetchTaskById(params.id);
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    return {
+      title: "Task | Authentication Required",
+      description: "Please sign in to view this task.",
+    };
+  }
+
+  const task = await getTaskById(params.id, session.user.email);
+
   if (!task) {
     return {
       title: "Task Not Found",
       description: "The requested task could not be found.",
     };
   }
+
   return {
-    title: `Task ${task.id} | Task Manager and Cloud Storage System`,
-    description: `Details for Task ${task.id}`,
+    title: `${task.title} | Task Manager`,
+    description: `Details for task: ${task.title}`,
   };
 }
 
 export default async function TaskPage({ params }: Props) {
-  const task = await fetchTaskById(params.id);
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    return <div className="p-8">Please sign in to view tasks</div>;
+  }
+
+  const userEmail = session.user.email;
+  const task = await getTaskById(params.id, userEmail);
 
   if (!task) {
     notFound();
   }
 
-  // remove in production
-  // await fetchTest();
-
   return (
-    <main className="flex-1 p-8 max-w-8xl mx-auto">
-      <h2 className="text-2xl font-bold tracking-tight">
-        Task {task.id}: {task.title}
-      </h2>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <h3 className="text-xl font-semibold mb-2">Created At</h3>
-          <p>{new Date(task.createdAt).toLocaleDateString()}</p>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold mb-2">Due Date</h3>
-          <p>{task.dueDate?.toLocaleDateString()}</p>
-        </div>
-      </div>
-      Files: {files.map((file) => file.name).join(", ")}
-      <DownloadIcon className="w-6 h-6" />
-    </main>
+    <div className="max-w-4xl mx-auto p-6">
+      {/* <Button variant="ghost" size="sm" className="mb-6" asChild>
+        <Link href="/tasks">
+          <ChevronLeft className="h-4 w-4 mr-1" />
+          Back to Tasks
+        </Link>
+      </Button> */}
+      <TaskForm task={task} userEmail={userEmail} taskId={params.id} />
+    </div>
   );
 }

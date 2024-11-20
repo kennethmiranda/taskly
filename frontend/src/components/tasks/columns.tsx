@@ -38,9 +38,16 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "id",
     header: ({ column, table }) => (
-      <DataTableColumnHeader column={column} title="Task" table={table} />
+      <DataTableColumnHeader
+        className="hidden md:table-cell"
+        column={column}
+        title="Task"
+        table={table}
+      />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => (
+      <div className="w-[80px] hidden md:table-cell">{row.getValue("id")}</div>
+    ),
     enableSorting: false,
     enableHiding: false,
   },
@@ -87,7 +94,12 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "status",
     header: ({ column, table }) => (
-      <DataTableColumnHeader column={column} title="Status" table={table} />
+      <DataTableColumnHeader
+        className="hidden md:table-cell"
+        column={column}
+        title="Status"
+        table={table}
+      />
     ),
     cell: ({ row }) => {
       const status = statuses.find(
@@ -99,7 +111,7 @@ export const columns: ColumnDef<Task>[] = [
       }
 
       return (
-        <div className="flex w-[100px] items-center">
+        <div className="w-[100px] items-center hidden md:flex">
           {status.icon && (
             <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}
@@ -116,7 +128,12 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "priority",
     header: ({ column, table }) => (
-      <DataTableColumnHeader column={column} title="Priority" table={table} />
+      <DataTableColumnHeader
+        className="hidden md:table-cell"
+        column={column}
+        title="Priority"
+        table={table}
+      />
     ),
     cell: ({ row }) => {
       const priority = priorities.find(
@@ -128,7 +145,7 @@ export const columns: ColumnDef<Task>[] = [
       }
 
       return (
-        <div className="flex items-center">
+        <div className="items-center hidden md:flex">
           {priority.icon && (
             <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}

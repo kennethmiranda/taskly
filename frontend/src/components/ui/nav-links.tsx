@@ -2,7 +2,6 @@
 
 import {
   HomeIcon,
-  CloudIcon,
   ClipboardDocumentListIcon,
   QuestionMarkCircleIcon,
   Cog6ToothIcon,
@@ -22,10 +21,9 @@ const links = [
     href: "/home/tasks",
     icon: ClipboardDocumentListIcon,
   },
-  { name: "Storage", href: "/home/storage", icon: CloudIcon },
   {
     id: "faq",
-    name: "Frequently Asked Questions",
+    name: "FAQs",
     href: "/home/faq",
     icon: QuestionMarkCircleIcon,
   },
@@ -55,7 +53,7 @@ export default function NavLinks() {
               )}
             >
               <LinkIcon className="w-6 h-6" />
-              <p className="hidden md:block">{link.name}</p>
+              <p className="md:block">{link.name}</p>
             </Link>
           </Card>
         );

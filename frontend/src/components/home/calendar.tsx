@@ -11,7 +11,7 @@ export default function Calendar() {
   const { data: userSession } = useSession();
   const [events, setEvents] = useState<EventType[]>([]);
   const userEmail = userSession?.user?.email;
-  
+
   useEffect(() => {
     const fetchTasks = async () => {
       if (!userEmail) {
@@ -70,10 +70,9 @@ export default function Calendar() {
     fetchTasks();
   }, [userEmail]);
 
-  const handleEventDrop = async (info: { revert?: any; event?: any; }) => {
-    const { event } = info; 
+  const handleEventDrop = async (info: { revert?: any; event?: any }) => {
+    const { event } = info;
     try {
-      
       const response = await fetch(
         `http://localhost:3002/api/tasks/test/${event.id}`,
         {
@@ -86,11 +85,10 @@ export default function Calendar() {
           }),
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Failed to update task date");
       }
-      
     } catch (error) {
       console.error("Error updating task date:", error);
       info.revert(); // Revert the event's position if the update fails
@@ -98,7 +96,7 @@ export default function Calendar() {
   };
 
   return (
-    <div className="calendar-container">
+    <div className="calendar-container w-full">
       <FullCalendar
         height="auto"
         themeSystem="standard"

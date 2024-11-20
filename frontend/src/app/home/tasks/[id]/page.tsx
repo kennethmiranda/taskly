@@ -84,12 +84,6 @@ export default async function TaskPage({ params }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      {/* <Button variant="ghost" size="sm" className="mb-6" asChild>
-        <Link href="/tasks">
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Back to Tasks
-        </Link>
-      </Button> */}
       <TaskForm task={task} userEmail={userEmail} taskId={params.id} />
     </div>
   );

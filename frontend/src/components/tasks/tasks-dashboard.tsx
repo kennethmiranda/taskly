@@ -41,20 +41,25 @@ export function TaskDashboard({ initialTasks, userEmail }: TaskDashboardProps) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex-1 items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Tasks</h2>
-          <p className="text-muted-foreground">
+    <div className="space-y-6 p-2 sm:p-6 md:p-8">
+      <div className="flex-1 sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+        <div className="sm:flex-row sm:space-x-4">
+          <h2 className="text-2xl font-bold tracking-tight  sm:text-3xl">
+            Tasks
+          </h2>
+          <p className="text-sm sm:text-base text-muted-foreground sm:mt-0">
             Here&apos;s a list of your tasks
           </p>
         </div>
         {error && (
-          <div className="text-red-500 text-sm mt-2">Error: {error}</div>
+          <div className="text-red-500 text-sm mt-2 sm:mt-0">
+            Error: {error}
+          </div>
         )}
       </div>
+
       {isLoading ? (
-        <div>Loading tasks...</div>
+        <div className="text-center">Loading tasks...</div>
       ) : (
         <DataTable data={tasks} columns={columns} onTasksChange={fetchTasks} />
       )}

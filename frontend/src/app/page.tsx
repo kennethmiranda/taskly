@@ -1,6 +1,5 @@
 import Logo from "@/src/components/logo";
 import { Button } from "@/src/components/ui/button";
-import { lusitana } from "@/src/components/fonts";
 import { ThemeToggle } from "@/src/components/ui/theme-toggle";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Separator } from "@/src/components/ui/separator";
@@ -16,36 +15,40 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mt-4 gap-4 grow content-center flex min-h-screen flex-col p-6">
+    <main className="mt-4 flex min-h-screen flex-col gap-6 p-4 sm:p-6">
       {/* Theme Toggle for testing, remove in production */}
       <ThemeToggle />
 
-      <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-        <div className="flex flex-col justify-center gap-6 rounded-lg mx-20 px-6 py-10 md:w-2/5 md:px-20">
+      <div className="flex flex-col gap-8 md:flex-row">
+        {/* Left Section */}
+        <div className="flex flex-col items-center justify-center gap-6 rounded-lg p-6 sm:px-10 sm:py-12 md:w-2/5">
           <Logo />
-          <Separator className="mt-3 mb-2" />
-          <p className="text-xl md:text-3xl md:leading-normal mb-2">
-            <strong>
-              Welcome to the Task Manager and Cloud Storage System
-            </strong>
+          <Separator className="mt-3 mb-2 w-full" />
+          <p className="text-center text-lg font-semibold sm:text-xl md:text-2xl">
+            Welcome to the Task Manager and Cloud Storage System
           </p>
           <Button asChild>
             <Link
               href="/sign-in"
-              className="flex items-center gap-5 rounded-lg px-6 py-3 text-sm font-medium transition-colors md:text-base"
+              className="flex items-center justify-center gap-3 rounded-lg  px-4 py-2 text-sm font-medium  transition-colors hover:bg-blue-600 sm:px-6 sm:py-3 md:text-base"
             >
               Sign In
               <ArrowRightIcon className="w-5 md:w-6" />
             </Link>
           </Button>
-          <CardFooter className="text-muted-foreground items-center justify-center text-xs">
-            No Account?
-            <Link href="/sign-up" className="px-1.5 underline text-blue-400">
+          <CardFooter className="text-center text-xs text-muted-foreground">
+            No Account?&nbsp;
+            <Link
+              href="/sign-up"
+              className="text-blue-500 underline hover:text-blue-600"
+            >
               Sign Up
             </Link>
           </CardFooter>
         </div>
-        <div className="flex items-center -mt-30 justify-center md:w-3/5 md:px-28 md:py-12">
+
+        {/* Right Section */}
+        <div className="flex items-center justify-center md:w-3/5 md:px-10 md:py-12">
           <CarouselComponent />
         </div>
       </div>

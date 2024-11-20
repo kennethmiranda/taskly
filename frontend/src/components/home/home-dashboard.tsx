@@ -8,9 +8,13 @@ export default function HomeDashboard() {
 
   return (
     <SessionProvider>
-      <main className="flex-1 p-8 max-w-8xl mx-auto">
-        <h2 className="text-2xl font-bold tracking-tight">Calendar</h2>
-        <p className="text-muted-foreground">Current Streak: {streak}</p>
+      <main className="flex-1 p-4 md:p-6 max-w-7xl mx-auto md:ml-4">
+        <h2 className="text-lg md:text-2xl font-bold tracking-tight">
+          Calendar
+        </h2>
+        <p className="text-sm md:text-base text-muted-foreground">
+          Current Streak: {streak}
+        </p>
         <Calendar />
       </main>
     </SessionProvider>

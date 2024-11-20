@@ -204,7 +204,7 @@ export function DataTableSelectOptions<TData extends Task>({
             <Button
               variant="outline"
               size="sm"
-              className="h-8 rounded-md"
+              className="h-8 rounded-md hidden md:flex"
               disabled={loading}
             >
               Change Status
@@ -229,7 +229,7 @@ export function DataTableSelectOptions<TData extends Task>({
             <Button
               variant="outline"
               size="sm"
-              className="h-8 rounded-md"
+              className="h-8 rounded-md hidden md:flex"
               disabled={loading}
             >
               Change Priority

@@ -54,9 +54,12 @@ const formSchema = z.object({
     .max(30, "Title must be less than 30 characters."),
   description: z.string().optional(),
   dueDate: z.date().optional(),
-  status: z.enum(["backlog", "todo", "in progress", "done"] as const, {
-    required_error: "A status is required.",
-  }),
+  status: z.enum(
+    ["backlog", "todo", "in progress", "done", "canceled"] as const,
+    {
+      required_error: "A status is required.",
+    }
+  ),
   priority: z.enum(["low", "medium", "high"] as const, {
     required_error: "A priority is required.",
   }),
@@ -200,14 +203,16 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="max-w-3xl mx-auto"
       >
-        {/* Header Section */}
+        {/* Back */}
         <div className="flex items-center justify-between mb-6">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/tasks">
+            <Link href="/home/tasks">
               <ChevronLeft className="h-4 w-4 mr-1" />
               Back to Tasks
             </Link>
           </Button>
+
+          {/* Header */}
           {!isEditing && (
             <Button
               variant="outline"
@@ -245,9 +250,8 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
           </div>
         </div>
 
-        {/* Description Section */}
+        {/* Description */}
         <div className="bg-card p-6 rounded-lg border mb-8">
-          <h2 className="text-lg font-semibold mb-4">Description</h2>
           {isEditing ? (
             <FormField
               control={form.control}
@@ -271,9 +275,8 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
           )}
         </div>
 
-        {/* Details Section */}
+        {/* Task Details */}
         <div className="bg-card p-6 rounded-lg border mb-8">
-          <h2 className="text-lg font-semibold mb-4">Task Details</h2>
           <div className="grid sm:grid-cols-3 gap-6">
             <FormField
               control={form.control}
@@ -411,7 +414,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
           </div>
         </div>
 
-        {/* Attachments Section */}
+        {/* File Attachments */}
         <div className="bg-card p-6 rounded-lg border">
           <h2 className="text-lg font-semibold mb-4">Attachments</h2>
           <div className="space-y-4">

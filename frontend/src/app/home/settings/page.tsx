@@ -1,5 +1,4 @@
-import { ThemeToggle } from "@/src/components/ui/theme-toggle";
-import { fetchTest } from "@/src/lib/data";
+import SettingsDashboard from "@/src/components/settings/settings-dashboard";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,18 +6,20 @@ export const metadata: Metadata = {
   description: "Settings page",
 };
 
-export default async function PolicyPage() {
-  // remove in production
-  // await fetchTest();
-
+export default function SettingsPage() {
   return (
-    <main className="flex-1 p-8 max-w-8xl mx-auto">
-      <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {" "}
-        Theme Toggle: <ThemeToggle />{" "}
+    <div className="space-y-6 p-2 sm:p-6 md:p-8">
+      <div className="flex-1 sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+        <div className="sm:flex-row sm:space-x-0.5">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Settings
+          </h2>
+          <p className="text-sm sm:text-base text-muted-foreground sm:mt-0">
+            Manage your account settings and preferences
+          </p>
+          <SettingsDashboard />
+        </div>
       </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8"></div>
-    </main>
+    </div>
   );
 }

@@ -1,5 +1,4 @@
 import Logo from "@/src/components/logo";
-import { ThemeToggle } from "@/src/components/ui/theme-toggle";
 import { CardFooter } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
 import SignUpForm from "@/src/components/sign-up/sign-up-form";
@@ -31,9 +30,6 @@ export default async function SignUpPage() {
         </CardFooter>
 
         <PolicyFooter />
-
-        {/* Theme Toggle for testing, remove in production */}
-        <ThemeToggle />
       </div>
     </main>
   );

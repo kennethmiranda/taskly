@@ -81,7 +81,8 @@ export function DataTableRowActions<TData>({
             <PencilIcon className="h-5 w-5 pr-2" />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleShare}>
+          {/* Share Feature temporarily disabled */}
+          <DropdownMenuItem className="hidden" onClick={handleShare}>
             <ShareIcon className="h-5 w-5 pr-2" />
             Share
           </DropdownMenuItem>

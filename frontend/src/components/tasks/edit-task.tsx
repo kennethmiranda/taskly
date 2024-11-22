@@ -144,6 +144,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       toast({
         title: "Success",
         description: "Task updated successfully",
+        duration: 3000,
       });
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -151,6 +152,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
         title: "Error",
         description: "Failed to update task",
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsLoading(false);
@@ -198,6 +200,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       toast({
         title: "Success",
         description: "Files uploaded successfully",
+        duration: 3000,
       });
     } catch (error) {
       console.error("Error uploading files:", error);
@@ -205,6 +208,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
         title: "Error",
         description: "Failed to upload files",
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsLoading(false);
@@ -219,6 +223,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       toast({
         title: "Success",
         description: "File deleted successfully",
+        duration: 3000,
       });
     } catch (error) {
       console.error("Error deleting file:", error);
@@ -226,6 +231,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
         title: "Error",
         description: "Failed to delete file",
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsLoading(false);

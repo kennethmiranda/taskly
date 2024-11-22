@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
@@ -13,27 +13,73 @@ import {
 } from "@/src/components/ui/avatar";
 import { toast } from "@/src/hooks/use-toast";
 import { ThemeToggle } from "@/src/components/ui/theme-toggle";
+import { IconLoader } from "@tabler/icons-react";
 
 export default function SettingsDashboard() {
-  const { data: session } = useSession();
+  const { data: session, status, update: updateSession } = useSession();
   const [name, setName] = useState(session?.user?.name || "");
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const [avatarUrl, setAvatarUrl] = useState(
-    session?.user?.image || "/placeholder.svg?height=100&width=100"
-  );
+  const [emailNotifications, setEmailNotifications] = useState(false);
+  const [customAvatar, setCustomAvatar] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const displayAvatar =
+    customAvatar || session?.user?.image || "/profile-placeholder.png";
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      if (!session?.user?.email) return;
+
+      setIsLoading(true);
+
+      try {
+        const response = await fetch("http://localhost:3002/api/profile", {
+          headers: {
+            email: session.user.email,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setName(data.name || "");
+        setEmailNotifications(data.emailNotifications || false);
+        if (data.avatar) {
+          setCustomAvatar(data.avatar);
+        }
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load profile settings",
+          variant: "destructive",
+          duration: 3000,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (status === "authenticated") {
+      fetchSettings();
+    }
+  }, [session, status]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
-      const response = await fetch("/api/user/update", {
+      const response = await fetch("http://localhost:3002/api/profile", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          email: session?.user?.email || "",
         },
         body: JSON.stringify({
           name,
           emailNotifications,
+          avatar: customAvatar,
         }),
       });
 
@@ -41,9 +87,19 @@ export default function SettingsDashboard() {
         throw new Error("Failed to update profile");
       }
 
+      // updates session data
+      await updateSession({
+        user: {
+          ...session?.user,
+          name: name,
+          image: customAvatar,
+        },
+      });
+
       toast({
         title: "Profile updated",
         description: "Your profile has been successfully updated.",
+        duration: 3000,
       });
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -51,45 +107,53 @@ export default function SettingsDashboard() {
         title: "Error",
         description: "Failed to update profile. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append("avatar", file);
+    if (!file) return;
 
-      try {
-        const response = await fetch("/api/user/avatar", {
-          method: "POST",
-          body: formData,
-        });
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append("avatar", file);
 
-        if (!response.ok) {
-          throw new Error("Failed to upload avatar");
-        }
+    try {
+      const response = await fetch("http://localhost:3002/api/avatar", {
+        method: "POST",
+        headers: {
+          email: session?.user?.email || "",
+        },
+        body: formData,
+      });
 
-        const data = await response.json();
-        if (data.image) {
-          setAvatarUrl(data.image);
-        } else {
-          throw new Error("No image URL returned");
-        }
+      if (!response.ok) {
+        throw new Error("Failed to upload avatar");
+      }
 
+      const data = await response.json();
+      if (data.avatar) {
+        setCustomAvatar(data.avatar);
         toast({
-          title: "Avatar updated",
-          description: "Your profile picture has been successfully updated.",
-        });
-      } catch (error) {
-        console.error("Error uploading avatar:", error);
-        toast({
-          title: "Error",
-          description: "Failed to upload avatar. Please try again.",
-          variant: "destructive",
+          title: "Success",
+          description: "Profile picture updated successfully",
+          duration: 3000,
         });
       }
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upload profile picture",
+        variant: "destructive",
+        duration: 3000,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -103,7 +167,7 @@ export default function SettingsDashboard() {
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder=""
+            placeholder={name}
           />
         </div>
 
@@ -122,7 +186,14 @@ export default function SettingsDashboard() {
           <Label htmlFor="avatar">Profile Picture</Label>
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={avatarUrl} alt="Profile picture" />
+              <AvatarImage
+                src={
+                  displayAvatar.startsWith("http")
+                    ? displayAvatar
+                    : displayAvatar
+                }
+                alt="Profile picture"
+              />
               <AvatarFallback>
                 {name
                   .split(" ")
@@ -138,6 +209,7 @@ export default function SettingsDashboard() {
               accept="image/*"
               onChange={handleAvatarChange}
               className="max-w-[250px]"
+              disabled={isLoading}
             />
           </div>
         </div>
@@ -159,7 +231,16 @@ export default function SettingsDashboard() {
           </span>
         </div>
 
-        <Button type="submit">Save Changes</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              Saving...
+              <IconLoader className="mr-2 h-4 w-4 animate-spin" />
+            </>
+          ) : (
+            "Save Changes"
+          )}
+        </Button>
       </form>
     </div>
   );

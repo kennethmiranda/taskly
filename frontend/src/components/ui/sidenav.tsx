@@ -1,9 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import NavLinks from "@/src/components/ui/nav-links";
 import Logo from "@/src/components/logo";
 import { PowerIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
-import { ThemeToggle } from "@/src/components/ui/theme-toggle";
 import {
   Avatar,
   AvatarFallback,
@@ -11,11 +12,47 @@ import {
 } from "@/src/components/ui/avatar";
 import { Card } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+interface UserProfile {
+  name: string;
+  avatar: string | null;
+}
 
 export default function SideNav() {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!session?.user?.email) return;
+
+      try {
+        const response = await fetch("http://localhost:3002/api/profile", {
+          headers: {
+            email: session.user.email,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setUserProfile({
+          name: data.name,
+          avatar: data.avatar,
+        });
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    if (session?.user?.email) {
+      fetchUserProfile();
+    }
+  }, [session]);
 
   return (
     <div className="flex h-full flex-col  md:bg-transparent">
@@ -45,18 +82,22 @@ export default function SideNav() {
             <div className="flex items-center mx-1 text-sm gap-2">
               <Avatar>
                 <AvatarImage
-                  src={session.user.image || undefined}
-                  alt={`${session.user.name}'s profile picture`}
+                  src={userProfile?.avatar || undefined}
+                  alt={`${
+                    userProfile?.name || session.user.name
+                  }'s profile picture`}
                 />
                 <AvatarFallback>
                   <img
-                    src="/profile-placeholder.png"
+                    src={session.user.image || "/profile-placeholder.png"}
                     alt="Profile Placeholder"
                   />
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="text-sm font-medium">{session.user.name}</span>
+                <span className="text-sm font-medium">
+                  {userProfile?.name || session.user.name}
+                </span>
                 <span className="text-xs ">{session.user.email}</span>
               </div>
             </div>
@@ -72,7 +113,6 @@ export default function SideNav() {
         <div className="flex-grow"></div>
 
         {/* Sign out button */}
-
         <Card className="mt-4 md:mt-auto">
           <button
             onClick={() => signOut({ callbackUrl: "/sign-in" })}

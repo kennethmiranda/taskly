@@ -35,6 +35,7 @@ import {
   PencilIcon,
   Trash2Icon,
   UploadIcon,
+  User,
 } from "lucide-react";
 import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -62,6 +63,7 @@ import {
   DialogTrigger,
 } from "@/src/components/ui/dialog";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useSession } from "next-auth/react";
 
 type TaskStatus = "backlog" | "todo" | "in progress" | "done" | "canceled";
 type TaskPriority = "low" | "medium" | "high";
@@ -94,16 +96,38 @@ interface TaskFormProps {
   taskId: string;
 }
 
-async function updateTask(taskId: string, userEmail: string, data: FormData) {
+
+async function updateTask(taskId: string, userEmail: string, data: FormData,userSession: any) {
+  
+  userEmail = userEmail || userSession?.user?.email || '';
+  console.log("User email after fallback:", userEmail);
+ 
+  if(!userEmail){
+    console.warn("User email is not available.");
+    return;
+  }
+  
   try {
-    console.log("Updating task...", { taskId, userEmail, data });
-    /* const response = await fetch();
+    const requestBody = {
+      ...Object.fromEntries(data.entries()),
+      userEmail: userEmail || userSession?.user?.email || ''
+    };
 
-    if (!response.ok) {
-      throw new Error("Failed to update task");
+    const response = await fetch(
+      `http://localhost:3002/api/tasks/${taskId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      }
+    );
+    if(!response.ok){
+      throw new Error('Faield to udpate task');
     }
-
-    return await response.json(); */
+    return await response.json();
+    
   } catch (error) {
     console.error("Error updating task:", error);
     throw error;
@@ -112,14 +136,7 @@ async function updateTask(taskId: string, userEmail: string, data: FormData) {
 
 async function deleteFile(taskId: string, userEmail: string, fileId: string) {
   try {
-    console.log("Deleting file...", { taskId, userEmail, fileId });
-    /* const response = await fetch();
-
-    if (!response.ok) {
-      throw new Error("Failed to delete file");
-    }
-
-    return await response.json(); */
+    console.log("test");
   } catch (error) {
     console.error("Error deleting file:", error);
     throw error;
@@ -132,6 +149,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
   const [dragActive, setDragActive] = useState(false);
   const [files, setFiles] = useState<File[]>(task.files || []);
   const { toast } = useToast();
+  const { data: userSession } = useSession();
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -159,7 +177,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
         }
       });
 
-      await updateTask(taskId, userEmail, formData);
+      await updateTask(taskId, userEmail, formData, userSession);
       setIsOpen(false);
       toast({
         title: "Success",
@@ -206,7 +224,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       Array.from(fileList).forEach((file) => {
         formData.append("files", file);
       });
-      await updateTask(taskId, userEmail, formData);
+      await updateTask(taskId, userEmail, formData, userSession);
       // Simulating file upload
       const newFiles: File[] = Array.from(fileList).map((file, index) => ({
         id: `new-file-${Date.now()}-${index}`,

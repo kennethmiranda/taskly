@@ -28,8 +28,6 @@ export default function SettingsDashboard() {
     const fetchSettings = async () => {
       if (!session?.user?.email) return;
 
-      setIsLoading(true);
-
       try {
         const response = await fetch("http://localhost:3002/api/profile", {
           headers: {
@@ -55,8 +53,6 @@ export default function SettingsDashboard() {
           variant: "destructive",
           duration: 3000,
         });
-      } finally {
-        setIsLoading(false);
       }
     };
 

@@ -2,10 +2,7 @@ import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { Task } from "@/src/lib/definitions";
-import TaskForm from "@/src/components/tasks/edit-task";
-import { Button } from "@/src/components/ui/button";
-import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import TaskForm from "@/src/components/tasks/edit-task-form";
 
 async function getTaskById(
   taskId: string,

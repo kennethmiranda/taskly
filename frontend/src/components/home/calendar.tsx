@@ -36,6 +36,7 @@ export default function Calendar() {
               id: task.id,
               title: task.title,
               start: task.createdAt,
+              editable: false,
               allDay: true,
               backgroundColor: "#4CAF50", // green for start date
               borderColor: "#4CAF50",

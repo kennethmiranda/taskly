@@ -22,6 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/src/components/ui/alert-dialog";
+import { useSession } from "next-auth/react";
 
 interface DataTableSelectOptionsProps<TData> {
   table: Table<TData>;
@@ -35,6 +36,7 @@ export function DataTableSelectOptions<TData extends Task>({
   const { toast } = useToast();
   const [loading, setLoading] = React.useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const { data: userSession } = useSession();
 
   //Stores selected rows id and userIds to a map.
   const selectedRows = table.getSelectedRowModel().flatRows;
@@ -46,28 +48,30 @@ export function DataTableSelectOptions<TData extends Task>({
   //Genereal api request function to avoid redundency
   const apiRequest = async (
     taskId: string,
-    userId: string,
     method: "DELETE" | "PATCH",
     body: Record<string, any> | null = null
   ) => {
+    let userEmail = userSession?.user?.email;
+    userEmail = userEmail || ''; // Set userEmail to an empty string if not found
+    console.log("User Session s:", userSession);
+    console.log(taskId);
     const response = await fetch(`http://localhost:3002/api/tasks/${taskId}`, {
       method,
       headers: {
         "Content-Type": "application/json",
-        userId: userId,
+        userEmail: userEmail, // Move userEmail inside headers
       },
-      body: body ? JSON.stringify(body) : null, // Convert body to JSON if it's provided
+      body: body ? JSON.stringify({ ...body, userEmail: userEmail }) : null,
     });
-
+  
     if (!response.ok) {
       throw new Error(
-        `Failed to ${
-          method === "DELETE" ? "delete" : "update"
-        } task with id: ${taskId}`
+        `Failed to ${method === "DELETE" ? "delete" : "update"} task with id: ${taskId}`
       );
     }
     return response;
   };
+  
 
   //Handles selected deletion
   const handleDeleteSelected = async () => {
@@ -78,9 +82,20 @@ export function DataTableSelectOptions<TData extends Task>({
     setLoading(true);
 
     try {
-      const deleteRequests = selectedTasks.map((task) =>
-        apiRequest(task.id, task.userId, "DELETE")
-      );
+      const deleteRequests = selectedTasks.map(async (task) => {
+        const response = await fetch(`http://localhost:3002/api/tasks/${task.id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            userId: task.userId, // Assuming you have userSession with user.id
+          },
+        });
+  
+        // Check if the request was successful
+        if (!response.ok) {
+          throw new Error(`Failed to delete task with id: ${task.id}`);
+        }
+      });
       await Promise.all(deleteRequests);
 
       toast({
@@ -108,7 +123,7 @@ export function DataTableSelectOptions<TData extends Task>({
   const handleChangeStatus = async (newStatus: string) => {
     try {
       const statusUpdateRequests = selectedTasks.map((task) =>
-        apiRequest(task.id, task.userId, "PATCH", { status: newStatus })
+        apiRequest(task.id, "PATCH", { status: newStatus })
       );
       await Promise.all(statusUpdateRequests);
 
@@ -135,7 +150,7 @@ export function DataTableSelectOptions<TData extends Task>({
   const handleChangePriority = async (newPriority: string) => {
     try {
       const priorityUpdateRequests = selectedTasks.map((task) =>
-        apiRequest(task.id, task.userId, "PATCH", { priority: newPriority })
+        apiRequest(task.id, "PATCH", { priority: newPriority })
       );
       await Promise.all(priorityUpdateRequests);
 

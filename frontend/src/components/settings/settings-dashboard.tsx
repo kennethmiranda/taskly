@@ -17,16 +17,28 @@ import { IconLoader } from "@tabler/icons-react";
 
 export default function SettingsDashboard() {
   const { data: session, status, update: updateSession } = useSession();
-  const [name, setName] = useState(session?.user?.name || "");
-  const [emailNotifications, setEmailNotifications] = useState(false);
-  const [customAvatar, setCustomAvatar] = useState<string | null>(null);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    emailNotifications: false,
+    customAvatar: null as string | null,
+    selectedFile: null as File | null,
+    previewAvatar: null as string | null,
+  });
   const [isLoading, setIsLoading] = useState(false);
+
   const displayAvatar =
-    customAvatar || session?.user?.image || "/profile-placeholder.png";
+    formData.previewAvatar ||
+    formData.customAvatar ||
+    session?.user?.image ||
+    "/profile-placeholder.png";
 
   useEffect(() => {
     const fetchSettings = async () => {
-      if (!session?.user?.email) return;
+      if (!session?.user?.email) {
+        setIsPageLoading(false);
+        return;
+      }
 
       try {
         const response = await fetch("http://localhost:3002/api/profile", {
@@ -40,11 +52,12 @@ export default function SettingsDashboard() {
         }
 
         const data = await response.json();
-        setName(data.name || "");
-        setEmailNotifications(data.emailNotifications || false);
-        if (data.avatar) {
-          setCustomAvatar(data.avatar);
-        }
+        setFormData((prev) => ({
+          ...prev,
+          name: data.name || "",
+          emailNotifications: data.emailNotifications || false,
+          customAvatar: data.avatar || null,
+        }));
       } catch (error) {
         console.error("Error fetching settings:", error);
         toast({
@@ -53,19 +66,53 @@ export default function SettingsDashboard() {
           variant: "destructive",
           duration: 3000,
         });
+      } finally {
+        setIsPageLoading(false);
       }
     };
 
     if (status === "authenticated") {
       fetchSettings();
+    } else if (status === "unauthenticated") {
+      setIsPageLoading(false);
     }
   }, [session, status]);
+
+  const uploadAvatar = async (file: File) => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    try {
+      const response = await fetch("http://localhost:3002/api/avatar", {
+        method: "POST",
+        headers: {
+          email: session?.user?.email || "",
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload avatar");
+      }
+
+      const data = await response.json();
+      return data.avatar;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
+      let newAvatarUrl = formData.customAvatar;
+
+      if (formData.selectedFile) {
+        newAvatarUrl = await uploadAvatar(formData.selectedFile);
+      }
+
       const response = await fetch("http://localhost:3002/api/profile", {
         method: "PATCH",
         headers: {
@@ -73,9 +120,9 @@ export default function SettingsDashboard() {
           email: session?.user?.email || "",
         },
         body: JSON.stringify({
-          name,
-          emailNotifications,
-          avatar: customAvatar,
+          name: formData.name,
+          emailNotifications: formData.emailNotifications,
+          avatar: newAvatarUrl,
         }),
       });
 
@@ -83,14 +130,20 @@ export default function SettingsDashboard() {
         throw new Error("Failed to update profile");
       }
 
-      // updates session data
+      // update session data and state
       await updateSession({
         user: {
           ...session?.user,
-          name: name,
-          image: customAvatar,
+          name: formData.name,
+          image: newAvatarUrl,
         },
       });
+
+      setFormData((prev) => ({
+        ...prev,
+        customAvatar: newAvatarUrl,
+        selectedFile: null,
+      }));
 
       toast({
         title: "Profile updated",
@@ -110,48 +163,25 @@ export default function SettingsDashboard() {
     }
   };
 
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setIsLoading(true);
-    const formData = new FormData();
-    formData.append("avatar", file);
-
-    try {
-      const response = await fetch("http://localhost:3002/api/avatar", {
-        method: "POST",
-        headers: {
-          email: session?.user?.email || "",
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload avatar");
-      }
-
-      const data = await response.json();
-      if (data.avatar) {
-        setCustomAvatar(data.avatar);
-        toast({
-          title: "Success",
-          description: "Profile picture updated successfully",
-          duration: 3000,
-        });
-      }
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-      toast({
-        title: "Error",
-        description: "Failed to upload profile picture",
-        variant: "destructive",
-        duration: 3000,
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    const previewUrl = URL.createObjectURL(file);
+    setFormData((prev) => ({
+      ...prev,
+      selectedFile: file,
+      previewAvatar: previewUrl,
+    }));
   };
+
+  if (isPageLoading) {
+    return (
+      <div className="flex w-full h-[400px] items-center justify-center">
+        <IconLoader className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full py-10">
@@ -161,9 +191,11 @@ export default function SettingsDashboard() {
           <Input
             id="name"
             name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={name}
+            value={formData.name}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, name: e.target.value }))
+            }
+            placeholder="Enter name"
           />
         </div>
 
@@ -182,16 +214,9 @@ export default function SettingsDashboard() {
           <Label htmlFor="avatar">Profile Picture</Label>
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage
-                src={
-                  displayAvatar.startsWith("http")
-                    ? displayAvatar
-                    : displayAvatar
-                }
-                alt="Profile picture"
-              />
+              <AvatarImage src={displayAvatar} alt="Profile picture" />
               <AvatarFallback>
-                {name
+                {formData.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")
@@ -215,8 +240,10 @@ export default function SettingsDashboard() {
           <Switch
             id="email-notifications"
             name="emailNotifications"
-            checked={emailNotifications}
-            onCheckedChange={setEmailNotifications}
+            checked={formData.emailNotifications}
+            onCheckedChange={(checked) =>
+              setFormData((prev) => ({ ...prev, emailNotifications: checked }))
+            }
           />
         </div>
 

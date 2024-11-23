@@ -1,6 +1,5 @@
 import Logo from "@/src/components/logo";
 import { Button } from "@/src/components/ui/button";
-import { ThemeToggle } from "@/src/components/ui/theme-toggle";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Separator } from "@/src/components/ui/separator";
 import Link from "next/link";
@@ -16,11 +15,8 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main className="mt-4 flex min-h-screen flex-col gap-6 p-4 sm:p-6">
-      {/* Theme Toggle for testing, remove in production */}
-      <ThemeToggle />
-
       <div className="flex flex-col gap-8 md:flex-row">
-        {/* Left Section */}
+        {/* Sign In */}
         <div className="flex flex-col items-center justify-center gap-6 rounded-lg p-6 sm:px-10 sm:py-12 md:w-2/5">
           <Logo />
           <Separator className="mt-3 mb-2 w-full" />
@@ -47,7 +43,7 @@ export default function Page() {
           </CardFooter>
         </div>
 
-        {/* Right Section */}
+        {/* Carousel */}
         <div className="flex items-center justify-center md:w-3/5 md:px-10 md:py-12">
           <CarouselComponent />
         </div>

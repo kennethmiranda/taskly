@@ -1,13 +1,22 @@
 const mysql = require("mysql2/promise");
 const pool = require("backend/mysql.js");
 const express = require("express");
-
+const fileUpload = require("express-fileupload");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
+
 const app = express();
 
 // Middleware to parse JSON request bodies
 app.use(cors());
 app.use(express.json());
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB max file size
+    createParentPath: true,
+  })
+);
 
 // helper function to get userId from email
 async function getUserIdFromEmail(email) {
@@ -245,39 +254,149 @@ app.get("/api/tasks/:id", async (req, res) => {
   }
 });
 
-app.get("/files", (req, res) => {
-  const query = "SELECT * FROM files";
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error("Error retrieving files:", err);
-      return res.status(500).send("Error retrieving files");
+// static files from public/uploads
+app.use(
+  "/uploads",
+  cors(),
+  express.static(path.join(__dirname, "public", "uploads"))
+);
+
+// uploads directory
+const uploadDir = path.join(__dirname, "public", "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// get user profile
+app.get("/api/profile", async (req, res) => {
+  const userEmail = req.headers.email;
+
+  if (!userEmail) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  try {
+    const [results] = await pool.query(
+      "SELECT name, email, emailNotifications, avatar FROM users WHERE email = ?",
+      [userEmail]
+    );
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "User not found" });
     }
-    res.json(results); // Return all files as JSON
-  });
+
+    res.json(results[0]);
+  } catch (error) {
+    console.error("Error retrieving user profile:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// profile settings update
+app.patch("/api/profile", async (req, res) => {
+  const { name, emailNotifications, avatar } = req.body;
+  const userEmail = req.headers.email;
+
+  if (!userEmail) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  try {
+    const userId = await getUserIdFromEmail(userEmail);
+    const updateQuery = avatar
+      ? "UPDATE users SET name = ?, emailNotifications = ?, avatar = ? WHERE email = ?"
+      : "UPDATE users SET name = ?, emailNotifications = ? WHERE email = ?";
+    const updateParams = avatar
+      ? [name, emailNotifications, avatar, userEmail]
+      : [name, emailNotifications, userEmail];
+    const [result] = await pool.query(updateQuery, updateParams);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// profile picture upload
+app.post("/api/avatar", async (req, res) => {
+  const userEmail = req.headers.email;
+
+  if (!userEmail) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  if (!req.files || !req.files.avatar) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
+  const file = req.files.avatar;
+
+  // Validate file type
+  const fileExtension = path.extname(file.name).toLowerCase();
+  if (![".jpg", ".jpeg", ".png", ".gif"].includes(fileExtension)) {
+    return res
+      .status(400)
+      .json({ error: "Invalid file type. Only images are allowed." });
+  }
+
+  try {
+    const [user] = await pool.query("SELECT id FROM users WHERE email = ?", [
+      userEmail,
+    ]);
+
+    if (user.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const filename = `${userEmail}-${file.name}`;
+    const filepath = path.join(uploadDir, filename);
+    const avatarUrl = `http://localhost:3002/uploads/${filename}`;
+
+    // Save the file
+    await file.mv(filepath);
+
+    // Update database with new avatar URL
+    await pool.query("UPDATE users SET avatar = ? WHERE email = ?", [
+      avatarUrl,
+      userEmail,
+    ]);
+
+    res.json({ avatar: avatarUrl });
+  } catch (error) {
+    console.error("Error updating avatar:", error);
+    res.status(500).json({ error: "Failed to update avatar" });
+  }
 });
 
 //second patch for changing dates for calendar.
-app.patch('/api/tasks/test/:id', async (req, res) => {
+app.patch("/api/tasks/test/:id", async (req, res) => {
   const taskId = req.params.id;
-  const { dueDate } = req.body;  
-  
-  const formattedDate = new Date(dueDate).toISOString().slice(0, 19).replace('T', ' ');
+  const { dueDate } = req.body;
+
+  const formattedDate = new Date(dueDate)
+    .toISOString()
+    .slice(0, 19)
+    .replace("T", " ");
 
   try {
-
     const [result] = await pool.query(
       "UPDATE tasks SET dueDate = ? WHERE id = ?",
       [formattedDate, taskId]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).send('Task not found');
+      return res.status(404).send("Task not found");
     }
 
-    res.status(200).send('Task updated successfully');
+    res.status(200).send("Task updated successfully");
   } catch (error) {
-    console.error('Error updating task:', error);
-    res.status(500).send('Error updating task');
+    console.error("Error updating task:", error);
+    res.status(500).send("Error updating task");
   }
 });
 

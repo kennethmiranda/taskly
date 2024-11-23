@@ -26,7 +26,7 @@ export type File = {
   url?: string;
   size?: number;
   type?: string;
-  createdAt: Date;
+  uploadedAt: Date;
 };
 
 export type EventType = {

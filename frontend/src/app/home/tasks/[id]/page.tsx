@@ -2,10 +2,7 @@ import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { Task } from "@/src/lib/definitions";
-import TaskForm from "@/src/components/tasks/edit-task";
-import { Button } from "@/src/components/ui/button";
-import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import TaskForm from "@/src/components/tasks/edit-task-form";
 
 async function getTaskById(
   taskId: string,
@@ -83,7 +80,7 @@ export default async function TaskPage({ params }: Props) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="">
       <TaskForm task={task} userEmail={userEmail} taskId={params.id} />
     </div>
   );

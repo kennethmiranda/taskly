@@ -1,22 +1,23 @@
 "use client";
 
 import Calendar from "@/src/components/home/calendar";
-import { SessionProvider } from "next-auth/react";
 
 export default function HomeDashboard() {
   const streak = 0;
 
   return (
-    <SessionProvider>
-      <main className="flex-1 p-4 md:p-6 max-w-7xl mx-auto md:ml-4">
-        <h2 className="text-lg md:text-2xl font-bold tracking-tight">
-          Calendar
-        </h2>
-        <p className="text-sm md:text-base text-muted-foreground">
-          Current Streak: {streak}
-        </p>
-        <Calendar />
-      </main>
-    </SessionProvider>
+    <div className="space-y-6 p-2 sm:p-6 md:p-8">
+      <div className="flex-1 sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+        <div className="sm:flex-row sm:space-x-0.5">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Calendar
+          </h2>
+          <p className="text-sm md:text-base text-muted-foreground">
+            Current Streak: {streak}
+          </p>
+          <Calendar />
+        </div>
+      </div>
+    </div>
   );
 }

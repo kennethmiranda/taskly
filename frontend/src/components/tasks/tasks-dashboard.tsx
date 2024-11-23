@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DataTable } from "@/src/components/tasks/data-table";
 import { columns } from "@/src/components/tasks/columns";
 import { Task } from "@/src/lib/definitions";
@@ -43,8 +43,8 @@ export function TaskDashboard({ initialTasks, userEmail }: TaskDashboardProps) {
   return (
     <div className="space-y-6 p-2 sm:p-6 md:p-8">
       <div className="flex-1 sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-        <div className="sm:flex-row sm:space-x-4">
-          <h2 className="text-2xl font-bold tracking-tight  sm:text-3xl">
+        <div className="sm:flex-row sm:space-x-0.5">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Tasks
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground sm:mt-0">

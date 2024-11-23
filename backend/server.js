@@ -150,11 +150,13 @@ app.delete("/api/tasks/:id", async (req, res) => {
 // update task
 app.patch("/api/tasks/:id", async (req, res) => {
   const { id } = req.params;
-  const userId = req.headers.userid;
+  const userEmail = req.body.userEmail; 
 
   const { title, description, dueDate, status, priority } = req.body;
 
   try {
+    const userId = await getUserIdFromEmail(userEmail);
+    console.log(userId);
     // First verify the task belongs to the user
     const [task] = await pool.query(
       "SELECT * FROM tasks WHERE id = ? AND userId = ?",
@@ -370,33 +372,6 @@ app.post("/api/avatar", async (req, res) => {
   } catch (error) {
     console.error("Error updating avatar:", error);
     res.status(500).json({ error: "Failed to update avatar" });
-  }
-});
-
-//second patch for changing dates for calendar.
-app.patch("/api/tasks/test/:id", async (req, res) => {
-  const taskId = req.params.id;
-  const { dueDate } = req.body;
-
-  const formattedDate = new Date(dueDate)
-    .toISOString()
-    .slice(0, 19)
-    .replace("T", " ");
-
-  try {
-    const [result] = await pool.query(
-      "UPDATE tasks SET dueDate = ? WHERE id = ?",
-      [formattedDate, taskId]
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).send("Task not found");
-    }
-
-    res.status(200).send("Task updated successfully");
-  } catch (error) {
-    console.error("Error updating task:", error);
-    res.status(500).send("Error updating task");
   }
 });
 

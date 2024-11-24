@@ -247,7 +247,7 @@ export default function SettingsDashboard() {
           />
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="relative md:flex items-center space-x-2">
           <Label htmlFor="theme-toggle">Theme Toggle</Label>
           <span>
             <ThemeToggle />

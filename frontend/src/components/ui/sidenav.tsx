@@ -3,7 +3,7 @@
 import Link from "next/link";
 import NavLinks from "@/src/components/ui/nav-links";
 import Logo from "@/src/components/logo";
-import { PowerIcon } from "@heroicons/react/24/outline";
+import { PowerIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import {
   Avatar,
@@ -102,10 +102,10 @@ export default function SideNav() {
         } md:flex flex-col px-3 py-4 md:px-2 h-full`}
       >
         {/* Logo */}
-        <Link className="flex p-4 md:h-40 -mt-3" href="/home">
+        <Link className="flex mx-7 md:mx-auto p-4 md:h-40 -mt-3" href="/home">
           <Logo />
         </Link>
-        <Separator className="-mt-3 mb-4 mx-3 w-10/12" />
+        <Separator className="md:-mt-4 mb-5 mx-8 md:mx-3 w-10/12" />
 
         {/* User profile */}
 
@@ -146,7 +146,7 @@ export default function SideNav() {
             className="flex h-[48px] w-full items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
           >
             <PowerIcon className="w-6" />
-            <span className="md:inline text-left">Sign Out</span>
+            <span className="md:inline md:mr-2 text-left">Sign Out</span>
           </button>
         </Card>
       </nav>

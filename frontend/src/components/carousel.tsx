@@ -13,45 +13,51 @@ import * as React from "react";
 
 export function CarouselComponent() {
   const plugin = React.useRef(
-    Autoplay({ delay: 6000, stopOnInteraction: true })
+    Autoplay({ delay: 5000, stopOnInteraction: true })
   );
 
   return (
     <Carousel
       plugins={[plugin.current]}
       opts={{
-        align: "start",
+        align: "center",
         loop: true,
       }}
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
+      className=""
     >
       <CarouselContent>
         <CarouselItem>
           <Card>
-            <CardContent className="flex aspect-square items-center justify-center p-2">
-              <img src="/1.png" alt="Task Management" />
+            <CardContent className="h-[350px] sm:h-[550px] flex items-center justify-center p-3">
+              <img
+                src="/hero-desktop-1.png"
+                alt="Task Management"
+                className="carousel-image"
+              />
             </CardContent>
           </Card>
         </CarouselItem>
         <CarouselItem>
           <Card>
-            <CardContent className="flex aspect-square items-center justify-center py-0 px-2">
-              <img src="/hero-desktop-1.png" alt="Task Management" />
+            <CardContent className="h-[350px] sm:h-[550px] flex items-center justify-center p-3">
+              <img
+                src="/hero-mobile.png"
+                alt="Task Management"
+                className="carousel-image"
+              />
             </CardContent>
           </Card>
         </CarouselItem>
         <CarouselItem>
           <Card>
-            <CardContent className="flex aspect-square items-center justify-center p-2">
-              <img src="/3.png" alt="Task Management" />
-            </CardContent>
-          </Card>
-        </CarouselItem>
-        <CarouselItem>
-          <Card>
-            <CardContent className="flex aspect-square items-center justify-center p-2">
-              <img src="/hero-desktop-1.png" alt="Task Management" />
+            <CardContent className="h-[350px] sm:h-[550px] flex items-center justify-center p-3">
+              <img
+                src="/hero-desktop-2.png"
+                alt="Task Management"
+                className="carousel-image"
+              />
             </CardContent>
           </Card>
         </CarouselItem>

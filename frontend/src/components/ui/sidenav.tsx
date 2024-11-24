@@ -13,6 +13,7 @@ import {
 import { Card } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
 import { useEffect, useState } from "react";
+import { IconLoader } from "@tabler/icons-react";
 
 interface UserProfile {
   name: string;
@@ -23,12 +24,18 @@ export default function SideNav() {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (!session?.user?.email) return;
+      if (!session?.user?.email) {
+        setIsPageLoading(false);
+        return;
+      }
 
       try {
+        setIsPageLoading(true);
+
         const response = await fetch("http://localhost:3002/api/profile", {
           headers: {
             email: session.user.email,
@@ -40,19 +47,40 @@ export default function SideNav() {
         }
 
         const data = await response.json();
-        setUserProfile({
-          name: data.name,
-          avatar: data.avatar,
-        });
+        setUserProfile((prev) =>
+          prev?.name !== data.name || prev?.avatar !== data.avatar
+            ? {
+                name: data.name || session?.user?.name || "User",
+                avatar: data.avatar || session?.user?.image || null,
+              }
+            : prev
+        );
       } catch (error) {
         console.error("Error fetching user profile:", error);
+      } finally {
+        setIsPageLoading(false);
       }
     };
 
     if (session?.user?.email) {
       fetchUserProfile();
+    } else {
+      setIsPageLoading(false);
     }
   }, [session]);
+
+  const displayedUser = userProfile || {
+    name: session?.user?.name || "User",
+    avatar: session?.user?.image || null,
+  };
+
+  if (isPageLoading) {
+    return (
+      <div className="flex w-full h-[400px] items-center justify-center">
+        <IconLoader className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full flex-col  md:bg-transparent">
@@ -77,32 +105,28 @@ export default function SideNav() {
         <Separator className="-mt-3 mb-4 mx-3 w-10/12" />
 
         {/* User profile */}
-        {session?.user && (
-          <div className="mb-4">
-            <div className="flex items-center mx-1 text-sm gap-2">
-              <Avatar>
-                <AvatarImage
-                  src={userProfile?.avatar || undefined}
-                  alt={`${
-                    userProfile?.name || session.user.name
-                  }'s profile picture`}
-                />
-                <AvatarFallback>
-                  <img
-                    src={session.user.image || "/profile-placeholder.png"}
-                    alt="Profile Placeholder"
-                  />
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <span className="text-sm font-medium">
-                  {userProfile?.name || session.user.name}
-                </span>
-                <span className="text-xs ">{session.user.email}</span>
-              </div>
+
+        <div className="mb-4">
+          <div className="flex items-center mx-1 text-sm gap-2">
+            <Avatar>
+              <AvatarImage
+                src={displayedUser.avatar || "/profile-placeholder.png"}
+                alt={`${
+                  userProfile?.name || session?.user?.name
+                }'s profile picture`}
+              />
+              <AvatarFallback>
+                {displayedUser.name?.charAt(0).toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">
+                {displayedUser.name || "User"}
+              </span>
+              <span className="text-xs">{session?.user?.email}</span>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Navigation links */}
         <div className="flex flex-col space-y-2">

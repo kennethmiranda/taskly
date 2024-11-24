@@ -96,38 +96,37 @@ interface TaskFormProps {
   taskId: string;
 }
 
-
-async function updateTask(taskId: string, userEmail: string, data: FormData,userSession: any) {
-  
-  userEmail = userEmail || userSession?.user?.email || '';
+async function updateTask(
+  taskId: string,
+  userEmail: string,
+  data: FormData,
+  userSession: any
+) {
+  userEmail = userEmail || userSession?.user?.email || "";
   console.log("User email after fallback:", userEmail);
- 
-  if(!userEmail){
+
+  if (!userEmail) {
     console.warn("User email is not available.");
     return;
   }
-  
+
   try {
     const requestBody = {
       ...Object.fromEntries(data.entries()),
-      userEmail: userEmail || userSession?.user?.email || ''
+      userEmail: userEmail || userSession?.user?.email || "",
     };
 
-    const response = await fetch(
-      `http://localhost:3002/api/tasks/${taskId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      }
-    );
-    if(!response.ok){
-      throw new Error('Faield to udpate task');
+    const response = await fetch(`http://localhost:3002/api/tasks/${taskId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update task");
     }
     return await response.json();
-    
   } catch (error) {
     console.error("Error updating task:", error);
     throw error;

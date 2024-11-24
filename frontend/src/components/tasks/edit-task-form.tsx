@@ -457,11 +457,11 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-16">
           {/* Description */}
           <div className="space-y-3">
             <h2 className="font-semibold mb-2">Description</h2>
-            <div className="w-full h-[200px] overflow-y-auto rounded-lg border bg-background md:w-[650px] p-4">
+            <div className="w-full h-[200px] overflow-y-auto rounded-lg border bg-background 2xl:w-[600px] 3xl:w-[650px] p-4">
               <div className="break-words whitespace-normal">
                 <p className="text-sm">
                   {task.description || (

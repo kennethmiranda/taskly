@@ -326,6 +326,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
                         <FormLabel>Description</FormLabel>
                         <FormControl>
                           <Textarea
+                            className="h-24"
                             placeholder="Task description (optional)"
                             {...field}
                           />
@@ -339,7 +340,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
                     control={form.control}
                     name="dueDate"
                     render={({ field }) => (
-                      <FormItem className="flex flex-col">
+                      <FormItem>
                         <FormLabel>Due Date</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
@@ -347,7 +348,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
                               <Button
                                 variant={"outline"}
                                 className={cn(
-                                  "w-[240px] pl-3 text-left font-normal",
+                                  "w-[240px] pl-3 text-left flex font-normal",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -478,7 +479,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
           {/* Description */}
           <div className="space-y-3">
             <h2 className="font-semibold mb-2">Description</h2>
-            <div className="w-full h-[200px] overflow-y-auto rounded-lg border bg-background 2xl:w-[600px] p-4">
+            <div className="w-full sm:h-[200px] overflow-y-auto rounded-lg border bg-background 2xl:w-[600px] p-4">
               <div className="break-words whitespace-normal">
                 <p className="text-sm">
                   {task.description || (
@@ -583,7 +584,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
               <div
                 onClick={() => document.getElementById("file-upload")?.click()}
                 className={cn(
-                  "border-2 border-dashed rounded-lg p-8 transition-colors cursor-pointer",
+                  "border-2 border-dashed sm:h-[200px] rounded-lg p-8 transition-colors cursor-pointer",
                   dragActive
                     ? "border-primary bg-primary/5"
                     : "border-muted-foreground/25"

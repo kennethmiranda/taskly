@@ -18,6 +18,8 @@ import { IconLoader } from "@tabler/icons-react";
 interface UserProfile {
   name: string;
   avatar: string | null;
+  image: string | null;
+  email: string;
 }
 
 export default function SideNav() {
@@ -35,7 +37,6 @@ export default function SideNav() {
 
       try {
         setIsPageLoading(true);
-
         const response = await fetch("http://localhost:3002/api/profile", {
           headers: {
             email: session.user.email,
@@ -48,10 +49,15 @@ export default function SideNav() {
 
         const data = await response.json();
         setUserProfile((prev) =>
-          prev?.name !== data.name || prev?.avatar !== data.avatar
+          prev?.name !== data.name ||
+          prev?.avatar !== data.avatar ||
+          prev?.image !== session?.user?.image ||
+          prev?.email !== session?.user?.email
             ? {
                 name: data.name || session?.user?.name || "User",
-                avatar: data.avatar || session?.user?.image || null,
+                image: session?.user?.image || null,
+                avatar: data.avatar || null,
+                email: session?.user?.email || "",
               }
             : prev
         );
@@ -69,14 +75,11 @@ export default function SideNav() {
     }
   }, [session]);
 
-  const displayedUser = userProfile || {
-    name: session?.user?.name || "User",
-    avatar: session?.user?.image || null,
-  };
+  const displayedUser = userProfile?.avatar || userProfile?.image || undefined;
 
   if (isPageLoading) {
     return (
-      <div className="flex w-full h-[400px] items-center justify-center">
+      <div className="hidden md:flex w-full h-[400px] items-center justify-center">
         <IconLoader className="h-8 w-8 animate-spin" />
       </div>
     );
@@ -110,20 +113,20 @@ export default function SideNav() {
           <div className="flex items-center mx-1 text-sm gap-2">
             <Avatar>
               <AvatarImage
-                src={displayedUser.avatar || "/profile-placeholder.png"}
+                src={displayedUser}
                 alt={`${
                   userProfile?.name || session?.user?.name
                 }'s profile picture`}
               />
               <AvatarFallback>
-                {displayedUser.name?.charAt(0).toUpperCase() || "U"}
+                <img src="/profile-placeholder.png" alt="Profile Placeholder" />
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
               <span className="text-sm font-medium">
-                {displayedUser.name || "User"}
+                {userProfile?.name || "User"}
               </span>
-              <span className="text-xs">{session?.user?.email}</span>
+              <span className="text-xs">{userProfile?.email}</span>
             </div>
           </div>
         </div>

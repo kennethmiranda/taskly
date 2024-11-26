@@ -26,15 +26,17 @@ export function DataTablePagination<TData>({
   useEffect(() => {
     // set initial page size based on screen width
     const updatePageSize = () => {
+      const totalRows = table.getFilteredRowModel().rows.length;
       const isMobile = window.matchMedia("(max-width: 768px)").matches;
-      if (isMobile) {
-        table.setPageSize(table.getFilteredRowModel().rows.length);
+
+      if (totalRows < 10) {
+        // Set page size to all rows if total rows < 10
+        table.setPageSize(totalRows);
+      } else if (isMobile) {
+        table.setPageSize(totalRows);
       } else {
-        // reset to 10 if current page size is the total row count
-        if (
-          table.getState().pagination.pageSize ===
-          table.getFilteredRowModel().rows.length
-        ) {
+        // Reset to 10 if the current page size equals the total row count
+        if (table.getState().pagination.pageSize === totalRows) {
           table.setPageSize(10);
         }
       }
@@ -71,18 +73,26 @@ export function DataTablePagination<TData>({
               {(() => {
                 const pageSizes = [];
                 const totalRows = table.getFilteredRowModel().rows.length;
-                for (let i = 10; i <= totalRows; i += 10) {
-                  pageSizes.push(i);
-                }
-                if (!pageSizes.includes(totalRows)) {
+
+                if (totalRows < 10) {
                   pageSizes.push(totalRows);
+                } else {
+                  for (let i = 10; i <= totalRows; i += 10) {
+                    pageSizes.push(i);
+                  }
+                  if (!pageSizes.includes(totalRows)) {
+                    pageSizes.push(totalRows);
+                  }
                 }
-                return pageSizes;
-              })().map((pageSize, index, array) => (
-                <SelectItem key={pageSize} value={`${pageSize}`}>
-                  {index === array.length - 1 ? "All Tasks" : pageSize}
-                </SelectItem>
-              ))}
+
+                return pageSizes.map((pageSize, index, array) => (
+                  <SelectItem key={pageSize} value={`${pageSize}`}>
+                    {index === array.length - 1 || totalRows < 10
+                      ? "All Tasks"
+                      : pageSize}
+                  </SelectItem>
+                ));
+              })()}
             </SelectContent>
           </Select>
         </div>

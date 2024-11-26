@@ -195,7 +195,7 @@ export const columns: ColumnDef<Task>[] = [
           if (!response.ok) {
             throw new Error("Failed to delete task");
           }
-
+          window.location.reload();
           console.log(`Task with id: ${id} deleted successfully`);
         } catch (error) {
           console.error("Error deleting task:", error);

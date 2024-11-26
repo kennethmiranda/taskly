@@ -29,6 +29,74 @@ async function getUserIdFromEmail(email) {
   return rows[0].id;
 }
 
+//Upload Files
+app.post("/api/upload", async (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).json({ error: "No files uploaded" });
+  }
+
+  const { taskId, userEmail} = req.body; 
+  const userId = await getUserIdFromEmail(userEmail);
+  const files = Array.isArray(req.files.files) ? req.files.files : [req.files.files];
+  const uploadedFiles = [];
+
+  files.forEach((file) => {
+    const uploadPath = path.join(uploadDir, file.name);
+
+    file.mv(uploadPath, async (err) => {
+      if (err) {
+        return res.status(500).json({ error: "Failed to save file" });
+      }
+
+      const fileData = {
+        name: file.name,
+        path: `/uploads/${file.name}`,
+        size: file.size,
+        type: file.mimetype,
+        taskId,
+        userId,
+        uploadedAt: new Date(),
+      };
+
+      // Save file metadata to the database
+      try {
+        await pool.query(
+          `INSERT INTO files (name, path, size, type, taskId, uploadedAt,userId) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          [fileData.name, fileData.path, fileData.size, fileData.type, fileData.taskId, fileData.uploadedAt, fileData.userId]
+        );
+      } catch (dbError) {
+        console.error("Database error:", dbError);
+        return res.status(500).json({ error: "Failed to save file metadata" });
+      }
+
+      uploadedFiles.push(fileData);
+
+      if (uploadedFiles.length === files.length) {
+        res.json({ files: uploadedFiles }); // Return metadata for all uploaded files
+      }
+    });
+  });
+});
+
+//Retrieve files from specific user and specific task
+app.post("/api/files/:taskId", async (req,res) => {
+  const { taskId } = req.params;
+  const userEmail = req.body.userEmail;
+
+  try{
+    const userId = await getUserIdFromEmail(userEmail);
+    const[rows] = await pool.query(
+      'SELECT * FROM files WHERE taskID = ? AND userId = ?',
+      [taskId,userId]
+    );
+    res.json({ files: rows });
+  }catch(error){
+    console.log("Error fetching attachments", error);
+    res.status(500).json({ error: "Failed to fetch attachments" });
+  }
+});
+
+
 // Route for the root URL '/'
 app.get("/", (req, res) => {
   res.send("Welcome to the Task Manager API!");

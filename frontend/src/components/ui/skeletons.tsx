@@ -178,7 +178,91 @@ export function HomeSkeleton() {
   );
 }
 
-export function EditTaskSkeleton() {}
+export function EditTaskSkeleton() {
+  return (
+    <div className="container w-full mx-auto px-4 py-8">
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <Skeleton className="h-9 w-28" />
+          <Skeleton className="h-9 w-24" />
+        </div>
+
+        {/* Title */}
+        <div className="space-y-2">
+          <Skeleton className="h-10 w-72" />
+          <Skeleton className="h-4 w-52" />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-16">
+          {/* Description Section */}
+          <div className="space-y-3">
+            <Skeleton className="h-6 w-24 mb-2" />
+            <Skeleton className="w-full h-[100px] overflow-y-auto rounded-lg 2xl:w-[600px] p-4" />
+
+            {/* Task Details */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-6 w-24" />
+                  <Skeleton className="h-6 w-32" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Attachments Section */}
+          <div className="space-y-2">
+            <Skeleton className="h-6 w-24 mb-2" />
+            <div className="space-y-3">
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[...Array(2)].map((_, i) => (
+                  <Skeleton key={i} className="h-16 w-full rounded-lg" />
+                ))}
+              </div>
+              <Skeleton className="w-full h-[200px] rounded-lg" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SideNavSkeleton() {
+  return (
+    <div className="flex h-screen flex-col gap-2">
+      {/* Mobile toggle */}
+      <div className="block md:hidden px-4 py-2">
+        <Skeleton className="h-8 w-24" />
+      </div>
+
+      {/* Logo */}
+      <div className="px-4 py-2">
+        <Skeleton className="h-8 w-32" />
+      </div>
+
+      {/* User profile */}
+      <div className="flex flex-col items-center gap-2 border-b border-border p-6">
+        <Skeleton className="h-16 w-16 rounded-full" />
+        <Skeleton className="h-5 w-32" />
+        <Skeleton className="h-4 w-40" />
+      </div>
+
+      {/* Navigation links */}
+      <div className="flex-1 px-4 space-y-2">
+        {[...Array(5)].map((_, i) => (
+          <Skeleton key={i} className="h-10 w-full rounded-lg" />
+        ))}
+      </div>
+
+      {/* Sign out button */}
+      <div className="p-4">
+        <Skeleton className="h-12 w-full rounded-lg" />
+      </div>
+    </div>
+  );
+}
 
 export function CardSkeleton() {
   return (

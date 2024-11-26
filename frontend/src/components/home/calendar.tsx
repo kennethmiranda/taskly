@@ -10,7 +10,20 @@ import { EventType } from "@/src/lib/definitions";
 export default function Calendar() {
   const { data: userSession } = useSession();
   const [events, setEvents] = useState<EventType[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
   const userEmail = userSession?.user?.email;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 769);
+    };
+
+    // Set initial value and add event listener
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -100,11 +113,14 @@ export default function Calendar() {
   return (
     <div className="calendar-container w-full">
       <FullCalendar
-        height="auto"
+        height="700px"
         themeSystem="standard"
         views={{
           dayGridMonth: {
-            titleFormat: { year: "numeric", month: "long" },
+            titleFormat: {
+              year: "numeric",
+              month: isMobile ? "short" : "long",
+            },
             buttonText: "Month View",
           },
         }}

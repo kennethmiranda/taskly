@@ -15,6 +15,24 @@ const config: Config = {
       gridTemplateColumns: {
         "13": "repeat(13, minmax(0, 1fr))",
       },
+      spacing: {
+        18: "4.5rem",
+        22: "5.5rem",
+        26: "6.5rem",
+        28: "7rem",
+        36: "9rem",
+        44: "11rem",
+        52: "13rem",
+        60: "15rem",
+        68: "17rem",
+        76: "19rem",
+        84: "21rem",
+        92: "23rem",
+        100: "25rem",
+        108: "27rem",
+        116: "29rem",
+        124: "31rem",
+      },
       colors: {
         blue: {
           "400": "#2589FE",

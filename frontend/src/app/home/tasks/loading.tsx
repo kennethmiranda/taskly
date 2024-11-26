@@ -1,9 +1,9 @@
-import { TaskDashboardSkeleton } from "@/src/components/ui/skeletons";
+import { TasksSkeleton } from "@/src/components/ui/skeletons";
 
 export default function Loading() {
   return (
     <div>
-      <TaskDashboardSkeleton />
+      <TasksSkeleton />
     </div>
   );
 }

@@ -1,65 +1,64 @@
 import React from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
 
-export function TaskDashboardSkeleton() {
+export function TasksSkeleton() {
   return (
-    <div className="space-y-6 p-2 sm:p-6 md:p-8">
+    <div className="space-y-5 p-2 sm:p-6 md:p-8">
       {/* Header */}
       <div className="space-y-2">
-        <Skeleton className="h-9 w-[120px]" /> {/* Tasks */}
-        <Skeleton className="h-5 w-[180px]" /> {/* Here's a list... */}
+        <Skeleton className="h-9 w-[100px]" /> {/* Tasks */}
+        <Skeleton className="h-5 w-[185px]" /> {/* h2 */}
       </div>
 
       {/* Command Bar */}
       <div className="flex gap-2 items-center">
-        <Skeleton className="h-9 w-[100px]" /> {/* Create Task button */}
-        <Skeleton className="h-9 w-[300px]" /> {/* Search input */}
+        <Skeleton className="h-7 w-[118px]" /> {/* Create Task button */}
+        <Skeleton className="h-7 w-[250px]" /> {/* Search input */}
         <div className="flex gap-2 mr-auto">
-          <Skeleton className="h-9 w-[100px]" /> {/* Status filter */}
-          <Skeleton className="h-9 w-[100px]" /> {/* Priority filter */}
+          <Skeleton className="h-7 w-[88px]" /> {/* Status filter */}
+          <Skeleton className="h-7 w-[88px]" /> {/* Priority filter */}
         </div>
       </div>
 
       {/* Table Header */}
       <div className="rounded-md border">
-        <div className="border-b p-3">
-          <div className="grid grid-cols-7 gap-3 items-center">
-            <Skeleton className="flex h-4 w-[20px]" /> {/* Checkbox */}
-            <Skeleton className="flex -ml-36 h-4 w-[50px]" /> {/* Task */}
-            <Skeleton className="flex -ml-20 h-4 w-[50px]" /> {/* Title */}
-            <Skeleton className="flex h-4 w-[50px]" /> {/* Due Date */}
-            <Skeleton className="flex ml-6 h-4 w-[50px]" /> {/* Status */}
-            <Skeleton className="flex ml-28 h-4 w-[50px]" /> {/* Priority */}
-            <Skeleton className="flex ml-28 h-4 w-[20px]" /> {/* Actions */}
+        <div className="border-b p-2.5">
+          <div className="grid grid-cols-7 gap-2 items-center">
+            <Skeleton className="flex -ml-1 h-5 w-[20px]" /> {/* Checkbox */}
+            <Skeleton className="flex -ml-40 h-5 w-[45px]" /> {/* Task */}
+            <Skeleton className="flex -ml-24 h-5 w-[50px]" /> {/* Title */}
+            <Skeleton className="flex h-5 -ml-2 w-[70px]" /> {/* Due Date */}
+            <Skeleton className="flex ml-8 h-5 w-[60px]" /> {/* Status */}
+            <Skeleton className="flex ml-24 h-5 w-[70px]" /> {/* Priority */}
+            <Skeleton className="flex ml-28 h-5 w-[20px]" /> {/* Actions */}
           </div>
         </div>
 
         {/* Table Rows */}
         {[...Array(10)].map((_, index) => (
           <div key={index} className="border-b p-4">
-            <div className="grid grid-cols-7 gap-4 items-center">
-              <Skeleton className="h-4 w-[20px]" /> {/* Checkbox */}
-              <Skeleton className="-ml-36 h-4 w-[50px]" /> {/* Task */}
-              <Skeleton className="-ml-20 h-4 w-[50px]" /> {/* Title */}
-              <Skeleton className="h-4 w-[50px]" /> {/* Due Date */}
-              <Skeleton className="h-4 ml-6 w-[50px]" /> {/* Status */}
-              <Skeleton className="h-4 ml-28 w-[50px]" /> {/* Priority */}
-              <Skeleton className="h-4 ml-28 w-[20px]" /> {/* Actions */}
+            <div className="grid grid-cols-7 items-center">
+              <Skeleton className="flex h-4 -ml-2 w-[20px]" /> {/* Checkbox */}
+              <Skeleton className="flex -ml-40 h-4 w-[120px]" /> {/* Task */}
+              <Skeleton className="-ml-24 h-4 w-[90px]" /> {/* Title */}
+              <Skeleton className="h-4 -ml-1 w-[90px]" /> {/* Due Date */}
+              <Skeleton className="h-4 ml-10 w-[86px]" /> {/* Status */}
+              <Skeleton className="h-4 ml-28 w-[70px]" /> {/* Priority */}
+              <Skeleton className="h-4 ml-32 w-[20px]" /> {/* Actions */}
             </div>
           </div>
         ))}
       </div>
 
       {/* Table Footer */}
-      <div className="-mt-1 flex items-center justify-between">
-        <Skeleton className="h-4 w-[200px]" /> {/* Selected items count */}
-        <div className="flex gap-2 items-center">
-          <Skeleton className="h-8 w-[100px]" /> {/* Items per page */}
-          <Skeleton className="h-8 w-[100px]" /> {/* Page numbers */}
+      <div className="-p-1 flex items-center justify-between">
+        <Skeleton className="h-6 w-[175px]" /> {/* Selected items count */}
+        <div className="flex gap-6 items-center">
+          <Skeleton className="h-8 w-[230px]" /> {/* Tasks per page */}
           <div className="flex gap-2 px-5">
-            <Skeleton className="h-8 w-[100px]" /> {/* Page numbers */}
+            <Skeleton className="h-8 w-[85px]" /> {/* Page numbers */}
           </div>
-          <div className="flex gap-1">
+          <div className="flex gap-2 -ml-4">
             <Skeleton className="h-8 w-8" /> {/* First page */}
             <Skeleton className="h-8 w-8" /> {/* Prev page */}
             <Skeleton className="h-8 w-8" /> {/* Next page */}

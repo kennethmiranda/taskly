@@ -42,7 +42,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
 import { IconLoader } from "@tabler/icons-react";
 import { Separator } from "@/src/components/ui/separator";
@@ -98,9 +98,7 @@ interface TaskFormProps {
 
 
 async function updateTask(taskId: string, userEmail: string, data: FormData,userSession: any) {
-  
   userEmail = userEmail || userSession?.user?.email || '';
-  console.log("User email after fallback:", userEmail);
  
   if(!userEmail){
     console.warn("User email is not available.");
@@ -124,8 +122,9 @@ async function updateTask(taskId: string, userEmail: string, data: FormData,user
       }
     );
     if(!response.ok){
-      throw new Error('Faield to udpate task');
+      throw new Error('Failed to update task');
     }
+    window.location.reload();
     return await response.json();
     
   } catch (error) {
@@ -151,6 +150,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
   const { toast } = useToast();
   const { data: userSession } = useSession();
 
+  userEmail = userEmail || userSession?.user?.email || '';
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -224,30 +224,34 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       Array.from(fileList).forEach((file) => {
         formData.append("files", file);
       });
-      await updateTask(taskId, userEmail, formData, userSession);
-      // Simulating file upload
-      const newFiles: File[] = Array.from(fileList).map((file, index) => ({
+      formData.append("taskId", taskId);
+      formData.append("userEmail", userEmail);
+
+      const response = await fetch(`http://localhost:3002/api/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Failed to upload files.");
+
+      const data = await response.json();
+      const uploadedFiles = Array.isArray(data.files) ? data.files : [data];
+      
+      const newFiles = uploadedFiles.map((file: { name: any; path: any; size: any; type: any; uploadedAt: any; }, index: any) => ({
         id: `new-file-${Date.now()}-${index}`,
-        taskId: taskId,
+        taskId,
         name: file.name,
+        path: file.path,
         size: file.size,
         type: file.type,
-        uploadedAt: new Date(),
+        uploadedAt: file.uploadedAt || new Date(),
       }));
+
       setFiles([...files, ...newFiles]);
-      toast({
-        title: "Success",
-        description: "Files uploaded successfully",
-        duration: 3000,
-      });
+      toast({ title: "Success", description: "Files uploaded successfully", duration: 3000 });
     } catch (error) {
       console.error("Error uploading files:", error);
-      toast({
-        title: "Error",
-        description: "Failed to upload files",
-        variant: "destructive",
-        duration: 3000,
-      });
+      toast({ title: "Error", description: "Failed to upload files", variant: "destructive", duration: 3000 });
     } finally {
       setIsLoading(false);
     }
@@ -275,6 +279,32 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchFiles = async () =>{
+      setIsLoading(true);
+      try{
+        const response = await fetch(`http://localhost:3002/api/files/${taskId}`, {
+          method: "POST",
+          headers:{
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({userEmail}),
+        });
+        
+        if(!response.ok){
+          throw new Error("Failed to fetch files.");
+        }
+        const data = await response.json();
+        setFiles(data.files);
+      }catch(error){
+        console.error("Error fetching files");
+      }finally{
+        setIsLoading(false);
+      }
+    }
+    fetchFiles();
+  }, [taskId, userEmail]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -563,7 +593,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
                           {file.name}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {(file.size ?? 0 / 1024).toFixed(1)} KB
+                        {((file.size ?? 0) / 1024).toFixed(1)} KB
                         </p>
                       </div>
                       <Button
@@ -621,4 +651,4 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       </div>
     </div>
   );
-}
+};

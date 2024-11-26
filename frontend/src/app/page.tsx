@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main className="mt-4 flex min-h-screen flex-col gap-6 p-4 sm:p-6">
-      <div className="flex flex-col gap-8 md:flex-row">
+      <div className="flex flex-col gap-8 md:flex-row md:space-y-16">
         {/* Sign In */}
         <div className="flex flex-col items-center justify-center gap-6 rounded-lg p-6 sm:px-10 sm:py-12 md:w-2/5">
           <Logo />
@@ -26,7 +26,7 @@ export default function Page() {
           <Button asChild>
             <Link
               href="/sign-in"
-              className="flex items-center justify-center gap-3 rounded-lg  px-4 py-2 text-sm font-medium  transition-colors hover:bg-blue-600 sm:px-6 sm:py-3 md:text-base"
+              className="flex items-center justify-center gap-3 rounded-lg px-4 py-2 text-sm font-medium  transition-colors hover:bg-blue-600 sm:px-6 sm:py-3 md:text-base"
             >
               Sign In
               <ArrowRightIcon className="w-5 md:w-6" />

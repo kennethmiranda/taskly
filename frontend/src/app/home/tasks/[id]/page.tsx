@@ -79,9 +79,5 @@ export default async function TaskPage({ params }: Props) {
     notFound();
   }
 
-  return (
-    <div className="">
-      <TaskForm task={task} userEmail={userEmail} taskId={params.id} />
-    </div>
-  );
+  return <TaskForm task={task} userEmail={userEmail} taskId={params.id} />;
 }

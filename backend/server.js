@@ -218,7 +218,7 @@ app.delete("/api/tasks/:id", async (req, res) => {
 // update task
 app.patch("/api/tasks/:id", async (req, res) => {
   const { id } = req.params;
-  const userEmail = req.body.userEmail; 
+  const userEmail = req.body.userEmail;
 
   const { title, description, dueDate, status, priority } = req.body;
 
@@ -347,7 +347,7 @@ app.get("/api/profile", async (req, res) => {
 
   try {
     const [results] = await pool.query(
-      "SELECT name, email, emailNotifications, avatar FROM users WHERE email = ?",
+      "SELECT name, email, emailNotifications, image, avatar FROM users WHERE email = ?",
       [userEmail]
     );
 

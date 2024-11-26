@@ -14,6 +14,7 @@ import {
 import { toast } from "@/src/hooks/use-toast";
 import { ThemeToggle } from "@/src/components/ui/theme-toggle";
 import { IconLoader } from "@tabler/icons-react";
+import { SettingsSkeleton } from "@/src/components/ui/skeletons";
 
 export default function SettingsDashboard() {
   const { data: session, status, update: updateSession } = useSession();
@@ -177,94 +178,107 @@ export default function SettingsDashboard() {
 
   if (isPageLoading) {
     return (
-      <div className="flex w-full h-[400px] items-center justify-center">
-        <IconLoader className="h-8 w-8 animate-spin" />
+      <div>
+        <SettingsSkeleton />
       </div>
     );
   }
 
   return (
-    <div className="flex w-full py-10">
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, name: e.target.value }))
-            }
-            placeholder="Enter name"
-          />
-        </div>
+    <div className="space-y-6 p-2 sm:p-6 md:p-8">
+      <div className="flex-1 sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          Settings
+        </h2>
+        <p className="text-sm sm:text-base text-muted-foreground sm:mt-0">
+          Manage your account settings and preferences
+        </p>
+        <div className="flex w-full py-10">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
+                placeholder="Enter name"
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={session?.user?.email || ""}
-            readOnly
-            className="bg-muted"
-          />
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={session?.user?.email || ""}
+                readOnly
+                className="bg-muted"
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="avatar">Profile Picture</Label>
-          <div className="flex items-center space-x-4">
-            <Avatar className="h-20 w-20">
-              <AvatarImage src={displayAvatar} alt="Profile picture" />
-              <AvatarFallback>
-                {formData.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <Input
-              id="avatar"
-              name="avatar"
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-              className="max-w-[250px]"
-              disabled={isLoading}
-            />
-          </div>
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="avatar">Profile Picture</Label>
+              <div className="flex items-center space-x-4">
+                <Avatar className="h-20 w-20">
+                  <AvatarImage src={displayAvatar} alt="Profile picture" />
+                  <AvatarFallback>
+                    {formData.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <Input
+                  id="avatar"
+                  name="avatar"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarChange}
+                  className="max-w-[250px]"
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
 
-        <div className="flex items-center space-x-2">
-          <Label htmlFor="email-notifications">Email Notifications</Label>
-          <Switch
-            id="email-notifications"
-            name="emailNotifications"
-            checked={formData.emailNotifications}
-            onCheckedChange={(checked) =>
-              setFormData((prev) => ({ ...prev, emailNotifications: checked }))
-            }
-          />
-        </div>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="email-notifications">Email Notifications</Label>
+              <Switch
+                id="email-notifications"
+                name="emailNotifications"
+                checked={formData.emailNotifications}
+                onCheckedChange={(checked) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    emailNotifications: checked,
+                  }))
+                }
+              />
+            </div>
 
-        <div className="flex items-center space-x-2">
-          <Label htmlFor="theme-toggle">Theme Toggle</Label>
-          <span>
-            <ThemeToggle />
-          </span>
-        </div>
+            <div className="relative md:flex items-center space-x-2">
+              <Label htmlFor="theme-toggle">Theme Toggle</Label>
+              <span>
+                <ThemeToggle />
+              </span>
+            </div>
 
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? (
-            <>
-              Saving...
-              <IconLoader className="mr-2 h-4 w-4 animate-spin" />
-            </>
-          ) : (
-            "Save Changes"
-          )}
-        </Button>
-      </form>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  Saving...
+                  <IconLoader className="mr-2 h-4 w-4 animate-spin" />
+                </>
+              ) : (
+                "Save Changes"
+              )}
+            </Button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

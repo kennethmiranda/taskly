@@ -1,4 +1,3 @@
-// /src/app/home/page.tsx
 import { Metadata } from "next";
 import HomeDashboard from "@/src/components/home/home-dashboard";
 
@@ -7,6 +6,6 @@ export const metadata: Metadata = {
   description: "Home page",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
   return <HomeDashboard />;
 }

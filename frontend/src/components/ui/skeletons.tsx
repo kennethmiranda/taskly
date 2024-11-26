@@ -1,5 +1,7 @@
 import React from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
+import { Card } from "@/src/components/ui/card";
+import { Separator } from "@/src/components/ui/separator";
 
 export function HomeSkeleton() {
   return (
@@ -64,35 +66,64 @@ export function HomeSkeleton() {
 // implement & mobile
 export function SideNavSkeleton() {
   return (
-    <div className="flex h-screen flex-col gap-2">
-      {/* Mobile toggle */}
-      <div className="block md:hidden px-4 py-2">
-        <Skeleton className="h-8 w-24" />
+    <div className="w-full md:w-64 flex-none md:flex-shrink-0">
+      <div className="flex h-full flex-col md:bg-transparent">
+        {/* Logo Skeleton */}
+        <div className="flex mx-7 md:mx-auto p-4 mt-1 md:h-40 items-center justify-center">
+          <Skeleton className="h-22 w-40 -ml-9" />
+        </div>
+
+        <Separator className="mb-5 -mt-4 mx-8 md:mx-5 w-[200px]" />
+
+        {/* User Profile Skeleton */}
+        <div className="mb-4 flex items-center text-sm gap-2 px-3">
+          <Skeleton className="h-11 w-11 rounded-full" />
+          <div className="flex flex-col space-y-2">
+            <Skeleton className="h-5 w-28" />
+            <Skeleton className="h-3 w-40" />
+          </div>
+        </div>
+
+        {/* Navigation Links Skeleton */}
+        <div className="flex flex-col space-y-3 px-4">
+          {[1, 2, 3, 4].map((item) => (
+            <Skeleton key={item} className="h-11 w-[230px]" />
+          ))}
+        </div>
+
+        {/* Sign Out Button Skeleton */}
+        <div className="mt-104 mb-auto px-4 pb-4">
+          <Skeleton className="h-11 w-[230px]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SideNavMobileSkeleton() {
+  return (
+    <div className="w-full flex-col items-center justify-center space-y-4 p-4">
+      {/* Mobile Logo Skeleton */}
+      <Skeleton className="h-16 w-40" />
+
+      {/* Mobile User Profile Skeleton */}
+      <div className="flex items-center space-x-4">
+        <Skeleton className="h-12 w-12 rounded-full" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-40" />
+        </div>
       </div>
 
-      {/* Logo */}
-      <div className="px-4 py-2">
-        <Skeleton className="h-8 w-32" />
-      </div>
-
-      {/* User profile */}
-      <div className="flex flex-col items-center gap-2 border-b border-border p-6">
-        <Skeleton className="h-16 w-16 rounded-full" />
-        <Skeleton className="h-5 w-32" />
-        <Skeleton className="h-4 w-40" />
-      </div>
-
-      {/* Navigation links */}
-      <div className="flex-1 px-4 space-y-2">
-        {[...Array(5)].map((_, i) => (
-          <Skeleton key={i} className="h-10 w-full rounded-lg" />
+      {/* Mobile Navigation Links Skeleton */}
+      <div className="space-y-3 w-full">
+        {[1, 2, 3, 4].map((item) => (
+          <Skeleton key={item} className="h-10 w-full" />
         ))}
       </div>
 
-      {/* Sign out button */}
-      <div className="p-4">
-        <Skeleton className="h-12 w-full rounded-lg" />
-      </div>
+      {/* Mobile Sign Out Button Skeleton */}
+      <Skeleton className="h-10 w-full" />
     </div>
   );
 }

@@ -18,7 +18,6 @@ export default function Calendar() {
       setIsMobile(window.innerWidth < 769);
     };
 
-    // Set initial value and add event listener
     handleResize();
     window.addEventListener("resize", handleResize);
 

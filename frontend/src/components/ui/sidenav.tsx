@@ -14,6 +14,11 @@ import { Card } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
 import { useEffect, useState } from "react";
 import { IconLoader } from "@tabler/icons-react";
+import {
+  SideNavMobileSkeleton,
+  SideNavSkeleton,
+} from "@/src/components/ui/skeletons";
+import { fetchTest } from "@/src/lib/data";
 
 interface UserProfile {
   name: string;
@@ -23,10 +28,23 @@ interface UserProfile {
 }
 
 export default function SideNav() {
+  fetchTest();
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 769);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -77,12 +95,8 @@ export default function SideNav() {
 
   const displayedUser = userProfile?.avatar || userProfile?.image || undefined;
 
-  if (isPageLoading) {
-    return (
-      <div className="hidden md:flex w-full h-[400px] items-center justify-center">
-        <IconLoader className="h-8 w-8 animate-spin" />
-      </div>
-    );
+  if (isPageLoading && !isMobile) {
+    return isMobile ? <SideNavSkeleton /> : <SideNavMobileSkeleton />;
   }
 
   return (

@@ -30,7 +30,6 @@ export default function Calendar() {
         }
         const tasks = await response.json();
 
-
         const mappedEvents = tasks.flatMap(
           (task: { title: any; createdAt: any; id: any; dueDate: any }) => [
             {
@@ -84,7 +83,7 @@ export default function Calendar() {
           },
           body: JSON.stringify({
             dueDate: event.start,
-            userEmail: userEmail,// Update with new start date
+            userEmail: userEmail, // Update with new start date
           }),
         }
       );

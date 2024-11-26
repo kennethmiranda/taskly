@@ -1,6 +1,184 @@
-// Loading animation
-const shimmer =
-  "before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent";
+import React from "react";
+import { Skeleton } from "@/src/components/ui/skeleton";
+
+export function TaskDashboardSkeleton() {
+  return (
+    <div className="space-y-6 p-2 sm:p-6 md:p-8">
+      {/* Header */}
+      <div className="space-y-2">
+        <Skeleton className="h-9 w-[120px]" /> {/* Tasks */}
+        <Skeleton className="h-5 w-[180px]" /> {/* Here's a list... */}
+      </div>
+
+      {/* Command Bar */}
+      <div className="flex gap-2 items-center">
+        <Skeleton className="h-9 w-[100px]" /> {/* Create Task button */}
+        <Skeleton className="h-9 w-[300px]" /> {/* Search input */}
+        <div className="flex gap-2 mr-auto">
+          <Skeleton className="h-9 w-[100px]" /> {/* Status filter */}
+          <Skeleton className="h-9 w-[100px]" /> {/* Priority filter */}
+        </div>
+      </div>
+
+      {/* Table Header */}
+      <div className="rounded-md border">
+        <div className="border-b p-3">
+          <div className="grid grid-cols-7 gap-3 items-center">
+            <Skeleton className="flex h-4 w-[20px]" /> {/* Checkbox */}
+            <Skeleton className="flex -ml-36 h-4 w-[50px]" /> {/* Task */}
+            <Skeleton className="flex -ml-20 h-4 w-[50px]" /> {/* Title */}
+            <Skeleton className="flex h-4 w-[50px]" /> {/* Due Date */}
+            <Skeleton className="flex ml-6 h-4 w-[50px]" /> {/* Status */}
+            <Skeleton className="flex ml-28 h-4 w-[50px]" /> {/* Priority */}
+            <Skeleton className="flex ml-28 h-4 w-[20px]" /> {/* Actions */}
+          </div>
+        </div>
+
+        {/* Table Rows */}
+        {[...Array(10)].map((_, index) => (
+          <div key={index} className="border-b p-4">
+            <div className="grid grid-cols-7 gap-4 items-center">
+              <Skeleton className="h-4 w-[20px]" /> {/* Checkbox */}
+              <Skeleton className="-ml-36 h-4 w-[50px]" /> {/* Task */}
+              <Skeleton className="-ml-20 h-4 w-[50px]" /> {/* Title */}
+              <Skeleton className="h-4 w-[50px]" /> {/* Due Date */}
+              <Skeleton className="h-4 ml-6 w-[50px]" /> {/* Status */}
+              <Skeleton className="h-4 ml-28 w-[50px]" /> {/* Priority */}
+              <Skeleton className="h-4 ml-28 w-[20px]" /> {/* Actions */}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Table Footer */}
+      <div className="-mt-1 flex items-center justify-between">
+        <Skeleton className="h-4 w-[200px]" /> {/* Selected items count */}
+        <div className="flex gap-2 items-center">
+          <Skeleton className="h-8 w-[100px]" /> {/* Items per page */}
+          <Skeleton className="h-8 w-[100px]" /> {/* Page numbers */}
+          <div className="flex gap-2 px-5">
+            <Skeleton className="h-8 w-[100px]" /> {/* Page numbers */}
+          </div>
+          <div className="flex gap-1">
+            <Skeleton className="h-8 w-8" /> {/* First page */}
+            <Skeleton className="h-8 w-8" /> {/* Prev page */}
+            <Skeleton className="h-8 w-8" /> {/* Next page */}
+            <Skeleton className="h-8 w-8" /> {/* Last page */}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SettingsSkeleton() {
+  return (
+    <div className="space-y-6 p-2 sm:p-6 md:p-8">
+      <div className="flex-1 sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+        {/* Header Section */}
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-[120px] sm:h-9" /> {/* Settings */}
+          <Skeleton className="h-6 w-[350px]" /> {/* Description */}
+        </div>
+
+        <div className="flex w-full py-10">
+          <div className="space-y-8 w-full max-w-xl">
+            {/* Name field */}
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-12" />
+              <Skeleton className="h-10 w-[340px]" />
+            </div>
+
+            {/* Email field */}
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-12" />
+              <Skeleton className="h-10 w-[340px]" />
+            </div>
+
+            {/* Profile Picture section */}
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-28" />
+              <div className="flex items-center space-x-4">
+                <Skeleton className="h-20 w-20 rounded-full" />
+                <Skeleton className="h-10 w-[250px]" />
+              </div>
+            </div>
+
+            {/* Email Notifications toggle */}
+            <div className="flex items-center space-x-2">
+              <Skeleton className="h-5 w-36" />
+              <Skeleton className="h-6 w-11 rounded-full" />
+            </div>
+
+            {/* Theme toggle */}
+            <div className="flex items-center space-x-2">
+              <Skeleton className="h-5 w-24" />
+              <Skeleton className="h-9 w-9 rounded-md" />
+            </div>
+
+            {/* Save button */}
+            <Skeleton className="h-10 w-28" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function HomeSkeleton() {
+  return (
+    <div className="space-y-6 p-2 sm:p-6 md:p-8">
+      <div className="flex-1 sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+        <div className="sm:flex-row sm:space-x-0.5">
+          {/* Header and Streak */}
+          <div className="space-y-2 mb-4">
+            <Skeleton className="h-8 w-[135px] sm:h-11" /> {/* Calendar */}
+            <Skeleton className="h-5 w-[140px]" /> {/* Streak */}
+          </div>
+
+          {/* Calendar Container */}
+          {/* Calendar Header */}
+          <div className="flex justify-between items-center mb-6">
+            <Skeleton className="mx-auto h-8 w-[180px]" /> {/* Month/Year */}
+            <div className="flex space-x-2 px-2">
+              <Skeleton className="h-9 w-28" /> {/* Navigation */}
+              <Skeleton className="h-9 w-28" />
+            </div>
+          </div>
+
+          <div className="calendar-skeleton w-full border rounded-lg p-4 space-y-4">
+            {/* Calendar Grid */}
+            <div className="grid grid-cols-7 gap-1">
+              {/* Week Headers */}
+              {Array.from({ length: 7 }).map((_, i) => (
+                <Skeleton key={`header-${i}`} className="w-[205px] -mt-4 h-5" />
+              ))}
+
+              {/* Calendar Days */}
+              {Array.from({ length: 35 }).map((_, i) => (
+                <div key={`day-${i}`} className="aspect-square p-1">
+                  <div className="w-full h-full relative">
+                    <Skeleton className="ml-auto h-6 w-6 mb-1" />{" "}
+                    {/* Day number */}
+                    {/* Random event indicators */}
+                    {Math.random() > 0.7 && (
+                      <Skeleton className="h-5 w-full mt-1" />
+                    )}
+                    {Math.random() > 0.8 && (
+                      <Skeleton className="h-5 w-full mt-1" />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function EditTaskSkeleton() {}
 
 export function CardSkeleton() {
   return (
@@ -29,187 +207,6 @@ export function CardsSkeleton() {
   );
 }
 
-export function RevenueChartSkeleton() {
-  return (
-    <div className={`${shimmer} relative w-full overflow-hidden md:col-span-4`}>
-      <div className="mb-4 h-8 w-36 rounded-md bg-gray-100" />
-      <div className="rounded-xl bg-gray-100 p-4">
-        <div className="mt-0 grid h-[410px] grid-cols-12 items-end gap-2 rounded-md bg-white p-4 sm:grid-cols-13 md:gap-4" />
-        <div className="flex items-center pb-2 pt-6">
-          <div className="h-5 w-5 rounded-full bg-gray-200" />
-          <div className="ml-2 h-4 w-20 rounded-md bg-gray-200" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function InvoiceSkeleton() {
-  return (
-    <div className="flex flex-row items-center justify-between border-b border-gray-100 py-4">
-      <div className="flex items-center">
-        <div className="mr-2 h-8 w-8 rounded-full bg-gray-200" />
-        <div className="min-w-0">
-          <div className="h-5 w-40 rounded-md bg-gray-200" />
-          <div className="mt-2 h-4 w-12 rounded-md bg-gray-200" />
-        </div>
-      </div>
-      <div className="mt-2 h-4 w-12 rounded-md bg-gray-200" />
-    </div>
-  );
-}
-
-export function LatestInvoicesSkeleton() {
-  return (
-    <div
-      className={`${shimmer} relative flex w-full flex-col overflow-hidden md:col-span-4`}
-    >
-      <div className="mb-4 h-8 w-36 rounded-md bg-gray-100" />
-      <div className="flex grow flex-col justify-between rounded-xl bg-gray-100 p-4">
-        <div className="bg-white px-6">
-          <InvoiceSkeleton />
-          <InvoiceSkeleton />
-          <InvoiceSkeleton />
-          <InvoiceSkeleton />
-          <InvoiceSkeleton />
-        </div>
-        <div className="flex items-center pb-2 pt-6">
-          <div className="h-5 w-5 rounded-full bg-gray-200" />
-          <div className="ml-2 h-4 w-20 rounded-md bg-gray-200" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function HomeSkeleton() {
-  return (
-    <>
-      <div
-        className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
-      />
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <CardSkeleton />
-        <CardSkeleton />
-        <CardSkeleton />
-        <CardSkeleton />
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8"></div>
-    </>
-  );
-}
-
-export function TableRowSkeleton() {
-  return (
-    <tr className="w-full border-b border-gray-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
-      {/* Customer Name and Image */}
-      <td className="relative overflow-hidden whitespace-nowrap py-3 pl-6 pr-3">
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-full bg-gray-100"></div>
-          <div className="h-6 w-24 rounded bg-gray-100"></div>
-        </div>
-      </td>
-      {/* Email */}
-      <td className="whitespace-nowrap px-3 py-3">
-        <div className="h-6 w-32 rounded bg-gray-100"></div>
-      </td>
-      {/* Amount */}
-      <td className="whitespace-nowrap px-3 py-3">
-        <div className="h-6 w-16 rounded bg-gray-100"></div>
-      </td>
-      {/* Date */}
-      <td className="whitespace-nowrap px-3 py-3">
-        <div className="h-6 w-16 rounded bg-gray-100"></div>
-      </td>
-      {/* Status */}
-      <td className="whitespace-nowrap px-3 py-3">
-        <div className="h-6 w-16 rounded bg-gray-100"></div>
-      </td>
-      {/* Actions */}
-      <td className="whitespace-nowrap py-3 pl-6 pr-3">
-        <div className="flex justify-end gap-3">
-          <div className="h-[38px] w-[38px] rounded bg-gray-100"></div>
-          <div className="h-[38px] w-[38px] rounded bg-gray-100"></div>
-        </div>
-      </td>
-    </tr>
-  );
-}
-
-export function InvoicesMobileSkeleton() {
-  return (
-    <div className="mb-2 w-full rounded-md bg-white p-4">
-      <div className="flex items-center justify-between border-b border-gray-100 pb-8">
-        <div className="flex items-center">
-          <div className="mr-2 h-8 w-8 rounded-full bg-gray-100"></div>
-          <div className="h-6 w-16 rounded bg-gray-100"></div>
-        </div>
-        <div className="h-6 w-16 rounded bg-gray-100"></div>
-      </div>
-      <div className="flex w-full items-center justify-between pt-4">
-        <div>
-          <div className="h-6 w-16 rounded bg-gray-100"></div>
-          <div className="mt-2 h-6 w-24 rounded bg-gray-100"></div>
-        </div>
-        <div className="flex justify-end gap-2">
-          <div className="h-10 w-10 rounded bg-gray-100"></div>
-          <div className="h-10 w-10 rounded bg-gray-100"></div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function InvoicesTableSkeleton() {
-  return (
-    <div className="mt-6 flow-root">
-      <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          <div className="md:hidden">
-            <InvoicesMobileSkeleton />
-            <InvoicesMobileSkeleton />
-            <InvoicesMobileSkeleton />
-            <InvoicesMobileSkeleton />
-            <InvoicesMobileSkeleton />
-            <InvoicesMobileSkeleton />
-          </div>
-          <table className="hidden min-w-full text-gray-900 md:table">
-            <thead className="rounded-lg text-left text-sm font-normal">
-              <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Customer
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Email
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Amount
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Date
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Status
-                </th>
-                <th
-                  scope="col"
-                  className="relative pb-4 pl-3 pr-6 pt-2 sm:pr-6"
-                >
-                  <span className="sr-only">Edit</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white">
-              <TableRowSkeleton />
-              <TableRowSkeleton />
-              <TableRowSkeleton />
-              <TableRowSkeleton />
-              <TableRowSkeleton />
-              <TableRowSkeleton />
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-}
+// Loading animation
+const shimmer =
+  "before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent";

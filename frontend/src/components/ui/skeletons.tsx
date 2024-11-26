@@ -198,7 +198,7 @@ export function EditTaskSkeleton() {
           {/* Description Section */}
           <div className="space-y-3">
             <Skeleton className="h-6 w-24 mb-2" />
-            <Skeleton className="w-full h-[100px] overflow-y-auto rounded-lg 2xl:w-[600px] p-4" />
+            <Skeleton className="w-full h-[100px] md:h-[200px] overflow-y-auto rounded-lg 2xl:w-[600px] p-4" />
 
             {/* Task Details */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

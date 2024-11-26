@@ -64,6 +64,7 @@ import {
 } from "@/src/components/ui/dialog";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
+import { EditTaskSkeleton } from "@/src/components/ui/skeletons";
 
 type TaskStatus = "backlog" | "todo" | "in progress" | "done" | "canceled";
 type TaskPriority = "low" | "medium" | "high";
@@ -116,18 +117,15 @@ async function updateTask(
       userEmail: userEmail || userSession?.user?.email || "",
     };
 
-    const response = await fetch(
-      `http://localhost:3002/api/tasks/${taskId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      }
-    );
-    if(!response.ok){
-      throw new Error('Failed to update task');
+    const response = await fetch(`http://localhost:3002/api/tasks/${taskId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update task");
     }
     window.location.reload();
     return await response.json();
@@ -154,7 +152,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
   const { toast } = useToast();
   const { data: userSession } = useSession();
 
-  userEmail = userEmail || userSession?.user?.email || '';
+  userEmail = userEmail || userSession?.user?.email || "";
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -232,7 +230,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       formData.append("userEmail", userEmail);
 
       const response = await fetch(`http://localhost:3002/api/upload`, {
-        method: 'POST',
+        method: "POST",
         body: formData,
       });
 
@@ -240,22 +238,36 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
 
       const data = await response.json();
       const uploadedFiles = Array.isArray(data.files) ? data.files : [data];
-      
-      const newFiles = uploadedFiles.map((file: { name: any; path: any; size: any; type: any; uploadedAt: any; }, index: any) => ({
-        id: `new-file-${Date.now()}-${index}`,
-        taskId,
-        name: file.name,
-        path: file.path,
-        size: file.size,
-        type: file.type,
-        uploadedAt: file.uploadedAt || new Date(),
-      }));
+
+      const newFiles = uploadedFiles.map(
+        (
+          file: { name: any; path: any; size: any; type: any; uploadedAt: any },
+          index: any
+        ) => ({
+          id: `new-file-${Date.now()}-${index}`,
+          taskId,
+          name: file.name,
+          path: file.path,
+          size: file.size,
+          type: file.type,
+          uploadedAt: file.uploadedAt || new Date(),
+        })
+      );
 
       setFiles([...files, ...newFiles]);
-      toast({ title: "Success", description: "Files uploaded successfully", duration: 3000 });
+      toast({
+        title: "Success",
+        description: "Files uploaded successfully",
+        duration: 3000,
+      });
     } catch (error) {
       console.error("Error uploading files:", error);
-      toast({ title: "Error", description: "Failed to upload files", variant: "destructive", duration: 3000 });
+      toast({
+        title: "Error",
+        description: "Failed to upload files",
+        variant: "destructive",
+        duration: 3000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -285,30 +297,37 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
   };
 
   useEffect(() => {
-    const fetchFiles = async () =>{
+    const fetchFiles = async () => {
       setIsLoading(true);
-      try{
-        const response = await fetch(`http://localhost:3002/api/files/${taskId}`, {
-          method: "POST",
-          headers:{
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({userEmail}),
-        });
-        
-        if(!response.ok){
+      try {
+        const response = await fetch(
+          `http://localhost:3002/api/files/${taskId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userEmail }),
+          }
+        );
+
+        if (!response.ok) {
           throw new Error("Failed to fetch files.");
         }
         const data = await response.json();
         setFiles(data.files);
-      }catch(error){
+      } catch (error) {
         console.error("Error fetching files");
-      }finally{
+      } finally {
         setIsLoading(false);
       }
-    }
+    };
     fetchFiles();
   }, [taskId, userEmail]);
+
+  if (isLoading) {
+    return <EditTaskSkeleton />;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -598,7 +617,7 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
                           {file.name}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                        {((file.size ?? 0) / 1024).toFixed(1)} KB
+                          {((file.size ?? 0) / 1024).toFixed(1)} KB
                         </p>
                       </div>
                       <Button
@@ -656,4 +675,4 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       </div>
     </div>
   );
-};
+}

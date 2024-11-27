@@ -112,7 +112,7 @@ export default function Calendar() {
   return (
     <div className="calendar-container w-full">
       <FullCalendar
-        height="700px"
+        height={isMobile ? "800px" : "auto"}
         themeSystem="standard"
         views={{
           dayGridMonth: {

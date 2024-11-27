@@ -1,6 +1,5 @@
 import React from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
-import { Card } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
 
 export function HomeSkeleton() {
@@ -10,7 +9,7 @@ export function HomeSkeleton() {
         <div className="sm:flex-row sm:space-x-0.5">
           {/* Header and Streak */}
           <div className="space-y-2 mb-4 sm:mb-2">
-            <Skeleton className="h-7 sm:h-9 w-[100px] sm:w-[135px]" />{" "}
+            <Skeleton className="h-7 sm:h-9 w-[105px] sm:w-[135px]" />{" "}
             {/* Calendar */}
             <Skeleton className="h-4 sm:h-5 w-[115px] sm:w-[140px]" />{" "}
             {/* Streak */}
@@ -63,10 +62,9 @@ export function HomeSkeleton() {
   );
 }
 
-// implement & mobile
 export function SideNavSkeleton() {
   return (
-    <div className="w-full md:w-64 flex-none md:flex-shrink-0">
+    <div className="w-full md:w-64 hidden sm:block flex-none md:flex-shrink-0">
       <div className="flex h-full flex-col md:bg-transparent">
         {/* Logo Skeleton */}
         <div className="flex mx-7 md:mx-auto p-4 mt-1 md:h-40 items-center justify-center">
@@ -77,53 +75,25 @@ export function SideNavSkeleton() {
 
         {/* User Profile Skeleton */}
         <div className="mb-4 flex items-center text-sm gap-2 px-3">
-          <Skeleton className="h-11 w-11 rounded-full" />
+          <Skeleton className="h-10 w-10 rounded-full" />
           <div className="flex flex-col space-y-2">
             <Skeleton className="h-5 w-28" />
-            <Skeleton className="h-3 w-40" />
+            <Skeleton className="h-4 w-40" />
           </div>
         </div>
 
         {/* Navigation Links Skeleton */}
         <div className="flex flex-col space-y-3 px-4">
           {[1, 2, 3, 4].map((item) => (
-            <Skeleton key={item} className="h-11 w-[230px]" />
+            <Skeleton key={item} className="-ml-2 h-11 rounded-lg w-[240px]" />
           ))}
         </div>
 
         {/* Sign Out Button Skeleton */}
-        <div className="mt-104 mb-auto px-4 pb-4">
-          <Skeleton className="h-11 w-[230px]" />
+        <div className="mt-108 mb-auto px-4 pb-4">
+          <Skeleton className="-ml-2 h-11 rounded-lg w-[240px]" />
         </div>
       </div>
-    </div>
-  );
-}
-
-export function SideNavMobileSkeleton() {
-  return (
-    <div className="w-full flex-col items-center justify-center space-y-4 p-4">
-      {/* Mobile Logo Skeleton */}
-      <Skeleton className="h-16 w-40" />
-
-      {/* Mobile User Profile Skeleton */}
-      <div className="flex items-center space-x-4">
-        <Skeleton className="h-12 w-12 rounded-full" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-3 w-40" />
-        </div>
-      </div>
-
-      {/* Mobile Navigation Links Skeleton */}
-      <div className="space-y-3 w-full">
-        {[1, 2, 3, 4].map((item) => (
-          <Skeleton key={item} className="h-10 w-full" />
-        ))}
-      </div>
-
-      {/* Mobile Sign Out Button Skeleton */}
-      <Skeleton className="h-10 w-full" />
     </div>
   );
 }

@@ -75,7 +75,7 @@ export function CreateTaskForm({ onCreateTask }: CreateTaskFormProps) {
     status: z.enum(["backlog", "todo", "in progress", "done"], {
       required_error: "A status is required.",
     }),
-    priority: z.enum(["low", "medium", "high"], {
+    priority: z.enum(["none", "low", "medium", "high"], {
       required_error: "A priority is required.",
     }),
   });
@@ -230,9 +230,6 @@ export function CreateTaskForm({ onCreateTask }: CreateTaskFormProps) {
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date < new Date(new Date().setHours(0, 0, 0, 0))
-                        }
                         initialFocus
                       />
                     </PopoverContent>

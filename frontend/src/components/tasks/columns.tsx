@@ -10,6 +10,10 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/src/components/ui/button";
 import { getStatusOrder, getPriorityOrder } from "@/src/lib/utils";
 
+const handleTaskRedirect = (id: string) => {
+  window.location.href = `/home/tasks/${id}`;
+};
+
 export const columns: ColumnDef<Task>[] = [
   {
     id: "select",
@@ -59,7 +63,11 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
+          <span
+            className="max-w-[500px] hover:underline hover:cursor-pointer truncate font-medium"
+            title={row.getValue("title")}
+            onClick={() => handleTaskRedirect(row.getValue("id"))}
+          >
             {row.getValue("title")}
           </span>
         </div>
@@ -196,7 +204,6 @@ export const columns: ColumnDef<Task>[] = [
             throw new Error("Failed to delete task");
           }
           window.location.reload();
-          console.log(`Task with id: ${id} deleted successfully`);
         } catch (error) {
           console.error("Error deleting task:", error);
         }

@@ -45,7 +45,7 @@ export default function Calendar() {
         const mappedEvents = tasks.flatMap(
           (task: { title: any; createdAt: any; id: any; dueDate: any }) => [
             {
-              id: task.id,
+              id: `${task.id} (start)` ,
               title: task.title,
               start: task.createdAt,
               editable: false,

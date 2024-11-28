@@ -14,7 +14,6 @@ import { Card } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
 import { useEffect, useState } from "react";
 import { SideNavSkeleton } from "@/src/components/ui/skeletons";
-import { fetchTest } from "@/src/lib/data";
 import { Button } from "@/src/components/ui/button";
 
 interface UserProfile {
@@ -25,7 +24,6 @@ interface UserProfile {
 }
 
 export default function SideNav() {
-  fetchTest();
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);

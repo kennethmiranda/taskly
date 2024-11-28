@@ -221,13 +221,8 @@ export function EditTaskSkeleton() {
 
           {/* Attachments Section */}
           <div className="space-y-2">
-            <Skeleton className="h-6 w-26 mb-2" />
+            <Skeleton className="h-6 w-26 mb-3" />
             <div className="space-y-3">
-              <div className="grid sm:grid-cols-2 gap-4">
-                {[...Array(2)].map((_, i) => (
-                  <Skeleton key={i} className="h-16 w-full rounded-lg" />
-                ))}
-              </div>
               <Skeleton className="w-full h-[200px] rounded-lg" />
             </div>
           </div>

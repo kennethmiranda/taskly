@@ -27,15 +27,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
-import { cn } from "@/src/lib/utils";
+import { cn, formattedFileSize, formattedFileType } from "@/src/lib/utils";
 import {
   CalendarIcon,
   ChevronLeft,
+  DownloadIcon,
   FileIcon,
+  ImageIcon,
   PencilIcon,
   Trash2Icon,
   UploadIcon,
-  User,
 } from "lucide-react";
 import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,15 +45,6 @@ import * as z from "zod";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
-import { IconLoader } from "@tabler/icons-react";
-import { Separator } from "@/src/components/ui/separator";
-import { Badge } from "@/src/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -67,7 +59,7 @@ import { useSession } from "next-auth/react";
 import { EditTaskSkeleton } from "@/src/components/ui/skeletons";
 
 type TaskStatus = "backlog" | "todo" | "in progress" | "done" | "canceled";
-type TaskPriority = "low" | "medium" | "high";
+type TaskPriority = "none" | "low" | "medium" | "high";
 
 const formSchema = z.object({
   title: z
@@ -84,7 +76,7 @@ const formSchema = z.object({
       required_error: "A status is required.",
     }
   ),
-  priority: z.enum(["low", "medium", "high"] as const, {
+  priority: z.enum(["none", "low", "medium", "high"] as const, {
     required_error: "A priority is required.",
   }),
 });
@@ -104,7 +96,6 @@ async function updateTask(
   userSession: any
 ) {
   userEmail = userEmail || userSession?.user?.email || "";
-  console.log("User email after fallback:", userEmail);
 
   if (!userEmail) {
     console.warn("User email is not available.");
@@ -137,15 +128,63 @@ async function updateTask(
 
 async function deleteFile(taskId: string, userEmail: string, fileId: string) {
   try {
-    console.log("test");
+    const response = await fetch(`http://localhost:3002/api/files/${fileId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        taskId,
+        userEmail,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete file");
+    }
+
+    return await response.json();
   } catch (error) {
     console.error("Error deleting file:", error);
     throw error;
   }
 }
 
+async function downloadFile(userEmail: string, fileId: string) {
+  try {
+    const response = await fetch(
+      `http://localhost:3002/api/files/download/${fileId}?userEmail=${encodeURIComponent(
+        userEmail
+      )}`,
+      { method: "GET" }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to download file");
+    }
+
+    const contentDisposition = response.headers.get("Content-Disposition");
+    const match = contentDisposition?.match(/filename="?(.+?)"?$/);
+
+    const filename = match ? decodeURIComponent(match[1]) : "downloaded-file";
+    const blob = await response.blob();
+
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error("Error downloading file:", error);
+    throw error;
+  }
+}
+
 export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [files, setFiles] = useState<File[]>(task.files || []);
@@ -220,8 +259,8 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
   };
 
   const handleFileUpload = async (fileList: FileList) => {
+    setIsUploading(true);
     try {
-      setIsLoading(true);
       const formData = new FormData();
       Array.from(fileList).forEach((file) => {
         formData.append("files", file);
@@ -237,24 +276,26 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
       if (!response.ok) throw new Error("Failed to upload files.");
 
       const data = await response.json();
-      const uploadedFiles = Array.isArray(data.files) ? data.files : [data];
 
-      const newFiles = uploadedFiles.map(
-        (
-          file: { name: any; path: any; size: any; type: any; uploadedAt: any },
-          index: any
-        ) => ({
-          id: `new-file-${Date.now()}-${index}`,
-          taskId,
-          name: file.name,
-          path: file.path,
-          size: file.size,
-          type: file.type,
-          uploadedAt: file.uploadedAt || new Date(),
-        })
+      // updates file state from db after uploading, allowing user to download & delete the files
+      const filesResponse = await fetch(
+        `http://localhost:3002/api/files/${taskId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userEmail }),
+        }
       );
 
-      setFiles([...files, ...newFiles]);
+      if (!filesResponse.ok) {
+        throw new Error("Failed to fetch files.");
+      }
+
+      const filesData = await filesResponse.json();
+      setFiles(filesData.files);
+
       toast({
         title: "Success",
         description: "Files uploaded successfully",
@@ -269,15 +310,22 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
         duration: 3000,
       });
     } finally {
-      setIsLoading(false);
+      setIsUploading(false);
+    }
+
+    // allows duplicate file uploads
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) {
+      (fileInput as HTMLInputElement).value = "";
     }
   };
 
   const handleFileDelete = async (fileId: string) => {
+    setIsLoading(false);
     try {
       setIsLoading(true);
       await deleteFile(taskId, userEmail, fileId);
-      setFiles(files.filter((file) => file.id !== fileId));
+      setFiles((prevFiles) => prevFiles.filter((file) => file.id !== fileId));
       toast({
         title: "Success",
         description: "File deleted successfully",
@@ -296,9 +344,33 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
     }
   };
 
+  const handleFileDownload = async (fileId: string) => {
+    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      await downloadFile(userEmail, fileId);
+      toast({
+        title: "Success",
+        description: "Your file is downloading",
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      toast({
+        title: "Error",
+        description: "Failed to download file",
+        variant: "destructive",
+        duration: 3000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchFiles = async () => {
-      setIsLoading(true);
+      setIsPageLoading(false);
+
       try {
         const response = await fetch(
           `http://localhost:3002/api/files/${taskId}`,
@@ -314,18 +386,19 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
         if (!response.ok) {
           throw new Error("Failed to fetch files.");
         }
+
         const data = await response.json();
         setFiles(data.files);
       } catch (error) {
         console.error("Error fetching files");
       } finally {
-        setIsLoading(false);
+        setIsPageLoading(false);
       }
     };
     fetchFiles();
   }, [taskId, userEmail]);
 
-  if (isLoading) {
+  if (isPageLoading) {
     return <EditTaskSkeleton />;
   }
 
@@ -420,9 +493,6 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
                               mode="single"
                               selected={field.value}
                               onSelect={field.onChange}
-                              disabled={(date) =>
-                                date < new Date(new Date().setHours(0, 0, 0, 0))
-                              }
                               initialFocus
                             />
                           </PopoverContent>
@@ -605,29 +675,54 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
             <h2 className="font-semibold">Attachments</h2>
             <div className="space-y-3">
               {files.length > 0 ? (
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 py-1 gap-4">
                   {files.map((file) => (
                     <div
                       key={file.id}
                       className="flex items-center gap-3 p-3 rounded-lg border bg-background hover:bg-accent/50 transition-colors"
                     >
-                      <FileIcon className="h-4 w-4 text-muted-foreground" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">
+                      {file.type?.includes("image") ? (
+                        <ImageIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      ) : (
+                        <FileIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      )}
+                      <div className="flex-1 min-w-0 w-[20px]">
+                        <p
+                          className="text-sm font-medium hover:cursor-pointer truncate overflow-hidden whitespace-nowrap"
+                          title={file.name}
+                          onClick={() => {
+                            if (!isLoading) {
+                              handleFileDownload(file.id);
+                            }
+                          }}
+                        >
                           {file.name}
                         </p>
-                        <p className="text-xs text-muted-foreground">
-                          {((file.size ?? 0) / 1024).toFixed(1)} KB
+                        <p className="text-xs text-muted-foreground truncate">
+                          {formattedFileType(file.type)} &bull;{" "}
+                          {formattedFileSize(file.size)}
                         </p>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                        onClick={() => handleFileDelete(file.id)}
-                      >
-                        <Trash2Icon className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={() => handleFileDownload(file.id)}
+                          disabled={isLoading}
+                        >
+                          <DownloadIcon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={() => handleFileDelete(file.id)}
+                          disabled={isLoading}
+                        >
+                          <Trash2Icon className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -658,16 +753,25 @@ export default function TaskForm({ task, userEmail, taskId }: TaskFormProps) {
                       handleFileUpload(e.target.files);
                     }
                   }}
+                  disabled={isUploading}
                 />
-                <div className="flex flex-col items-center justify-center gap-2 text-center">
-                  <UploadIcon className="h-8 w-8 text-muted-foreground" />
-                  <p className="text-sm font-medium">
-                    Drag and drop files here or click to browse
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Supported files: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG
-                  </p>
-                </div>
+                {isUploading ? (
+                  <div className="flex flex-col mt-4 items-center justify-center gap-2 text-center">
+                    <ReloadIcon className="h-8 w-8 animate-spin" />
+                    Uploading...
+                  </div>
+                ) : (
+                  <div className="flex flex-col mt-3 items-center justify-center gap-2 text-center">
+                    <UploadIcon className="h-8 w-8 text-muted-foreground" />
+                    <p className="text-sm font-medium">
+                      Drag and drop files here or click to browse
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Supported files: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG, GIF,
+                      MP4, etc.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

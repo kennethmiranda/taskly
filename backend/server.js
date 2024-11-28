@@ -5,6 +5,7 @@ const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 
@@ -29,73 +30,171 @@ async function getUserIdFromEmail(email) {
   return rows[0].id;
 }
 
+//Retrieve files from specific user and specific task
+app.post("/api/files/:taskId", async (req, res) => {
+  const { taskId } = req.params;
+  const userEmail = req.body.userEmail;
+
+  try {
+    const userId = await getUserIdFromEmail(userEmail);
+    const [rows] = await pool.query(
+      "SELECT * FROM files WHERE taskId = ? AND userId = ?",
+      [taskId, userId]
+    );
+    res.json({ files: rows });
+  } catch (error) {
+    console.error("Error fetching attachments", error);
+    res.status(500).json({ error: "Failed to fetch attachments" });
+  }
+});
+
 //Upload Files
 app.post("/api/upload", async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).json({ error: "No files uploaded" });
   }
 
-  const { taskId, userEmail} = req.body; 
-  const userId = await getUserIdFromEmail(userEmail);
-  const files = Array.isArray(req.files.files) ? req.files.files : [req.files.files];
-  const uploadedFiles = [];
+  const { taskId, userEmail } = req.body;
 
-  files.forEach((file) => {
-    const uploadPath = path.join(uploadDir, file.name);
-
-    file.mv(uploadPath, async (err) => {
-      if (err) {
-        return res.status(500).json({ error: "Failed to save file" });
-      }
-
-      const fileData = {
-        name: file.name,
-        path: `/uploads/${file.name}`,
-        size: file.size,
-        type: file.mimetype,
-        taskId,
-        userId,
-        uploadedAt: new Date(),
-      };
-
-      // Save file metadata to the database
-      try {
-        await pool.query(
-          `INSERT INTO files (name, path, size, type, taskId, uploadedAt,userId) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-          [fileData.name, fileData.path, fileData.size, fileData.type, fileData.taskId, fileData.uploadedAt, fileData.userId]
-        );
-      } catch (dbError) {
-        console.error("Database error:", dbError);
-        return res.status(500).json({ error: "Failed to save file metadata" });
-      }
-
-      uploadedFiles.push(fileData);
-
-      if (uploadedFiles.length === files.length) {
-        res.json({ files: uploadedFiles }); // Return metadata for all uploaded files
-      }
-    });
-  });
-});
-
-//Retrieve files from specific user and specific task
-app.post("/api/files/:taskId", async (req,res) => {
-  const { taskId } = req.params;
-  const userEmail = req.body.userEmail;
-
-  try{
+  try {
     const userId = await getUserIdFromEmail(userEmail);
-    const[rows] = await pool.query(
-      'SELECT * FROM files WHERE taskID = ? AND userId = ?',
-      [taskId,userId]
+    const files = Array.isArray(req.files.files)
+      ? req.files.files
+      : [req.files.files];
+
+    const uploadedFiles = await Promise.all(
+      files.map(async (file) => {
+        // create unique filename
+        const fileExtension = path.extname(file.name);
+        const uniqueFilename = `${uuidv4()}${fileExtension}`;
+        const uploadPath = path.join(uploadDir, uniqueFilename);
+
+        await new Promise((resolve, reject) => {
+          file.mv(uploadPath, (err) => {
+            if (err) reject(err);
+            else resolve();
+          });
+        });
+
+        const fileData = {
+          name: file.name,
+          uniqueName: uniqueFilename, // uniqueName for storage
+          path: `/uploads/${uniqueFilename}`,
+          size: file.size,
+          type: file.mimetype,
+          taskId,
+          userId,
+          uploadedAt: new Date(),
+        };
+
+        // Save file metadata to the database
+        const [result] = await pool.query(
+          `INSERT INTO files (name, uniqueName, path, size, type, taskId, uploadedAt, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            fileData.name,
+            fileData.uniqueName,
+            fileData.path,
+            fileData.size,
+            fileData.type,
+            fileData.taskId,
+            fileData.uploadedAt,
+            fileData.userId,
+          ]
+        );
+
+        fileData.id = result.insertId;
+        return fileData;
+      })
     );
-    res.json({ files: rows });
-  }catch(error){
-    console.log("Error fetching attachments", error);
-    res.status(500).json({ error: "Failed to fetch attachments" });
+
+    res.json({ files: uploadedFiles });
+  } catch (error) {
+    console.error("Upload error:", error);
+    res.status(500).json({ error: "Failed to upload files" });
   }
 });
 
+// delete file
+app.delete("/api/files/:fileId", async (req, res) => {
+  const { fileId } = req.params;
+  const userEmail = req.body.userEmail;
+
+  try {
+    const userId = await getUserIdFromEmail(userEmail);
+
+    // check if file exists and belongs to the user
+    const [file] = await pool.query(
+      "SELECT * FROM files WHERE id = ? AND userId = ?",
+      [fileId, userId]
+    );
+
+    if (!file.length) {
+      return res.status(404).json({ error: "File not found or unauthorized" });
+    }
+
+    const filePath = path.join(
+      __dirname,
+      "public",
+      `/uploads/${file[0].uniqueName}`
+    );
+
+    // delete file
+    fs.unlink(filePath, async (err) => {
+      if (err) {
+        console.error("Error deleting file from disk:", err);
+        return res.status(500).json({ error: "Failed to delete file" });
+      }
+      await pool.query("DELETE FROM files WHERE id = ? AND userId = ?", [
+        fileId,
+        userId,
+      ]);
+
+      res.status(200).json({ message: "File deleted successfully" });
+    });
+  } catch (error) {
+    console.error("Error deleting File:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// download file
+app.get("/api/files/download/:fileId", async (req, res) => {
+  const { fileId } = req.params;
+  const userEmail = req.query.userEmail;
+
+  try {
+    const userId = await getUserIdFromEmail(userEmail);
+
+    // check if file exists and belongs to the user
+    const [file] = await pool.query(
+      "SELECT * FROM files WHERE id = ? AND userId = ?",
+      [fileId, userId]
+    );
+
+    if (!file.length) {
+      return res.status(404).json({ error: "File not found or unauthorized" });
+    }
+
+    const filePath = path.join(
+      __dirname,
+      "public",
+      `/uploads/${file[0].uniqueName}`
+    );
+    const filename = file[0].name;
+
+    res.setHeader("Content-Type", file[0].type);
+    res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${encodeURIComponent(filename)}"`
+    );
+
+    fs.createReadStream(filePath).pipe(res);
+  } catch (error) {
+    console.error("Error downloading file:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 // Route for the root URL '/'
 app.get("/", (req, res) => {
@@ -224,8 +323,8 @@ app.patch("/api/tasks/:id", async (req, res) => {
 
   try {
     const userId = await getUserIdFromEmail(userEmail);
-    console.log(userId);
-    // First verify the task belongs to the user
+
+    // verify the task belongs to the user
     const [task] = await pool.query(
       "SELECT * FROM tasks WHERE id = ? AND userId = ?",
       [id, userId]
@@ -265,21 +364,21 @@ app.patch("/api/tasks/:id", async (req, res) => {
       updateValues.push(priority);
     }
 
-    // If there are no fields to update, return an error
+    // return error if no fields to update
     if (updateFields.length === 0) {
       return res
         .status(400)
         .json({ message: "No valid fields provided for update" });
     }
 
-    // Final SQL query to update the task
+    // last SQL query to update task
     const updateQuery = `
       UPDATE tasks
       SET ${updateFields.join(", ")}
       WHERE id = ? AND userId = ?
     `;
 
-    // Add the task id to the values array for the WHERE clause
+    // add task id to values array for WHERE clause
     updateValues.push(id, userId);
 
     const [result] = await pool.query(updateQuery, updateValues);

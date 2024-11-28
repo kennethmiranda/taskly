@@ -22,7 +22,6 @@ export default function SignUpForm() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    console.log(user);
 
     try {
       const response = await fetch("/api/auth/sign-up", {

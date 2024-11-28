@@ -12,8 +12,6 @@ export function DataTableCreateTask<TData>({
   onTasksChange,
 }: DataTableCreateTaskProps<TData>) {
   const handleCreateTask = (task: Task) => {
-    console.log("Task created successfully:", task);
-
     if (onTasksChange) {
       onTasksChange();
     }

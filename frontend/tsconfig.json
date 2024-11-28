@@ -28,7 +28,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/lib/placeholder-data.ts",
     "scripts/seed.js",
     "src/components/tasks"
   ],

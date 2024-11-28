@@ -30,8 +30,6 @@ export async function POST(req: Request) {
       [email, hashedPassword, name]
     );
 
-    console.log("User created:", email);
-
     return NextResponse.json({ message: "User created successfully" });
   } catch (error) {
     console.error(error);

@@ -15,7 +15,6 @@ import { Label } from "@/src/components/ui/label";
 import { Task } from "@/src/lib/definitions";
 import { useEffect, useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
-import { tasks } from "@/src/lib/placeholder-data";
 
 interface ShareTaskProps {
   taskId: string;
@@ -25,12 +24,27 @@ interface ShareTaskProps {
 export function ShareTask({ taskId, onOpenChange }: ShareTaskProps) {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(true);
-  const [task, setTask] = useState<Task | null>(null);
+  const [tasks, setTasks] = useState<Task | null>(null);
+  const [isCopied, setIsCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const fetchedTask = tasks.find((task) => task.id === taskId) || null;
-        setTask(fetchedTask);
+        const response = await fetch(
+          `http://localhost:3002/api/tasks/${taskId}`,
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+          if (response.status === 404) return null;
+          throw new Error("Failed to fetch task");
+        }
+
+        const task = await response.json();
+        setTasks({
+          ...task,
+        });
       } catch (error) {
         console.error("Failed to fetch task:", error);
       }
@@ -45,9 +59,9 @@ export function ShareTask({ taskId, onOpenChange }: ShareTaskProps) {
   };
 
   const handleCopy = () => {
-    if (task) {
+    if (isCopied) {
       navigator.clipboard.writeText(
-        `http://localhost:3000/home/tasks/${task.id}`
+        `http://localhost:3000/home/tasks/${taskId}`
       );
       toast({
         title: "Link copied",
@@ -57,15 +71,11 @@ export function ShareTask({ taskId, onOpenChange }: ShareTaskProps) {
     }
   };
 
-  if (!task) {
-    return null; // or a loading state
-  }
-
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Share task: {task.title}</DialogTitle>
+          <DialogTitle>Share task: {tasks?.title}</DialogTitle>
           <DialogDescription>
             Anyone who has this link will be able to view this task.
           </DialogDescription>
@@ -77,7 +87,7 @@ export function ShareTask({ taskId, onOpenChange }: ShareTaskProps) {
             </Label>
             <Input
               id="link"
-              defaultValue={`http://localhost:3000/home/tasks/${task.id}`}
+              defaultValue={`http://localhost:3000/home/tasks/${taskId}`}
               readOnly
             />
           </div>

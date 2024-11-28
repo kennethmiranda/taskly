@@ -52,9 +52,7 @@ export function DataTableSelectOptions<TData extends Task>({
     body: Record<string, any> | null = null
   ) => {
     let userEmail = userSession?.user?.email;
-    userEmail = userEmail || ''; // Set userEmail to an empty string if not found
-    console.log("User Session s:", userSession);
-    console.log(taskId);
+    userEmail = userEmail || ""; // Set userEmail to an empty string if not found
     const response = await fetch(`http://localhost:3002/api/tasks/${taskId}`, {
       method,
       headers: {
@@ -63,34 +61,37 @@ export function DataTableSelectOptions<TData extends Task>({
       },
       body: body ? JSON.stringify({ ...body, userEmail: userEmail }) : null,
     });
-  
+
     if (!response.ok) {
       throw new Error(
-        `Failed to ${method === "DELETE" ? "delete" : "update"} task with id: ${taskId}`
+        `Failed to ${
+          method === "DELETE" ? "delete" : "update"
+        } task with id: ${taskId}`
       );
     }
     return response;
   };
-  
 
   //Handles selected deletion
   const handleDeleteSelected = async () => {
     if (selectedTasks.length === 0) {
-      console.log("No tasks selected for deletion.");
       return;
     }
     setLoading(true);
 
     try {
       const deleteRequests = selectedTasks.map(async (task) => {
-        const response = await fetch(`http://localhost:3002/api/tasks/${task.id}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            userId: task.userId, // Assuming you have userSession with user.id
-          },
-        });
-  
+        const response = await fetch(
+          `http://localhost:3002/api/tasks/${task.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              userId: task.userId, // Assuming you have userSession with user.id
+            },
+          }
+        );
+
         // Check if the request was successful
         if (!response.ok) {
           throw new Error(`Failed to delete task with id: ${task.id}`);

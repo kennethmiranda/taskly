@@ -6,6 +6,7 @@ import Link from "next/link";
 import { CardFooter } from "@/src/components/ui/card";
 import { CarouselComponent } from "@/src/components/carousel";
 import { Metadata } from "next";
+import Footer from "@/src/components/footer";
 
 export const metadata: Metadata = {
   title: "Task Manager and Cloud Storage System",
@@ -18,7 +19,9 @@ export default function Page() {
       <div className="flex flex-col gap-8 md:flex-row md:space-y-16">
         {/* Sign In */}
         <div className="flex flex-col items-center justify-center gap-6 rounded-lg p-6 sm:px-10 sm:py-12 md:w-2/5">
-          <Logo />
+          <Link href="http://localhost:3000">
+            <Logo />
+          </Link>
           <Separator className="mt-3 mb-2 w-full" />
           <p className="text-center text-lg font-semibold sm:text-xl md:text-2xl">
             Welcome to the Task Manager and Cloud Storage System
@@ -47,6 +50,12 @@ export default function Page() {
         <div className="flex items-center justify-center md:w-3/5 md:px-10 md:py-12">
           <CarouselComponent />
         </div>
+      </div>
+
+      {/* Footer */}
+      <div className="sm:space-y-4 mt-8">
+        <Separator className="mt-3 mb-2 w-full" />
+        <Footer />
       </div>
     </main>
   );

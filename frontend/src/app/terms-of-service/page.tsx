@@ -1,7 +1,5 @@
-import { fetchTest } from "@/src/lib/data";
-import { Separator } from "@/src/components/ui/separator";
 import { Metadata } from "next";
-import HeaderNav from "@/src/components/header-nav";
+import HeaderNav from "@/src/components/header";
 
 export const metadata: Metadata = {
   title: "Terms of Service | Task Manager and Cloud Storage System",
@@ -9,13 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function TermsPage() {
-  // remove in production
-  // await fetchTest();
-
   return (
     <main className="flex-1 p-8 max-w-8xl overflow-y-auto mx-auto">
       <HeaderNav />
-      <Separator className="mt-4 mb-5 -mx-2" />
       <h2 className="text-2xl font-bold tracking-tight">Terms of Service</h2>
       <div className="flex-grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <p className="text-muted-foreground">

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import HeaderNav from "@/src/components/header";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Task Manager and Cloud Storage System",
+  title: "Terms of Service | Task Manager and File Storage System",
   description: "Terms of Service page",
 };
 

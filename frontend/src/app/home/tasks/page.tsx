@@ -4,7 +4,7 @@ import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { TaskDashboard } from "@/src/components/tasks/tasks-dashboard";
 
 export const metadata: Metadata = {
-  title: "Tasks | Task Manager and Cloud Storage System",
+  title: "Tasks | Task Manager and File Storage System",
   description: "Manage your tasks.",
 };
 

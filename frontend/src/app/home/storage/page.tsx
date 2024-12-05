@@ -3,8 +3,8 @@ import FileTable from "@/src/components/storage/table";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Storage | Task Manager and Cloud Storage System",
-  description: "Store your files securely in the cloud.",
+  title: "Storage | Task Manager and File Storage System",
+  description: "Store your files securely.",
 };
 
 /* async function downloadFile(fileName: string) {

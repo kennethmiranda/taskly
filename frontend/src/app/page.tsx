@@ -9,8 +9,8 @@ import { Metadata } from "next";
 import Footer from "@/src/components/footer";
 
 export const metadata: Metadata = {
-  title: "Task Manager and Cloud Storage System",
-  description: "Manage your tasks and store your files securely in the cloud.",
+  title: "Task Manager and File Storage System",
+  description: "Manage your tasks and store your files.",
 };
 
 export default function Page() {
@@ -24,7 +24,7 @@ export default function Page() {
           </Link>
           <Separator className="mt-3 mb-2 w-full" />
           <p className="text-center text-lg font-semibold sm:text-xl md:text-2xl">
-            Welcome to the Task Manager and Cloud Storage System
+            Welcome to the Task Manager and File Storage System
           </p>
           <Button asChild>
             <Link

@@ -1,2 +1,3 @@
 # SE2-Project
-Task Management and Multi-Device Synchronization System
+
+Task Management and File Storage System

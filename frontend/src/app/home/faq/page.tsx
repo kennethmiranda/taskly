@@ -2,7 +2,7 @@ import { fetchTest } from "@/src/lib/data";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Frequently Asked Questions | Task Manager and Cloud Storage System",
+  title: "Frequently Asked Questions | Task Manager and File Storage System",
   description: "Frequently Asked Questions page",
 };
 

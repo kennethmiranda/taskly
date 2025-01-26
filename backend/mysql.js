@@ -1,7 +1,7 @@
 const mysql = require("mysql2/promise");
 const dotenv = require("dotenv");
 dotenv.config({
-  path: "SE2-Project/backend/.env",
+  path: "/home/kennymiranda/code/SE2-Project/SE2-Project/backend/.env",
 });
 // replace with your own path to the .env.local file
 
@@ -15,7 +15,5 @@ const pool = mysql.createPool({
   connectionLimit: 10, // Max number of connections in pool
   queueLimit: 0, // Max number of connection requests
 });
-
-
 
 module.exports = pool;

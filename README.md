@@ -1,16 +1,16 @@
-# 🌟 SE2-Project: Task Management System 🌟
+# :ballot_box_with_check: Taskly: Task Management System
 
-The **SE2 Project** is a task management web application designed to help users efficiently create, manage, and organize their tasks. Built using **Next.js**, **TypeScript**, and **MySQL**, this system offers user authentication with NextAuth and provides a seamless experience across various devices. The app features task creation, updates, priorities, statuses, file management, calendar views, and personalized user settings.
+**Taskly** is a task management web application designed to help users efficiently create, manage, and organize their tasks. Built using **Next.js**, **TypeScript**, and **MySQL**, this system offers user authentication with NextAuth and provides a seamless experience across various devices. The app features task creation, updates, priorities, statuses, file management, calendar views, and personalized user settings.
 
-## 📑 Table of Contents
+## 📁 Table of Contents
 
-1. [🌟 Features](#-features)
+1. [✨ Features](#-features)
 2. [🛠️ Tech Stack](#️-tech-stack)
 3. [🎉 Getting Started](#-getting-started)
    - [📋 Prerequisites](#-prerequisites)
    - [⚙️ Installation](#️-installation)
    - [🌐 OAuth Setup](#-oauth-setup)
-4. [📖 Usage](#-usage)
+4. [🌟 App Showcase](#-app-showcase)
 5. [🚀 Roadmap](#-roadmap)
 6. [👥 Contributors](#-contributors)
 7. [📚 Acknowledgements](#-acknowledgements)
@@ -154,13 +154,15 @@ For more detailed documentation, refer to the [NextAuth.js Documentation](https:
 
 </details>
 
-## 📖 Live Usage
+## 🌟 App Showcase
 
-### 🔐 Authentication
+<details><summary><b>Show instructions</b></summary>
+
+### Authentication
 
 ![OAuth Login GIF](/images/taskly-sign-in.gif)
 
-### 📝 Task Management
+### Task Management
 
 - **Task Table Preview**:
   ![Task Table Video](/images/taskly-task-table.mp4)
@@ -177,6 +179,8 @@ For more detailed documentation, refer to the [NextAuth.js Documentation](https:
 
 ![Settings GIF](/images/taskly-settings.gif)
 
+</details>
+
 ## 🚀 Roadmap
 
 - [ :heavy_check_mark: ] Task list/table functionality
@@ -185,7 +189,6 @@ For more detailed documentation, refer to the [NextAuth.js Documentation](https:
 - [ :heavy_check_mark: ] File upload, download, and removal for tasks
 - [ :heavy_check_mark: ] Settings page for profile customization and dark/light mode toggle
 - [ ] Update text pages (Terms of Service, Privacy Policy, Documentation, FAQ)
-- [ ] Implement testing
 - [ ] Implement streaks to track how often a user signs in
 - [ ] Implement "Share Task" feature with authentication
 - [ ] Email notifications for due date reminders

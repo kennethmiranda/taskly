@@ -175,15 +175,22 @@ For more detailed documentation, refer to the [NextAuth.js Documentation](https:
 - [ :heavy_check_mark: ] Calendar display for tasks
 - [ :heavy_check_mark: ] File upload, download, and removal for tasks
 - [ :heavy_check_mark: ] Settings page for profile customization and dark/light mode toggle
--
+- [ ] Update text pages (Terms of Service, Privacy Policy, Documentation, FAQ)
+- [ ] Implement testing
+- [ ] Implement streaks to track how often a user signs in
+- [ ] Implement "Share Task" feature with authentication
+- [ ] Email notifications for due date reminders
+- [ ] File storage page to display all user files
+- [ ] Deploy web app and publish to production
+- [ ] Implement cloud storage for files
 
 ## 👥 Contributors
 
 Thanks to the amazing team that made this project possible:
 
-<div href="https://github.com/kennethmiranda/SE2-Project/graphs/contributors">
+<a href="https://github.com/kennethmiranda/SE2-Project/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=kennethmiranda/SE2-Project" />
-</div>
+</a>
 
 - **Kenneth Miranda** - Project Lead / Frontend Developer
 - **Avid Andrade** - Backend Developer

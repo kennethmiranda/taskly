@@ -1,9 +1,7 @@
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 
-dotenv.config({
-  path: "/home/kennymiranda/code/SE2-Project/SE2-Project/frontend/.env.local",
-});
+dotenv.config();
 // replace with your own path to the .env.local file
 
 const pool = mysql.createPool({

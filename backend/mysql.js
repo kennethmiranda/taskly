@@ -1,8 +1,6 @@
 const mysql = require("mysql2/promise");
 const dotenv = require("dotenv");
-dotenv.config({
-  path: "/home/kennymiranda/code/SE2-Project/SE2-Project/backend/.env",
-});
+dotenv.config();
 // replace with your own path to the .env.local file
 
 // Create a connection to the MySQL database

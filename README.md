@@ -154,19 +154,28 @@ For more detailed documentation, refer to the [NextAuth.js Documentation](https:
 
 </details>
 
-## 📖 Usage
-
-### 📝 Task Management
-
-- Log in to view your task list.
-- Create tasks with details like a title, description, due date, and priority.
-- Update task attributes or delete tasks as needed.
-- Change task statuses to reflect progress (e.g., To-Do → In Progress → Completed).
+## 📖 Live Usage
 
 ### 🔐 Authentication
 
-- Log in using your Credentials, Google, GitHub, or Discord via **NextAuth**.
-- Your tasks are securely tied to your account and are accessible only to you.
+![OAuth Login GIF](/images/taskly-sign-in.gif)
+
+### 📝 Task Management
+
+- **Task Table Preview**:
+  ![Task Table Video](/images/taskly-task-table.mp4)
+- **Calendar**:
+  ![Calendar GIF](/images/taskly-calendar.gif)
+- **Edit Task**:
+  ![Edit Task GIF](/images/taskly-task-edit.gif)
+
+### File Management
+
+![Files GIF](/images/taskly-files.gif)
+
+### Settings
+
+![Settings GIF](/images/taskly-settings.gif)
 
 ## 🚀 Roadmap
 

@@ -23,8 +23,8 @@ export default function Page() {
             <Logo />
           </Link>
           <Separator className="mt-3 mb-2 w-full" />
-          <p className="text-center text-lg font-semibold sm:text-xl md:text-2xl">
-            Welcome to the Task Manager and File Storage System
+          <p className="text-center text-base font-semibold sm:text-lg md:text-xl">
+            Welcome to the Task Management System!
           </p>
           <Button asChild>
             <Link

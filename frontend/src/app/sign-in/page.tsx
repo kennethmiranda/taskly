@@ -15,10 +15,10 @@ export default async function SignInPage() {
   return (
     <main className="flex items-center justify-center md:h-screen">
       <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
-        <div className="flex mx-2 w-full items-center rounded-lg p-5 ">
+        <div className="flex justify-center w-full items-center rounded-lg p-5 ">
           <Logo />
         </div>
-        <Separator className="mt-4 mb-5 -mx-2" />
+        <Separator className="mt-4 mb-5" />
 
         <SignInForm />
 

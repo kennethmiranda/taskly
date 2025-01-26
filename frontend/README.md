@@ -1,2 +1,3 @@
-SE2-Project
-Task Management and File Storage System
+# Taskly
+
+Task Management System

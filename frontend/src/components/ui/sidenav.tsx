@@ -118,7 +118,10 @@ export default function SideNav() {
           >
             <div className="flex flex-col space-y-2 p-4 animate-slide-up">
               <Card>
-                <Link className="flex mx-auto py-2 px-1" href="/home">
+                <Link
+                  className="flex justify-center sm:mx-auto py-2 px-1"
+                  href="/home"
+                >
                   <Logo />
                 </Link>
               </Card>

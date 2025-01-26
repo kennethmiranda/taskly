@@ -1,6 +1,6 @@
 import { Separator } from "@/src/components/ui/separator";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
-import { GlobeAltIcon } from "@heroicons/react/24/outline";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
 export default function Header() {
@@ -10,7 +10,7 @@ export default function Header() {
         {/* Logo */}
         <div className="sm:justify-start -ml-9 sm:ml-10">
           <Link href="http://localhost:3000">
-            <GlobeAltIcon className="h-10 sm:h-12 w-10 sm:w-12 rotate-[15deg]" />
+            <CheckCircledIcon className="h-10 sm:h-12 w-10 sm:w-12 rotate-[-5deg]" />
           </Link>
         </div>
 

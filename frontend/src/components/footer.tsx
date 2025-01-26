@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
-import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import {
+  CheckCircledIcon,
   GitHubLogoIcon,
   InstagramLogoIcon,
   TwitterLogoIcon,
@@ -11,11 +11,11 @@ export default function Footer() {
   return (
     <nav className="flex sm:-mt-4 p-4">
       {/* Logo */}
-      <div className="justify-start -ml-6 sm:ml-10">
+      {/* <div className="justify-start -ml-6 sm:ml-10">
         <Link href="http://localhost:3000">
-          <GlobeAltIcon className="h-10 sm:h-12 w-10 sm:w-12 rotate-[15deg]" />
+          <CheckCircledIcon className="h-10 sm:h-12 w-10 sm:w-12 rotate-[15deg]" />
         </Link>
-      </div>
+      </div> */}
 
       {/* Links */}
       <div className="flex-shrink-0 justify-center ml-3 sm:ml-112 mt-3 sm:mt-5">

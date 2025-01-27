@@ -1,3 +1,0 @@
-# Taskly
-
-Task Management System

@@ -4,16 +4,20 @@
 
 ## 📁 Table of Contents
 
-1. [✨ Features](#-features)
-2. [🛠️ Tech Stack](#️-tech-stack)
-3. [🎉 Getting Started](#-getting-started)
-   - [📋 Prerequisites](#-prerequisites)
-   - [⚙️ Installation](#️-installation)
-   - [🌐 OAuth Setup](#-oauth-setup)
-4. [🌟 App Showcase](#-app-showcase)
-5. [🚀 Roadmap](#-roadmap)
-6. [👥 Contributors](#-contributors)
-7. [📚 Acknowledgements](#-acknowledgements)
+<details><summary><b>Table of Contents</b></summary>
+
+- [✨ Features](#-features)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [🎉 Getting Started](#-getting-started)
+  - [📋 Prerequisites](#-prerequisites)
+  - [⚙️ Installation](#️-installation)
+  - [🌐 OAuth Setup](#-oauth-setup)
+- [🌟 App Showcase](#-app-showcase)
+- [🚀 Roadmap](#-roadmap)
+- [👥 Contributors](#-contributors)
+- [📚 Acknowledgements](#-acknowledgements)
+
+</details>
 
 ## 🌟 Features
 
@@ -156,7 +160,7 @@ For more detailed documentation, refer to the [NextAuth.js Documentation](https:
 
 ## 🌟 App Showcase
 
-<details><summary><b>Show instructions</b></summary>
+<details><summary><b>Previews</b></summary>
 
 ### Authentication
 

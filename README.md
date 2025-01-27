@@ -35,7 +35,7 @@
 ## 🛠️ Tech Stack
 
 - **Frontend**: [Next.js](https://nextjs.org/) (React Framework), [TypeScript](https://www.typescriptlang.org/), [Tailwind CSS](https://tailwindcss.com), [shadcn UI](https://ui.shadcn.com/docs)
-- **Backend**: [Node.js](https://nodejs.org/) with [Express.js](https://expressjs.com/)
+- **Backend**: [Node.js](https://nodejs.org/) with [Express.js](https://expressjs.com/), [JavaScript]()
 - **Database**: [MySQL](https://www.mysql.com/)
 - **Authentication** [NextAuth.js](https://next-auth.js.org/)
 
@@ -46,7 +46,7 @@ Follow these steps to set up the project on your local machine.
 ### 📋 Prerequisites
 
 - **Node.js** (v20.12.2)
-- A running **MySQL server**
+- **MySQL server**
 
 ### ⚙️ Installation
 
@@ -88,6 +88,13 @@ Follow these steps to set up the project on your local machine.
      DISCORD_ID=
      DISCORD_SECRET=
      DISCORD_URL="http://localhost:3000/api/auth/callback/discord"
+
+     # Database
+     PORT=
+     DBHOST=
+     DBUSER=
+     DBPASSWORD=
+     DBNAME=
      ```
 
    **Backend**:
@@ -166,12 +173,12 @@ For more detailed documentation, refer to the [NextAuth.js Documentation](https:
 
 ### Task Management
 
-- **Task Table Preview**:
-  ![Task Table Video](/images/taskly-task-table.mp4)
-- **Calendar**:
-  ![Calendar GIF](/images/taskly-calendar.gif)
-- **Edit Task**:
-  ![Edit Task GIF](/images/taskly-task-edit.gif)
+**Task Table Preview**:
+![Task Table Video](/images/taskly-task-table.mp4)
+**Calendar**:
+![Calendar GIF](/images/taskly-calendar.gif)
+**Edit Task**:
+![Edit Task GIF](/images/taskly-task-edit.gif)
 
 ### File Management
 
@@ -202,8 +209,8 @@ For more detailed documentation, refer to the [NextAuth.js Documentation](https:
 
 Thanks to the amazing team that made this project possible:
 
-<a href="https://github.com/kennethmiranda/SE2-Project/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=kennethmiranda/SE2-Project" />
+<a href="https://github.com/kennethmiranda/taskly/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=kennethmiranda/taskly" />
 </a>
 
 - **Kenneth Miranda** - Project Lead / Frontend Developer

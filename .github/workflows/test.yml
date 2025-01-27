@@ -1,0 +1,45 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: |
+          cd frontend && npm install
+          cd ../backend && npm install
+
+      - name: Run Frontend Tests
+        run: cd frontend && npm test
+
+      - name: Run Backend Tests
+        env:
+          DATABASE_URL: "mysql://root:root@localhost:3306/test_db"
+        run: cd backend && npm test

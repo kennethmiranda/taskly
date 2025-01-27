@@ -2,7 +2,7 @@ import HeaderNav from "@/src/components/header";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Documentation | Task Manager and File Storage System",
+  title: "Documentation | Taskly",
   description: "Documentation page",
 };
 

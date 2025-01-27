@@ -3,7 +3,7 @@ import FileTable from "@/src/components/storage/table";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Storage | Task Manager and File Storage System",
+  title: "Storage | Taskly",
   description: "Store your files securely.",
 };
 

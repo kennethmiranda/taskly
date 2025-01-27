@@ -9,7 +9,7 @@ import { Metadata } from "next";
 import Footer from "@/src/components/footer";
 
 export const metadata: Metadata = {
-  title: "Task Manager and File Storage System",
+  title: "Taskly - Task Management System",
   description: "Manage your tasks and store your files.",
 };
 

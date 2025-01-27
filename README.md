@@ -2,9 +2,7 @@
 
 **Taskly** is a task management web application designed to help users efficiently create, manage, and organize their tasks. Built using **Next.js**, **TypeScript**, and **MySQL**, this system offers user authentication with NextAuth and provides a seamless experience across various devices. The app features task creation, updates, priorities, statuses, file management, calendar views, and personalized user settings.
 
-## 📁 Table of Contents
-
-<details><summary><b>Table of Contents</b></summary>
+<details><summary><b>📁 Table of Contents</b></summary>
 
 - [✨ Features](#-features)
 - [🛠️ Tech Stack](#️-tech-stack)

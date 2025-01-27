@@ -55,8 +55,8 @@ Follow these steps to set up the project on your local machine.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/kennethmiranda/SE2-Project.git
-   cd SE2-Project
+   git clone https://github.com/kennethmiranda/taskly.git
+   cd taskly
    ```
 
 2. Install dependencies and set up environment variables for both the frontend and backend:

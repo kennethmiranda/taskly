@@ -7,7 +7,7 @@ import { Metadata } from "next";
 import PolicyFooter from "@/src/components/policy-footer";
 
 export const metadata: Metadata = {
-  title: "Sign Up | Task Manager and File Storage System",
+  title: "Sign Up | Taskly",
   description: "Create a new account",
 };
 

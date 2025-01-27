@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: Props) {
   }
 
   return {
-    title: `${task.title} | Task Manager`,
+    title: `${task.title} | Taskly`,
     description: `Details for task: ${task.title}`,
   };
 }

@@ -33,7 +33,7 @@ export function CarouselComponent() {
             <CardContent className="h-[350px] sm:h-[550px] flex items-center justify-center p-3">
               <img
                 src="/taskly3.png"
-                alt="Task Management"
+                alt="Taskly Image"
                 className="carousel-image"
               />
             </CardContent>
@@ -44,7 +44,7 @@ export function CarouselComponent() {
             <CardContent className="h-[350px] sm:h-[550px] flex items-center justify-center p-3">
               <img
                 src="/hero-mobile.png"
-                alt="Task Management"
+                alt="Taskly Image"
                 className="carousel-image"
               />
             </CardContent>
@@ -55,7 +55,7 @@ export function CarouselComponent() {
             <CardContent className="h-[350px] sm:h-[550px] flex items-center justify-center p-3">
               <img
                 src="/taskly4.png"
-                alt="Task Management"
+                alt="Taskly Image"
                 className="carousel-image"
               />
             </CardContent>

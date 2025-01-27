@@ -2,7 +2,7 @@ import SettingsDashboard from "@/src/components/settings/settings-dashboard";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Settings | Task Manager and File Storage System",
+  title: "Settings | Taskly",
   description: "Settings page",
 };
 

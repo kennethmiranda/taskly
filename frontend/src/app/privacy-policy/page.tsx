@@ -2,7 +2,7 @@ import HeaderNav from "@/src/components/header";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Task Manager and File Storage System",
+  title: "Privacy Policy | Taskly",
   description: "Privacy Policy page",
 };
 

@@ -8,10 +8,10 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -29,7 +29,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "scripts/seed.js",
-    "src/components/tasks"
+    "src/components/tasks",
+    "tests/**/*",
+    "jest.config.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -12,6 +12,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "importHelpers": true,
+    "types": ["jest", "node", "@testing-library/jest-dom"],
     "incremental": true,
     "plugins": [
       {
@@ -31,7 +33,8 @@
     "scripts/seed.js",
     "src/components/tasks",
     "tests/**/*",
-    "jest.config.ts"
+    "jest.config.ts",
+    "jest.setup.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -9,12 +9,12 @@ const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 
-// Middleware to parse JSON request bodies
 app.use(cors());
 app.use(express.json());
 app.use(
   fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB max file size
+    limits: { fileSize: 50 * 1024 * 1024 },
+    abortOnLimit: true,
     createParentPath: true,
   })
 );
@@ -543,6 +543,10 @@ app.post("/api/avatar", async (req, res) => {
 });
 
 // Start the server on port 3002
-app.listen(3002, () => {
-  console.log("Server is running on http://localhost:3002");
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(3002, () => {
+    console.log("Server is running on http://localhost:3002");
+  });
+}
+
+module.exports = app;

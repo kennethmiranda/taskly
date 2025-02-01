@@ -12,11 +12,13 @@ import {
   IconBrandGoogleFilled,
   IconFidgetSpinner,
 } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
   const [user, setUser] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,15 +29,14 @@ export default function SignInForm() {
       const result = await signIn("credentials", {
         email: user.email,
         password: user.password,
-        redirect: false, // no automatic redirect
+        redirect: false,
       });
 
       if (result?.error) {
         throw new Error(result.error);
       }
 
-      // redirect to the home page
-      window.location.href = "/home";
+      router.push("/home");
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);

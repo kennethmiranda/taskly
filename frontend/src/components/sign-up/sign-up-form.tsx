@@ -29,7 +29,10 @@ export default function SignUpForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify({
+          email: user.email,
+          password: user.password,
+        }),
       });
       if (!response.ok) {
         throw new Error(await response.text());

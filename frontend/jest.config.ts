@@ -11,7 +11,9 @@ const config: Config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",
   },
+  preset: "ts-jest",
   transform: {
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
     "^.+\\.(ts|tsx)$": [
       "ts-jest",
       {

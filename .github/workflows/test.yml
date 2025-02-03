@@ -36,10 +36,15 @@ jobs:
           cd frontend && npm install
           cd ../backend && npm install
 
+      - name: Set up Database Schema
+        run: |
+          cd database
+          mysql -h127.0.0.1 -uroot -proot test_db < schema.sql
+
       - name: Run Frontend Tests
         run: cd frontend && npm test
 
       - name: Run Backend Tests
         env:
-          DATABASE_URL: "mysql://root:root@localhost:3306/test_db"
+          DATABASE_URL: "mysql://root:root@127.0.0.1:3306/test_db"
         run: cd backend && npm test

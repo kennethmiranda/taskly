@@ -40,7 +40,8 @@ jobs:
       - name: Set up Database Schema
         run: |
           cd database
-          mysql -h127.0.0.1 -uroot -proot test_db < schema.sql
+          mysql -h127.0.0.1 -uroot -proot --default-character-set=utf8mb4 -e "CREATE DATABASE IF NOT EXISTS test_db;"
+          mysql -h127.0.0.1 -uroot -proot --default-character-set=utf8mb4 test_db -e "source schema.sql"
 
       - name: Run Frontend Tests
         run: cd frontend && npm test

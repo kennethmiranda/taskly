@@ -39,7 +39,8 @@ jobs:
 
       - name: Set up Database Schema
         run: |
-          mysql -h127.0.0.1 -uroot -proot test_db < databse/schema.sql
+          cd database
+          mysql -h127.0.0.1 -uroot -proot test_db < schema.sql
 
       - name: Run Frontend Tests
         run: cd frontend && npm test

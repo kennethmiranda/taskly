@@ -8,7 +8,7 @@ CREATE TABLE `users` (
     `avatar` varchar(255) DEFAULT NULL,
     `streak` int DEFAULT '0',
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE `user_providers` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -18,7 +18,7 @@ CREATE TABLE `user_providers` (
     PRIMARY KEY (`id`),
     KEY `userId` (`userId`),
     CONSTRAINT `user_providers_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE `tasks` (
     `id` bigint NOT NULL AUTO_INCREMENT,
@@ -33,7 +33,7 @@ CREATE TABLE `tasks` (
     PRIMARY KEY (`id`),
     KEY `userId` (`userId`),
     CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1730237556161 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+) ENGINE = InnoDB AUTO_INCREMENT = 1730237556161 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE `files` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -50,6 +50,6 @@ CREATE TABLE `files` (
     KEY `userId` (`userId`),
     CONSTRAINT `files_ibfk_1` FOREIGN KEY (`taskId`) REFERENCES `tasks` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT `files_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 306 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
+) ENGINE = InnoDB AUTO_INCREMENT = 306 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 

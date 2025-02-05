@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latestas
 
     services:
       mysql:
@@ -16,13 +16,14 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping --silent"
+          --health-cmd="mysqladmin ping -h localhost -u root -proot"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: test_db
+          MYSQL_ROOT_HOST: "%"
 
     steps:
       - uses: actions/checkout@v3
@@ -38,13 +39,12 @@ jobs:
 
       - name: Set up Database Schema
         run: |
-          cd database
-          mysql -h127.0.0.1 -uroot -proot test_db < schema.sql || cat schema.sql
+          mysql -h127.0.0.1 -uroot -proot test_db < databse/schema.sql
 
       - name: Run Frontend Tests
         run: cd frontend && npm test
 
       - name: Run Backend Tests
         env:
-          DATABASE_URL: "mysql://root:root@127.0.0.1:3306/test_db"
+          DATABASE_URL: "mysql://root:root@127.0.0.1:3306/test_db?connectionLimit=10&queueLimit=0&waitForConnections=true"
         run: cd backend && npm test

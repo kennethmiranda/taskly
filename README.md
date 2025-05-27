@@ -226,6 +226,7 @@ Thanks to the amazing team that made this project possible:
 - [NextAuth.js](https://next-auth.js.org)
 - [ShadCN UI](https://ui.shadcn.com/docs)
 
+
 <div align="left">
   <a href="kennymiranda000@gmail.com" target="_blank">
     <img src="https://img.shields.io/static/v1?message=Email&logo=gmail&label=&color=D14836&logoColor=white&labelColor=&style=for-the-badge" height="35" alt="gmail logo"  />
